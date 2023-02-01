@@ -1,29 +1,33 @@
 package com.hgshkt.justchat.auth
 
-import android.content.Context
-import android.widget.Toast
-import com.google.firebase.auth.FirebaseAuth
+import com.hgshkt.justchat.database.UserDatabase
+import com.hgshkt.justchat.database.UserDatabaseImpl
 import com.hgshkt.justchat.models.User
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import java.lang.Exception
 
 class ChatAuth {
 
-    private val auth = FirebaseAuth.getInstance()
-
-    fun createUser(user: User, context: Context) {
-        if(user.email.isNotEmpty() && user.password.isNotEmpty()) {
+    fun createUser(
+        name: String,
+        customId: String,
+        email: String,
+        password: String,
+        firebaseId: String
+    ) {
+        if (email.isNotEmpty() && password.isNotEmpty()) {
             CoroutineScope(Dispatchers.IO).launch {
-                try{
-                    auth.createUserWithEmailAndPassword(user.email, user.password)
-                } catch (exception: Exception) {
-                    withContext(Dispatchers.Main) {
-                        Toast.makeText(context, "Error", Toast.LENGTH_LONG).show()
-                    }
-                }
+                val createdUser = User(
+                    name = name,
+                    id = customId,
+                    email = email,
+                    password = password,
+                    firebaseId = firebaseId
+                )
+
+                val db : UserDatabase = UserDatabaseImpl()
+                db.addUser(createdUser)
             }
         }
     }

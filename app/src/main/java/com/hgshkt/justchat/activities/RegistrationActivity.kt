@@ -1,18 +1,16 @@
 package com.hgshkt.justchat.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.hgshkt.justchat.R
 import com.hgshkt.justchat.auth.ChatAuth
-import com.hgshkt.justchat.models.User
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class RegistrationActivity : AppCompatActivity() {
 
@@ -40,22 +38,26 @@ class RegistrationActivity : AppCompatActivity() {
     }
 
     private fun registration() {
+        val name = etName.text.toString()
+        val id = etId.text.toString()
         val email = etEmail.text.toString()
         val password = etPassword.text.toString()
 
         CoroutineScope(Dispatchers.IO).launch {
-            try {
-                val chatAuth = ChatAuth()
-                val user = User(
-                    name = "test name",
-                    id = "test id",
-                    email = email,
-                    password = password
-                )
-                chatAuth.createUser(user, this@RegistrationActivity)
-            } catch (exception: Exception) {
-                withContext(Dispatchers.Main) {
-                    Toast.makeText(this@RegistrationActivity, "Error", Toast.LENGTH_LONG).show()
+            auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener {
+                auth.signInWithEmailAndPassword(email, password).addOnCompleteListener {
+                    val chatAuth = ChatAuth()
+                    chatAuth.createUser(
+                        name = name,
+                        customId = id,
+                        email = email,
+                        password = password,
+                        firebaseId = auth.currentUser!!.uid
+                    )
+
+                    Intent(this@RegistrationActivity, MainActivity::class.java).also {
+                        startActivity(it)
+                    }
                 }
             }
         }

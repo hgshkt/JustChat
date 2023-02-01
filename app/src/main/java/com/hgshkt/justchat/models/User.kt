@@ -5,21 +5,23 @@ class User {
     var id: String = "id"
     var email: String = "email"
     var password: String = "password"
+    var firebaseId: String = "firebaseId"
 
-    constructor() {}
+    var chatIdList: List<String> = mutableListOf()
+
+    constructor()
 
     constructor(
         name: String,
         id: String,
         email: String,
         password: String,
+        firebaseId: String
     ) {
         this.name = name
         this.id = id
         this.email = email
         this.password = password
+        this.firebaseId = firebaseId
     }
-
-
-
 }

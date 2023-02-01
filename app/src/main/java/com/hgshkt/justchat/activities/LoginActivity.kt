@@ -46,6 +46,9 @@ class LoginActivity : AppCompatActivity() {
                         Toast.makeText(this@LoginActivity, "Error", Toast.LENGTH_LONG).show()
                     }
                 }
+                Intent(this@LoginActivity, MainActivity::class.java).also {
+                    startActivity(it)
+                }
             }
         }
     }
