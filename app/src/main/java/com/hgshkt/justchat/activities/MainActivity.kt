@@ -2,6 +2,8 @@ package com.hgshkt.justchat.activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -42,6 +44,24 @@ class MainActivity : AppCompatActivity() {
                 updateUI()
             }
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val inflater = menuInflater
+        inflater.inflate(R.menu.main_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId) {
+            R.id.plusButton -> openCreatingChatActivity()
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun openCreatingChatActivity() {
+        val intent = Intent(this@MainActivity, CreatingChatActivity::class.java)
+        startActivity(intent)
     }
 
     private fun updateUI() {

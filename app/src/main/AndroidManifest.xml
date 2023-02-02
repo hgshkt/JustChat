@@ -23,9 +23,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.LoginActivity" />
-        <activity android:name=".activities.RegistrationActivity"/>
-        <activity android:name=".activities.ChatActivity">
-    </activity>
+        <activity android:name=".activities.RegistrationActivity" />
+        <activity android:name=".activities.ChatActivity" />
+        <activity android:name=".activities.CreatingChatActivity" />
     </application>
 
 </manifest>

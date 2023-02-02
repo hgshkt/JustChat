@@ -68,11 +68,11 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun init() {
-        loginButton = findViewById(R.id.loginButton)
-        etRegistration = findViewById(R.id.loginRegistrationButton)
+        loginButton = findViewById(R.id.login_button)
+        etRegistration = findViewById(R.id.login_registration_button)
 
-        etEmail = findViewById(R.id.etEmail)
-        etPassword = findViewById(R.id.etPassword)
+        etEmail = findViewById(R.id.et_email)
+        etPassword = findViewById(R.id.et_password)
 
         auth = FirebaseAuth.getInstance()
     }

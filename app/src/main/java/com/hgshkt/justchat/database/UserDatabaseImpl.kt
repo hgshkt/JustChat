@@ -1,6 +1,7 @@
 package com.hgshkt.justchat.database
 
 import com.google.firebase.database.FirebaseDatabase
+import com.hgshkt.justchat.models.Chat
 import com.hgshkt.justchat.models.User
 import kotlinx.coroutines.tasks.await
 
@@ -15,5 +16,12 @@ class UserDatabaseImpl : UserDatabase {
 
     override suspend fun getUserById(id: String): User {
         return dbRef.child(id).get().await().getValue(User::class.java)!!
+    }
+
+    override suspend fun addChatToUserChatList(userId: String, chat: Chat) {
+        dbRef.child(userId)
+            .child("chatIdList")
+            .child(chat.lastMessageTime)
+            .setValue(chat.id)
     }
 }
