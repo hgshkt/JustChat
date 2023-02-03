@@ -1,14 +1,14 @@
-package com.hgshkt.justchat.activities
+package com.hgshkt.justchat.layout.fragments
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
-import androidx.appcompat.app.AppCompatActivity
+import android.view.View
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.hgshkt.justchat.R
+import com.hgshkt.justchat.layout.activities.LoginActivity
 import com.hgshkt.justchat.adapters.ChatListAdapter
 import com.hgshkt.justchat.auth.CurrentUser
 import com.hgshkt.justchat.database.ChatDatabase
@@ -18,8 +18,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class MainActivity : AppCompatActivity() {
-
+class ChatListFragment : Fragment(R.layout.fragment_chats){
     lateinit var recyclerView: RecyclerView
 
     lateinit var chatIdList: List<String>
@@ -29,14 +28,17 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         init()
+    }
+
+    override fun onStart() {
+        super.onStart()
 
         if (auth.currentUser == null) {
-            Intent(this@MainActivity, LoginActivity::class.java).also {
+            Intent(requireContext(), LoginActivity::class.java).also {
                 startActivity(it)
             }
         } else {
@@ -46,27 +48,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        val inflater = menuInflater
-        inflater.inflate(R.menu.main_menu, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId) {
-            R.id.plusButton -> openCreatingChatActivity()
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
-    private fun openCreatingChatActivity() {
-        val intent = Intent(this@MainActivity, CreatingChatActivity::class.java)
-        startActivity(intent)
-    }
-
     private fun updateUI() {
         CoroutineScope(Dispatchers.Main).launch {
-            recyclerView.layoutManager = LinearLayoutManager(this@MainActivity)
+            recyclerView.layoutManager = LinearLayoutManager(requireContext())
             recyclerView.setHasFixedSize(true)
 
             updateAdapter()
@@ -78,13 +62,13 @@ class MainActivity : AppCompatActivity() {
         chatIdList = user!!.chatIdList
         chatList = db.getChatList(chatIdList)
         recyclerView.adapter = ChatListAdapter(
-            context = this@MainActivity,
+            context = requireContext(),
             chatList = chatList
         )
     }
 
     private fun init() {
-        recyclerView = findViewById(R.id.main_rv)
+        recyclerView = view!!.findViewById(R.id.chats_rv)
 
         db = ChatDatabaseImpl()
         auth = FirebaseAuth.getInstance()

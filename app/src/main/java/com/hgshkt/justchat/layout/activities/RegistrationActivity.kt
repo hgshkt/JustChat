@@ -1,4 +1,4 @@
-package com.hgshkt.justchat.activities
+package com.hgshkt.justchat.layout.activities
 
 import android.content.Intent
 import android.os.Bundle

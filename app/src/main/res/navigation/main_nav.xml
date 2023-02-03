@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_nav"
+    app:startDestination="@id/chats_fragment">
+
+    <fragment
+        android:id="@+id/chats_fragment"
+        android:name="com.hgshkt.justchat.layout.fragments.ChatListFragment"
+        android:label="Chats">
+    </fragment>
+
+    <fragment
+        android:id="@+id/creating_chat_fragment"
+        android:name="com.hgshkt.justchat.layout.fragments.CreatingChatFragment"
+        android:label="New chat">
+    </fragment>
+
+    <fragment
+        android:id="@+id/profile_fragment"
+        android:name="com.hgshkt.justchat.layout.fragments.ProfileFragment"
+        android:label="Profile">
+    </fragment>
+
+    <fragment
+        android:id="@+id/friends_fragment"
+        android:name="com.hgshkt.justchat.layout.fragments.FriendsFragment"
+        android:label="Friends" >
+    </fragment>
+
+</navigation>
