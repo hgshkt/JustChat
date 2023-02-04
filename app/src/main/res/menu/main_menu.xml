@@ -7,7 +7,7 @@
     <group android:checkableBehavior="single">
 
         <item
-            android:id="@+id/chats_fragment"
+            android:id="@+id/chat_list_fragment"
             android:title="Chats"/>
 
         <item android:id="@+id/creating_chat_fragment"
