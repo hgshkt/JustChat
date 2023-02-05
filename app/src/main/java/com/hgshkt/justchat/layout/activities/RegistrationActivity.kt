@@ -7,7 +7,7 @@ import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.hgshkt.justchat.R
-import com.hgshkt.justchat.auth.ChatAuth
+import com.hgshkt.justchat.auth.AppAuth
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -46,8 +46,8 @@ class RegistrationActivity : AppCompatActivity() {
         CoroutineScope(Dispatchers.IO).launch {
             auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener {
                 auth.signInWithEmailAndPassword(email, password).addOnCompleteListener {
-                    val chatAuth = ChatAuth()
-                    chatAuth.createUser(
+                    val appAuth = AppAuth()
+                    appAuth.createUser(
                         name = name,
                         customId = id,
                         email = email,

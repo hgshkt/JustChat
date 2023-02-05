@@ -8,6 +8,10 @@ class User {
     var firebaseId: String = "firebaseId"
 
     var chatIdList: List<String> = mutableListOf()
+    var gottenInvites: List<String> = mutableListOf()
+    var sentInvites: List<String> = mutableListOf()
+    var friendList: List<String> = mutableListOf()
+
 
     constructor()
 
