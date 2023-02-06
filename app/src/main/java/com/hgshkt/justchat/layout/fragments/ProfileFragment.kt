@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.hgshkt.justchat.R
 import com.hgshkt.justchat.auth.CurrentUser
+import com.hgshkt.justchat.controllers.FriendController
 import com.hgshkt.justchat.database.UserDatabase
 import com.hgshkt.justchat.database.UserDatabaseImpl
 import com.hgshkt.justchat.models.User
@@ -29,24 +30,26 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     lateinit var etBio: EditText
 
     lateinit var db: UserDatabase
+    lateinit var controller: FriendController
     lateinit var profileUser: User
     lateinit var id: String
+    private lateinit var status: Status
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         getUserId()
         init()
+        updateStatus()
         setListeners()
 
-
         CoroutineScope(Dispatchers.IO).launch {
-            loadUser(id)
+            loadUser()
             updateUI()
         }
     }
 
-    private suspend fun loadUser(id: String) {
+    private suspend fun loadUser() {
         val db = UserDatabaseImpl()
         profileUser = db.getUserById(id)
     }
@@ -83,6 +86,17 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         }
     }
 
+    private fun updateStatus() {
+        runBlocking {
+            val currentUserId = CurrentUser.get()!!.firebaseId
+
+            Status.values().forEach {
+                if (it.condition(id, currentUserId))
+                    status = it
+            }
+        }
+    }
+
     private fun init() {
         avatar = requireView().findViewById(R.id.profile_avatar)
         inviteButton = requireView().findViewById(R.id.profile_button)
@@ -95,5 +109,54 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         etBio = requireView().findViewById(R.id.profile_et_bio)
 
         db = UserDatabaseImpl()
+        controller = FriendController()
+    }
+
+    private enum class Status {
+        CURRENT {
+            override fun condition(profileId: String, currentUserId: String): Boolean {
+                return profileId == currentUserId
+            }
+        },
+        FRIEND {
+            override fun condition(profileId: String, currentUserId: String): Boolean =
+                runBlocking {
+                    val controller = FriendController()
+                    controller.areFriends(profileId, currentUserId)
+                }
+        },
+        SENDER {
+            override fun condition(profileId: String, currentUserId: String): Boolean =
+                runBlocking {
+                    val controller = FriendController()
+                    val profileHasCurrent = controller.idInSentInviteList(profileId, currentUserId)
+                    val curHasProfile = controller.idInGottenInviteList(profileId, currentUserId)
+                    profileHasCurrent && curHasProfile
+                }
+        },
+        RECIPIENT {
+            override fun condition(profileId: String, currentUserId: String): Boolean =
+                runBlocking {
+                    val controller = FriendController()
+                    val profileHasCurrent =
+                        controller.idInGottenInviteList(profileId, currentUserId)
+                    val curHasProfile = controller.idInSentInviteList(profileId, currentUserId)
+                    profileHasCurrent && curHasProfile
+                }
+        },
+        DEFAULT {
+            override fun condition(profileId: String, currentUserId: String): Boolean {
+                for (status in Status.values()) {
+                    if (status.condition(
+                            profileId,
+                            currentUserId
+                        ) && status != DEFAULT
+                    ) return false
+                }
+                return true
+            }
+        };
+
+        abstract fun condition(profileId: String, currentUserId: String): Boolean
     }
 }

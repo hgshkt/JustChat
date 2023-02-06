@@ -76,4 +76,6 @@ interface UserDatabase {
      * @param userId is user's id whose list must be gotten
      */
     suspend fun getReceivedInviteList(userId: String): HashMap<String, String>
+
+    suspend fun getFriendList(userId: String): HashMap<String, String>
 }

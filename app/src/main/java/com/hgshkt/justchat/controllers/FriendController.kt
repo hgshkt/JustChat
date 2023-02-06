@@ -63,4 +63,10 @@ class FriendController {
         }
         return false
     }
+
+    suspend fun areFriends(firstId: String, secondId: String): Boolean {
+        val firstHasSecond = db.getFriendList(firstId).contains(secondId)
+        val secondHasFirst = db.getFriendList(secondId).contains(firstId)
+        return firstHasSecond && secondHasFirst
+    }
 }

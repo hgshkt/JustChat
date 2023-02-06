@@ -76,4 +76,9 @@ class UserDatabaseImpl : UserDatabase {
         return dbRef.child(userId)
             .child(gottenInvitesKey).get().await().getValue<HashMap<String, String>>()!!
     }
+
+    override suspend fun getFriendList(userId: String): HashMap<String, String> {
+        return dbRef.child(userId)
+            .child(friendListKey).get().await().getValue<HashMap<String, String>>()!!
+    }
 }
