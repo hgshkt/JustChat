@@ -67,18 +67,23 @@ class UserDatabaseImpl : UserDatabase {
             .setValue("")
     }
 
-    override suspend fun getSentInviteList(userId: String): HashMap<String, String> {
+    override suspend fun getSentInviteList(userId: String): HashMap<String, String>? {
         return dbRef.child(userId)
-            .child(sentInvitesKey).get().await().getValue<HashMap<String, String>>()!!
+            .child(sentInvitesKey).get().await().getValue<HashMap<String, String>>()
     }
 
-    override suspend fun getReceivedInviteList(userId: String): HashMap<String, String> {
+    override suspend fun getReceivedInviteList(userId: String): HashMap<String, String>? {
         return dbRef.child(userId)
-            .child(gottenInvitesKey).get().await().getValue<HashMap<String, String>>()!!
+            .child(gottenInvitesKey).get().await().getValue<HashMap<String, String>>()
     }
 
-    override suspend fun getFriendList(userId: String): HashMap<String, String> {
+    override suspend fun getFriendList(userId: String): HashMap<String, String>? {
         return dbRef.child(userId)
-            .child(friendListKey).get().await().getValue<HashMap<String, String>>()!!
+            .child(friendListKey).get().await().getValue<HashMap<String, String>>()
+    }
+
+
+    override suspend fun removeFromFriendList(ownerId: String, removedId: String) {
+        dbRef.child(ownerId).child(friendListKey).child(removedId).removeValue()
     }
 }

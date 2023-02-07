@@ -5,11 +5,12 @@ import com.hgshkt.justchat.database.UserDatabaseImpl
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class FriendController {
     private val db: UserDatabase = UserDatabaseImpl()
 
-    fun makeFriends(firstUserID: String, secondUserId: String) {
+    private fun makeFriends(firstUserID: String, secondUserId: String) {
         CoroutineScope(Dispatchers.IO).launch {
             db.addFriendToFriendList(firstUserID, secondUserId)
         }
@@ -33,6 +34,7 @@ class FriendController {
     suspend fun getSentInviteList(userId: String): List<String> {
         val list = mutableListOf<String>()
         val map = db.getSentInviteList(userId)
+        if (map == null) return list
         map.keys.forEach {
             list.add(it)
         }
@@ -42,6 +44,7 @@ class FriendController {
     suspend fun getReceivedInviteList(userId: String): List<String> {
         val list = mutableListOf<String>()
         val map = db.getReceivedInviteList(userId)
+        if (map == null) return list
         map.keys.forEach {
             list.add(it)
         }
@@ -65,8 +68,33 @@ class FriendController {
     }
 
     suspend fun areFriends(firstId: String, secondId: String): Boolean {
-        val firstHasSecond = db.getFriendList(firstId).contains(secondId)
-        val secondHasFirst = db.getFriendList(secondId).contains(firstId)
+        val friendList = db.getFriendList(firstId)
+        if (friendList == null) return false
+
+        val firstHasSecond = friendList.contains(secondId)
+        val secondHasFirst = friendList.contains(firstId)
         return firstHasSecond && secondHasFirst
+    }
+
+    fun stopFriendship(stopperId: String, senderId: String) {
+        runBlocking {
+            if (areFriends(stopperId, senderId)) {
+                db.removeFromFriendList(stopperId, senderId)
+                db.removeFromFriendList(senderId, stopperId)
+
+                db.sendInvite(senderId, stopperId)
+            }
+        }
+    }
+
+    fun cancelInviting(senderId: String, recipientId: String) {
+        runBlocking {
+            val senderHasRecipient = idInSentInviteList(senderId, recipientId)
+            val recipientHasSender = idInGottenInviteList(senderId, recipientId)
+            if (senderHasRecipient && recipientHasSender) {
+                db.removeUserFromGottenInvites(senderId, recipientId)
+                db.removeUserFromSentInvites(senderId, recipientId)
+            }
+        }
     }
 }

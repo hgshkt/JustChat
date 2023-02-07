@@ -32,7 +32,8 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     lateinit var db: UserDatabase
     lateinit var controller: FriendController
     lateinit var profileUser: User
-    lateinit var id: String
+    lateinit var profileId: String
+    lateinit var currentUserId: String
     private lateinit var status: Status
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -51,7 +52,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
     private suspend fun loadUser() {
         val db = UserDatabaseImpl()
-        profileUser = db.getUserById(id)
+        profileUser = db.getUserById(profileId)
     }
 
     private fun updateUI() {
@@ -72,28 +73,33 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     }
 
     private fun inviteButtonClick() {
-        // TODO
+        when (status) {
+            Status.FRIEND -> controller.stopFriendship(currentUserId, profileId)
+            Status.SENDER -> controller.acceptInvite(profileId, currentUserId)
+            Status.CURRENT -> TODO()
+            Status.RECIPIENT -> controller.cancelInviting(currentUserId, profileId)
+            Status.DEFAULT -> controller.sendInvite(currentUserId, profileId)
+        }
     }
 
     private fun getUserId() {
+        runBlocking {
+            currentUserId = CurrentUser.get()!!.firebaseId
+        }
         val extraId = requireActivity().intent.getStringExtra("id")
         if (extraId == null) {
             runBlocking {
-                id = CurrentUser.get()!!.firebaseId
+                profileId = currentUserId
             }
         } else {
-            id = extraId
+            profileId = extraId
         }
     }
 
     private fun updateStatus() {
-        runBlocking {
-            val currentUserId = CurrentUser.get()!!.firebaseId
-
-            Status.values().forEach {
-                if (it.condition(id, currentUserId))
-                    status = it
-            }
+        Status.values().forEach {
+            if (it.condition(profileId, currentUserId))
+                status = it
         }
     }
 

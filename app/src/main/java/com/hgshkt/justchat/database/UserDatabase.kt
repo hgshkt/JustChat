@@ -69,13 +69,15 @@ interface UserDatabase {
      * Returns HashMap of user's sent invites. Values is empty. Keys contains id
      * @param userId is user's id whose list must be gotten
      */
-    suspend fun getSentInviteList(userId: String): HashMap<String, String>
+    suspend fun getSentInviteList(userId: String): HashMap<String, String>?
 
     /**
      * Returns HashMap of user's received invites. Values is empty. Keys contains id
      * @param userId is user's id whose list must be gotten
      */
-    suspend fun getReceivedInviteList(userId: String): HashMap<String, String>
+    suspend fun getReceivedInviteList(userId: String): HashMap<String, String>?
 
-    suspend fun getFriendList(userId: String): HashMap<String, String>
+    suspend fun getFriendList(userId: String): HashMap<String, String>?
+
+    suspend fun removeFromFriendList(ownerId: String, removedId: String)
 }
