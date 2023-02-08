@@ -5,8 +5,10 @@ import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.annotation.IdRes
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
+import androidx.navigation.fragment.findNavController
 import com.hgshkt.justchat.R
 import com.hgshkt.justchat.controllers.UserController
 import com.hgshkt.justchat.database.UserDatabase
@@ -46,13 +48,9 @@ class FriendsFragment : Fragment(R.layout.fragment_friends) {
                 ).show()
             }
         } else {
-            requireActivity().supportFragmentManager.commit {
-                val bundle = Bundle()
-                bundle.putString("id", searchId)
-                val profile = ProfileFragment()
-                profile.arguments = bundle
-                replace(R.id.nav_host_fragment, profile)
-            }
+            val bundle = Bundle()
+            bundle.putString("id", searchId)
+            findNavController().navigate(R.id.friend_to_profile, bundle)
         }
     }
 

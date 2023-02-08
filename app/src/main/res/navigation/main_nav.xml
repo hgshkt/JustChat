@@ -20,6 +20,9 @@
         android:id="@+id/profile_fragment"
         android:name="com.hgshkt.justchat.layout.fragments.ProfileFragment"
         android:label="Profile">
+        <action
+            android:id="@+id/profile_to_friends"
+            app:destination="@id/friends_fragment" />
     </fragment>
 
     <fragment
