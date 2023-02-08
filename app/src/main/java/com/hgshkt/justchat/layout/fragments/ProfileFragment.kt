@@ -1,7 +1,5 @@
 package com.hgshkt.justchat.layout.fragments
 
-import android.os.Bundle
-import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
@@ -9,8 +7,7 @@ import androidx.fragment.app.Fragment
 import com.hgshkt.justchat.R
 import com.hgshkt.justchat.auth.CurrentUser
 import com.hgshkt.justchat.controllers.FriendController
-import com.hgshkt.justchat.database.UserDatabase
-import com.hgshkt.justchat.database.UserDatabaseImpl
+import com.hgshkt.justchat.controllers.UserController
 import com.hgshkt.justchat.models.User
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -29,18 +26,18 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     lateinit var etCustomId: EditText
     lateinit var etBio: EditText
 
-    lateinit var db: UserDatabase
-    lateinit var controller: FriendController
-    lateinit var profileUser: User
-    lateinit var profileId: String
-    lateinit var currentUserId: String
+    private lateinit var friendController: FriendController
+    private lateinit var userController: UserController
+    private lateinit var profileUser: User
+    private lateinit var currentUserFirebaseId: String
     private lateinit var status: Status
+    private lateinit var profileFirebaseId: String
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onStart() {
+        super.onStart()
 
-        getUserId()
         init()
+        loadId()
         updateStatus()
         setListeners()
 
@@ -50,9 +47,9 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         }
     }
 
-    private suspend fun loadUser() {
-        val db = UserDatabaseImpl()
-        profileUser = db.getUserById(profileId)
+
+    private fun loadUser() {
+        profileUser = userController.getUserByFirebaseId(profileFirebaseId)!!
     }
 
     private fun updateUI() {
@@ -74,32 +71,33 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
     private fun inviteButtonClick() {
         when (status) {
-            Status.FRIEND -> controller.stopFriendship(currentUserId, profileId)
-            Status.SENDER -> controller.acceptInvite(profileId, currentUserId)
+            Status.FRIEND -> friendController.stopFriendship(currentUserFirebaseId, profileFirebaseId)
+            Status.SENDER -> friendController.acceptInvite(profileFirebaseId, currentUserFirebaseId)
             Status.CURRENT -> TODO()
-            Status.RECIPIENT -> controller.cancelInviting(currentUserId, profileId)
-            Status.DEFAULT -> controller.sendInvite(currentUserId, profileId)
+            Status.RECIPIENT -> friendController.cancelInviting(currentUserFirebaseId, profileFirebaseId)
+            Status.DEFAULT -> friendController.sendInvite(currentUserFirebaseId, profileFirebaseId)
         }
     }
 
-    private fun getUserId() {
+    private fun loadId() {
         runBlocking {
-            currentUserId = CurrentUser.get()!!.firebaseId
-        }
-        val extraId = requireActivity().intent.getStringExtra("id")
-        if (extraId == null) {
-            runBlocking {
-                profileId = currentUserId
+            currentUserFirebaseId = CurrentUser.get()!!.firebaseId
+            if (arguments != null && requireArguments().containsKey("id")) {
+                val id = requireArguments().getString("id")!!
+                val user = userController.getUserById(id)
+                profileFirebaseId = user!!.firebaseId
             }
-        } else {
-            profileId = extraId
+            else {
+                profileFirebaseId = currentUserFirebaseId
+            }
         }
     }
 
     private fun updateStatus() {
         Status.values().forEach {
-            if (it.condition(profileId, currentUserId))
+            if (it.condition(profileFirebaseId, currentUserFirebaseId)) {
                 status = it
+            }
         }
     }
 
@@ -114,8 +112,8 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         etCustomId = requireView().findViewById(R.id.profile_et_id)
         etBio = requireView().findViewById(R.id.profile_et_bio)
 
-        db = UserDatabaseImpl()
-        controller = FriendController()
+        friendController = FriendController()
+        userController = UserController()
     }
 
     private enum class Status {
@@ -153,11 +151,9 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         DEFAULT {
             override fun condition(profileId: String, currentUserId: String): Boolean {
                 for (status in Status.values()) {
-                    if (status.condition(
-                            profileId,
-                            currentUserId
-                        ) && status != DEFAULT
-                    ) return false
+                    if (status != DEFAULT && status.condition(profileId, currentUserId)) {
+                        return false
+                    }
                 }
                 return true
             }

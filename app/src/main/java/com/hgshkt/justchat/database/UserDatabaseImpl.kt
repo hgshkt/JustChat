@@ -15,14 +15,18 @@ class UserDatabaseImpl : UserDatabase {
     private val friendListKey = "friendList"
 
 
-    var dbRef = FirebaseDatabase.getInstance().getReference(path)
+    private var dbRef = FirebaseDatabase.getInstance().getReference(path)
 
     override suspend fun addUser(user: User) {
         dbRef.child(user.firebaseId).setValue(user)
     }
 
-    override suspend fun getUserById(id: String): User {
-        return dbRef.child(id).get().await().getValue(User::class.java)!!
+    override suspend fun getUserById(id: String): User? {
+        return dbRef.child(id).get().await().getValue(User::class.java)
+    }
+
+    override suspend fun getAllUsers(): HashMap<String, User>? {
+        return dbRef.get().await().getValue<HashMap<String, User>>()
     }
 
     override suspend fun addChatToUserChatList(userId: String, chat: Chat) {

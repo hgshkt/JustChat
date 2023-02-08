@@ -24,8 +24,6 @@
         </activity>
         <activity android:name=".layout.activities.LoginActivity" />
         <activity android:name=".layout.activities.RegistrationActivity" />
-        <activity android:name=".layout.fragments.ChatFragment" />
-        <activity android:name=".layout.activities.CreatingChatActivity" />
     </application>
 
 </manifest>

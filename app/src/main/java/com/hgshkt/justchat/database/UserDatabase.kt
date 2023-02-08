@@ -19,7 +19,12 @@ interface UserDatabase {
      * Returns user from database by its id
      * @param id is user id
      */
-    suspend fun getUserById(id: String): User
+    suspend fun getUserById(id: String): User?
+
+    /**
+     * Returns HashMap of all users. Value is user, keys contains id
+     */
+    suspend fun getAllUsers(): HashMap<String, User>?
 
 
     /**
@@ -77,7 +82,16 @@ interface UserDatabase {
      */
     suspend fun getReceivedInviteList(userId: String): HashMap<String, String>?
 
+    /**
+     * Returns HashMap of user's friend list. Values is empty. Keys contains id
+     * @param userId is user's id whose list must be gotten
+     */
     suspend fun getFriendList(userId: String): HashMap<String, String>?
 
+    /**
+     * Removes user id from friend list
+     * @param ownerId is user id from whose friend list the id must be removed
+     * @param removedId is id to be removed
+     */
     suspend fun removeFromFriendList(ownerId: String, removedId: String)
 }
