@@ -36,14 +36,16 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     override fun onStart() {
         super.onStart()
 
-        init()
-        loadId()
-        updateStatus()
-        setListeners()
+        CoroutineScope(Dispatchers.Main).launch {
+            init()
+            loadId()
+            updateStatus()
+            setListeners()
 
-        CoroutineScope(Dispatchers.IO).launch {
-            loadUser()
-            updateUI()
+            CoroutineScope(Dispatchers.IO).launch {
+                loadUser()
+                updateUI()
+            }
         }
     }
 
