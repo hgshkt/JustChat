@@ -4,6 +4,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import com.bumptech.glide.Glide
 import com.hgshkt.justchat.R
 import com.hgshkt.justchat.auth.CurrentUser
 import com.hgshkt.justchat.controllers.FriendController
@@ -43,25 +44,25 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             setListeners()
 
             CoroutineScope(Dispatchers.IO).launch {
-                loadUser()
+                loadUsers()
                 updateUI()
             }
         }
     }
 
 
-    private fun loadUser() {
+    private fun loadUsers() {
         profileUser = userController.getUserByFirebaseId(profileFirebaseId)!!
     }
 
     private fun updateUI() {
         CoroutineScope(Dispatchers.Main).launch {
             // TODO avatar
-            // TODO inviteButton
-            // TODO tvStatus
             tvName.text = profileUser.name
             tvCustomId.text = profileUser.id
             tvBio.text = profileUser.bio
+
+            updateStatusDrawing(status)
         }
     }
 
@@ -72,12 +73,38 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     }
 
     private fun inviteButtonClick() {
-        when (status) {
-            Status.FRIEND -> friendController.stopFriendship(currentUserFirebaseId, profileFirebaseId)
-            Status.SENDER -> friendController.acceptInvite(profileFirebaseId, currentUserFirebaseId)
-            Status.CURRENT -> TODO()
-            Status.RECIPIENT -> friendController.cancelInviting(currentUserFirebaseId, profileFirebaseId)
-            Status.DEFAULT -> friendController.sendInvite(currentUserFirebaseId, profileFirebaseId)
+        CoroutineScope(Dispatchers.IO).launch {
+            when (status) {
+                Status.FRIEND -> friendController.stopFriendship(
+                    CurrentUser.get()!!,
+                    profileUser
+                )
+                Status.SENDER -> friendController.acceptInvite(
+                    profileUser,
+                    CurrentUser.get()!!
+                )
+                Status.CURRENT -> TODO()
+                Status.RECIPIENT -> friendController.cancelInviting(
+                    CurrentUser.get()!!,
+                    profileUser
+                )
+                Status.DEFAULT -> friendController.sendInvite(
+                    CurrentUser.get()!!,
+                    profileUser
+                )
+            }
+            updateStatus()
+            updateStatusDrawing(status)
+        }
+    }
+
+    private fun updateStatusDrawing(status: Status) {
+        CoroutineScope(Dispatchers.Main).launch {
+            Glide.with(this@ProfileFragment)
+                .load(status.id)
+                .into(inviteButton)
+
+            tvStatus.text = status.text
         }
     }
 
@@ -88,8 +115,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                 val id = requireArguments().getString("id")!!
                 val user = userController.getUserById(id)
                 profileFirebaseId = user!!.firebaseId
-            }
-            else {
+            } else {
                 profileFirebaseId = currentUserFirebaseId
             }
         }
@@ -120,18 +146,27 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
     private enum class Status {
         CURRENT {
+            override val id: Int = R.drawable.ic_settings
+            override val text: String = "This is your profile"
+
             override fun condition(profileId: String, currentUserId: String): Boolean {
                 return profileId == currentUserId
             }
         },
         FRIEND {
+            override val id: Int = R.drawable.ic_friends
+            override val text: String = "This is your friend"
+
             override fun condition(profileId: String, currentUserId: String): Boolean =
-                runBlocking {
+                    runBlocking {
                     val controller = FriendController()
                     controller.areFriends(profileId, currentUserId)
                 }
         },
         SENDER {
+            override val id: Int = R.drawable.ic_accept_invite
+            override val text: String = "This user sent invite"
+
             override fun condition(profileId: String, currentUserId: String): Boolean =
                 runBlocking {
                     val controller = FriendController()
@@ -141,16 +176,21 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                 }
         },
         RECIPIENT {
+            override val id: Int = R.drawable.ic_invite_sent
+            override val text: String = "You are sent invite to this user"
+
             override fun condition(profileId: String, currentUserId: String): Boolean =
                 runBlocking {
                     val controller = FriendController()
-                    val profileHasCurrent =
-                        controller.idInGottenInviteList(profileId, currentUserId)
-                    val curHasProfile = controller.idInSentInviteList(profileId, currentUserId)
-                    profileHasCurrent && curHasProfile
+                    val profileHasCur = controller.idInGottenInviteList(currentUserId, profileId)
+                    val curHasProfile = controller.idInSentInviteList(currentUserId, profileId)
+                    profileHasCur && curHasProfile
                 }
         },
         DEFAULT {
+            override val id: Int = R.drawable.ic_add_friend
+            override val text: String = "Send invite"
+
             override fun condition(profileId: String, currentUserId: String): Boolean {
                 for (status in Status.values()) {
                     if (status != DEFAULT && status.condition(profileId, currentUserId)) {
@@ -160,6 +200,9 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                 return true
             }
         };
+
+        abstract val id: Int
+        abstract val text: String
 
         abstract fun condition(profileId: String, currentUserId: String): Boolean
     }
