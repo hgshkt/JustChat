@@ -10,10 +10,7 @@ import com.hgshkt.justchat.auth.CurrentUser
 import com.hgshkt.justchat.controllers.FriendController
 import com.hgshkt.justchat.controllers.UserController
 import com.hgshkt.justchat.models.User
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
 
 class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
@@ -37,7 +34,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     override fun onStart() {
         super.onStart()
 
-        CoroutineScope(Dispatchers.Main).launch {
+        CoroutineScope(Dispatchers.Default).launch {
             init()
             loadId()
             updateStatus()
@@ -66,9 +63,11 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         }
     }
 
-    private fun setListeners() {
-        inviteButton.setOnClickListener {
-            inviteButtonClick()
+    private suspend fun setListeners() {
+        withContext(Dispatchers.Main) {
+            inviteButton.setOnClickListener {
+                inviteButtonClick()
+            }
         }
     }
 
