@@ -36,10 +36,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     private lateinit var status: Status
     private lateinit var profileFirebaseId: String
 
-    private var avatarUri: Uri? = null
-
     val getContent = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
-        avatarUri = uri
 
         val name = "$currentUserFirebaseId-${System.currentTimeMillis()}"
 
@@ -78,13 +75,14 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             tvName.text = profileUser.name
             tvCustomId.text = profileUser.id
             tvBio.text = profileUser.bio
-            loadAvatar(avatarUri)
+            loadAvatar()
 
             updateStatusDrawing(status)
         }
     }
 
-    private fun loadAvatar(uri: Uri?) {
+    private fun loadAvatar() {
+        val uri = profileUser.avatarUri
         if (uri == null) {
             // load default avatar
         } else {
