@@ -22,14 +22,4 @@ class Chat {
         this.messages = mutableListOf()
         this.lastMessageTime = System.currentTimeMillis().toString()
     }
-
-    constructor(
-        name: String,
-        id: String,
-        messages: List<Message>
-    ) {
-        this.name = name
-        this.id = id
-        this.messages = messages
-    }
 }

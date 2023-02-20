@@ -5,14 +5,11 @@ import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
-import androidx.annotation.IdRes
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.commit
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.RecyclerView
 import com.hgshkt.justchat.R
 import com.hgshkt.justchat.controllers.UserController
-import com.hgshkt.justchat.database.UserDatabase
-import com.hgshkt.justchat.database.UserDatabaseImpl
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -20,6 +17,7 @@ import kotlinx.coroutines.launch
 class FriendsFragment : Fragment(R.layout.fragment_friends) {
     lateinit var etSearch: EditText
     lateinit var searchButton: ImageView
+    lateinit var recyclerView: RecyclerView
 
     private lateinit var controller: UserController
 
@@ -58,6 +56,7 @@ class FriendsFragment : Fragment(R.layout.fragment_friends) {
     private fun init() {
         etSearch = requireView().findViewById(R.id.friend_et_search)
         searchButton = requireView().findViewById(R.id.friend_search_button)
+        recyclerView = requireView().findViewById(R.id.rv_friends)
 
         controller = UserController()
     }
