@@ -1,15 +1,10 @@
 package com.hgshkt.justchat.layout.fragments
 
-import android.app.Activity
-import android.content.Intent
 import android.net.Uri
-import android.util.Log
 import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
-import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
@@ -17,7 +12,7 @@ import com.hgshkt.justchat.R
 import com.hgshkt.justchat.auth.CurrentUser
 import com.hgshkt.justchat.controllers.FriendController
 import com.hgshkt.justchat.controllers.UserController
-import com.hgshkt.justchat.loaders.ImageLoader
+import com.hgshkt.justchat.loaders.AvatarLoader
 import com.hgshkt.justchat.models.User
 import kotlinx.coroutines.*
 
@@ -48,8 +43,12 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
         val name = "$currentUserFirebaseId-${System.currentTimeMillis()}"
 
-        val loader = ImageLoader()
-        loader.upload(uri!!, name)
+        val loader = AvatarLoader()
+        val task = loader.upload(uri!!, name)
+        task.addOnCompleteListener {
+            profileUser.avatarUri = it.result.toString()
+            userController.updateUser(profileUser)
+        }
     }
 
     override fun onStart() {

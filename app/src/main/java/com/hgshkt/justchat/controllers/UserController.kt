@@ -3,10 +3,16 @@ package com.hgshkt.justchat.controllers
 import com.hgshkt.justchat.database.UserDatabase
 import com.hgshkt.justchat.database.UserDatabaseImpl
 import com.hgshkt.justchat.models.User
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
 
 class UserController {
     private val db: UserDatabase = UserDatabaseImpl()
+
+    fun updateUser(user: User) {
+        CoroutineScope(Dispatchers.IO).launch {
+            db.addUser(user)
+        }
+    }
 
     fun getUserById(id: String): User? {
         val users = getAllUsers()
@@ -16,7 +22,7 @@ class UserController {
         return null
     }
 
-    fun getUserByFirebaseId(id: String) : User? {
+    fun getUserByFirebaseId(id: String): User? {
         return runBlocking {
             db.getUserById(id)
         }

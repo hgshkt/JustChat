@@ -7,6 +7,7 @@ class User {
     var password: String = "password"
     var firebaseId: String = "firebaseId"
     var bio: String = "User didn't tell about self..."
+    var avatarUri: String? = null
 
     var chatIdList: List<String> = mutableListOf()
     var gottenInvites: List<String> = mutableListOf()
