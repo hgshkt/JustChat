@@ -1,15 +1,23 @@
 package com.hgshkt.justchat.layout.fragments
 
+import android.app.Activity
+import android.content.Intent
+import android.net.Uri
+import android.util.Log
 import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.hgshkt.justchat.R
 import com.hgshkt.justchat.auth.CurrentUser
 import com.hgshkt.justchat.controllers.FriendController
 import com.hgshkt.justchat.controllers.UserController
+import com.hgshkt.justchat.loaders.ImageLoader
 import com.hgshkt.justchat.models.User
 import kotlinx.coroutines.*
 
@@ -32,6 +40,17 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     private lateinit var currentUserFirebaseId: String
     private lateinit var status: Status
     private lateinit var profileFirebaseId: String
+
+    private var avatarUri: Uri? = null
+
+    val getContent = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+        avatarUri = uri
+
+        val name = "$currentUserFirebaseId-${System.currentTimeMillis()}"
+
+        val loader = ImageLoader()
+        loader.upload(uri!!, name)
+    }
 
     override fun onStart() {
         super.onStart()
@@ -60,8 +79,17 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             tvName.text = profileUser.name
             tvCustomId.text = profileUser.id
             tvBio.text = profileUser.bio
+            loadAvatar(avatarUri)
 
             updateStatusDrawing(status)
+        }
+    }
+
+    private fun loadAvatar(uri: Uri?) {
+        if (uri == null) {
+            // load default avatar
+        } else {
+            Glide.with(this).load(uri).into(avatar)
         }
     }
 
@@ -70,7 +98,14 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             inviteButton.setOnClickListener {
                 inviteButtonClick()
             }
+            imgLoadButton.setOnClickListener {
+                openGallery()
+            }
         }
+    }
+
+    private fun openGallery() {
+        getContent.launch("image/*")
     }
 
     private fun inviteButtonClick() {
