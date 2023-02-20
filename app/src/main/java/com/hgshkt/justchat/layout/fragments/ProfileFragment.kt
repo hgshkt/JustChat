@@ -1,5 +1,6 @@
 package com.hgshkt.justchat.layout.fragments
 
+import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
@@ -16,6 +17,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
     lateinit var avatar: ImageView
     lateinit var inviteButton: ImageView
+    lateinit var imgLoadButton: ImageView
     lateinit var tvStatus: TextView
     lateinit var tvName: TextView
     lateinit var tvCustomId: TextView
@@ -104,6 +106,12 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                 .into(inviteButton)
 
             tvStatus.text = status.text
+
+            if (status == Status.CURRENT) {
+                imgLoadButton.visibility = View.VISIBLE
+            } else {
+                imgLoadButton.visibility = View.INVISIBLE
+            }
         }
     }
 
@@ -131,6 +139,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     private fun init() {
         avatar = requireView().findViewById(R.id.profile_avatar)
         inviteButton = requireView().findViewById(R.id.profile_button)
+        imgLoadButton = requireView().findViewById(R.id.profile_img)
         tvStatus = requireView().findViewById(R.id.profile_status)
         tvName = requireView().findViewById(R.id.profile_name)
         tvCustomId = requireView().findViewById(R.id.profile_id)
@@ -157,7 +166,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             override val text: String = "This is your friend"
 
             override fun condition(profileId: String, currentUserId: String): Boolean =
-                    runBlocking {
+                runBlocking {
                     val controller = FriendController()
                     controller.areFriends(profileId, currentUserId)
                 }
