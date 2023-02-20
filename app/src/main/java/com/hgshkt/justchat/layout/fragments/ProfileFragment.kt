@@ -71,7 +71,6 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
     private fun updateUI() {
         CoroutineScope(Dispatchers.Main).launch {
-            // TODO avatar
             tvName.text = profileUser.name
             tvCustomId.text = profileUser.id
             tvBio.text = profileUser.bio
@@ -82,12 +81,11 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     }
 
     private fun loadAvatar() {
-        val uri = profileUser.avatarUri
+        var uri : Any? = profileUser.avatarUri
         if (uri == null) {
-            // load default avatar
-        } else {
-            Glide.with(this).load(uri).into(avatar)
+            uri = R.drawable.ic_default_avatar
         }
+        Glide.with(this).load(uri).into(avatar)
     }
 
     private suspend fun setListeners() {
