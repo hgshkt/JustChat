@@ -36,6 +36,8 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     private lateinit var status: Status
     private lateinit var profileFirebaseId: String
 
+    private var editable = false
+
     val getContent = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
 
         val name = "$currentUserFirebaseId-${System.currentTimeMillis()}"
@@ -114,7 +116,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                     profileUser,
                     CurrentUser.get()!!
                 )
-                Status.CURRENT -> TODO()
+                Status.CURRENT -> updateEditable()
                 Status.RECIPIENT -> friendController.cancelInviting(
                     CurrentUser.get()!!,
                     profileUser
@@ -127,6 +129,52 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             updateStatus()
             updateStatusDrawing(status)
         }
+    }
+
+    private fun updateEditable() {
+        if (editable) {
+            CoroutineScope(Dispatchers.Default).launch {
+                val name = etName.text.toString()
+                val id = etCustomId.text.toString()
+                val bio = etBio.text.toString()
+
+                profileUser.name = name
+                profileUser.id = id
+                profileUser.bio = bio
+
+                userController.updateUser(profileUser)
+            }
+            CoroutineScope(Dispatchers.Main).launch {
+                etName.visibility = View.INVISIBLE
+                etCustomId.visibility = View.INVISIBLE
+                etBio.visibility = View.INVISIBLE
+
+                tvName.visibility = View.VISIBLE
+                tvName.text = etName.text
+
+                tvCustomId.visibility = View.VISIBLE
+                tvCustomId.text = etCustomId.text
+
+                tvBio.visibility = View.VISIBLE
+                tvBio.text = etBio.text
+            }
+        } else {
+            CoroutineScope(Dispatchers.Main).launch {
+                tvName.visibility = View.INVISIBLE
+                tvCustomId.visibility = View.INVISIBLE
+                tvBio.visibility = View.INVISIBLE
+
+                etName.visibility = View.VISIBLE
+                etName.setText(profileUser.name)
+
+                etCustomId.visibility = View.VISIBLE
+                etCustomId.setText(profileUser.id)
+
+                etBio.visibility = View.VISIBLE
+                etBio.setText(profileUser.bio)
+            }
+        }
+        editable = !editable
     }
 
     private fun updateStatusDrawing(status: Status) {
