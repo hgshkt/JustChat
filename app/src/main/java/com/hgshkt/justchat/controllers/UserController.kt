@@ -29,7 +29,7 @@ class UserController {
     }
 
     fun getAllUsers(): List<User> {
-        return runBlocking {
+        return runBlocking(Dispatchers.IO) {
             val list = mutableListOf<User>()
             val map = db.getAllUsers()
             if (map == null) return@runBlocking list
