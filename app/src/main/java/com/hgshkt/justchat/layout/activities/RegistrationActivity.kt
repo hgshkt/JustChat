@@ -5,13 +5,11 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
-import com.google.firebase.auth.FirebaseAuth
 import com.hgshkt.justchat.R
-import com.hgshkt.justchat.creators.UserCreator
+import com.hgshkt.justchat.auth.AppAuth
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
 
 class RegistrationActivity : AppCompatActivity() {
 
@@ -45,19 +43,7 @@ class RegistrationActivity : AppCompatActivity() {
         val password = etPassword.text.toString()
 
         CoroutineScope(Dispatchers.IO).launch {
-            val auth = FirebaseAuth.getInstance()
-
-            auth.createUserWithEmailAndPassword(email, password).await()
-            auth.signInWithEmailAndPassword(email, password).await()
-
-            val creator = UserCreator()
-            creator.createUser(
-                name = name,
-                customId = id,
-                email = email,
-                password = password,
-                firebaseId = auth.currentUser!!.uid
-            )
+            AppAuth().registration(email, password, name, id)
 
             Intent(this@RegistrationActivity, MainActivity::class.java).also {
                 startActivity(it)
