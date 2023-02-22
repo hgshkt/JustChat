@@ -46,6 +46,7 @@ class FriendsFragment : Fragment(R.layout.fragment_friends) {
                 recyclerView.adapter = FriendListAdapter(
                     requireContext(),
                     friendFIDList.await(),
+                    findNavController(),
                     false
                 )
             }

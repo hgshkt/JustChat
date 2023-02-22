@@ -1,12 +1,14 @@
 package com.hgshkt.justchat.adapters
 
 import android.content.Context
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.navigation.NavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.hgshkt.justchat.R
@@ -18,6 +20,7 @@ import kotlinx.coroutines.launch
 class FriendListAdapter(
     private val context: Context,
     private val friendFirebaseIdList: List<String>,
+    private val navController: NavController,
     private val withCheckBox: Boolean
 ) : RecyclerView.Adapter<FriendListAdapter.FriendViewHolder>() {
 
@@ -44,6 +47,11 @@ class FriendListAdapter(
                 Glide.with(context)
                     .load(friend.avatarUri)
                     .into(holder.avatar)
+
+                holder.itemView.setOnClickListener {
+                    val bundle = Bundle()
+                    navController.navigate(R.id.friend_to_profile, bundle)
+                }
             }
         }
     }
