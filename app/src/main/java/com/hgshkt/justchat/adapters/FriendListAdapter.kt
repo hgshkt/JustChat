@@ -17,7 +17,8 @@ import kotlinx.coroutines.launch
 
 class FriendListAdapter(
     private val context: Context,
-    private val friendFirebaseIdList: List<String>
+    private val friendFirebaseIdList: List<String>,
+    private val withCheckBox: Boolean
 ) : RecyclerView.Adapter<FriendListAdapter.FriendViewHolder>() {
 
     private val userController = UserController()
@@ -37,6 +38,9 @@ class FriendListAdapter(
 
             launch(Dispatchers.Main) {
                 holder.tvName.text = friend.name
+                if (withCheckBox) {
+                    holder.checkBox.visibility = View.VISIBLE
+                }
                 Glide.with(context)
                     .load(friend.avatarUri)
                     .into(holder.avatar)

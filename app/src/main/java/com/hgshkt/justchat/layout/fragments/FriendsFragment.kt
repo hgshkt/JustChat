@@ -43,7 +43,11 @@ class FriendsFragment : Fragment(R.layout.fragment_friends) {
             recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
             CoroutineScope(Dispatchers.Main).launch {
-                recyclerView.adapter = FriendListAdapter(requireContext(), friendFIDList.await())
+                recyclerView.adapter = FriendListAdapter(
+                    requireContext(),
+                    friendFIDList.await(),
+                    false
+                )
             }
         }
     }
