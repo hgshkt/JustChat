@@ -38,7 +38,7 @@ class FriendListAdapter(
     override fun onBindViewHolder(holder: FriendViewHolder, position: Int) {
         CoroutineScope(Dispatchers.Default).launch {
             val fid = friendFirebaseIdList[position]
-            val friend = userController.getUserByFirebaseId(fid)!!
+            val friend = userController.getUserByFID(fid)!!
 
             launch(Dispatchers.Main) {
                 holder.tvName.text = friend.name

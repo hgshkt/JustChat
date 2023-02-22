@@ -17,9 +17,9 @@ interface UserDatabase {
 
     /**
      * Returns user from database by its id
-     * @param id is user id
+     * @param fid is user id
      */
-    suspend fun getUserById(id: String): User?
+    suspend fun getUserByFID(fid: String): User?
 
     /**
      * Returns HashMap of all users. Value is user, keys contains id
@@ -29,35 +29,35 @@ interface UserDatabase {
 
     /**
      * Adds chat id to user chat list
-     * @param userId is user id
+     * @param fid is user id
      * @param chat is chat whose id must be added to user chat list
      */
-    suspend fun addChatToUserChatList(userId: String, chat: Chat)
+    suspend fun addChatToUserChatList(fid: String, chat: Chat)
 
 
-    suspend fun updateSentInvites(userId: String, sentInvites: List<String>)
+    suspend fun updateSentInvites(fid: String, sentInvites: List<String>)
 
 
-    suspend fun updateReceivedInvites(userId: String, receivedInvites: List<String>)
+    suspend fun updateReceivedInvites(fid: String, receivedInvites: List<String>)
 
 
-    suspend fun updateFriendList(userId: String, friendList: List<String>)
+    suspend fun updateFriendList(fid: String, friendList: List<String>)
 
     /**
      * Returns HashMap of user's sent invites. Values is empty. Keys contains id
-     * @param userId is user's id whose list must be gotten
+     * @param fid is user's id whose list must be gotten
      */
-    suspend fun getSentInviteList(userId: String): List<String>?
+    suspend fun getSentInviteList(fid: String): List<String>?
 
     /**
      * Returns HashMap of user's received invites. Values is empty. Keys contains id
-     * @param userId is user's id whose list must be gotten
+     * @param fid is user's id whose list must be gotten
      */
-    suspend fun getReceivedInviteList(userId: String): List<String>?
+    suspend fun getReceivedInviteList(fid: String): List<String>?
 
     /**
      * Returns HashMap of user's friend list. Values is empty. Keys contains id
-     * @param userId is user's id whose list must be gotten
+     * @param fid is user's id whose list must be gotten
      */
-    suspend fun getFriendList(userId: String): List<String>?
+    suspend fun getFriendList(fid: String): List<String>?
 }

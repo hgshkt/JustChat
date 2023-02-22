@@ -68,7 +68,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
 
     private fun loadUsers() {
-        profileUser = userController.getUserByFirebaseId(profileFirebaseId)!!
+        profileUser = userController.getUserByFID(profileFirebaseId)!!
     }
 
     private fun updateUI() {
@@ -278,7 +278,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             override val text: String = "Send invite"
 
             override fun condition(profileId: String, currentUserId: String): Boolean {
-                for (status in Status.values()) {
+                for (status in values()) {
                     if (status != DEFAULT && status.condition(profileId, currentUserId)) {
                         return false
                     }

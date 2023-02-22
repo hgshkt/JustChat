@@ -11,16 +11,9 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
-import com.google.firebase.auth.FirebaseAuth
 import com.hgshkt.justchat.R
-import com.hgshkt.justchat.database.ChatDatabase
-import com.hgshkt.justchat.database.ChatDatabaseImpl
 
 class MainActivity : AppCompatActivity() {
-
-    lateinit var db: ChatDatabase
-
-    private lateinit var auth: FirebaseAuth
 
     private lateinit var navController: NavController
     private lateinit var drawerLayout: DrawerLayout
@@ -50,8 +43,5 @@ class MainActivity : AppCompatActivity() {
         navController = navHostFragment!!.findNavController()
         drawerLayout = findViewById(R.id.drawer_layout)
         navigationView = findViewById(R.id.navigation_view)
-
-        db = ChatDatabaseImpl()
-        auth = FirebaseAuth.getInstance()
     }
 }

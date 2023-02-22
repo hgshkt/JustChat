@@ -22,9 +22,9 @@ class UserController {
         return null
     }
 
-    fun getUserByFirebaseId(id: String): User? {
+    fun getUserByFID(fid: String): User? {
         return runBlocking {
-            db.getUserById(id)
+            db.getUserByFID(fid)
         }
     }
 

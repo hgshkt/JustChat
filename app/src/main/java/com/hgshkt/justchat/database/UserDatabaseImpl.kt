@@ -21,45 +21,45 @@ class UserDatabaseImpl : UserDatabase {
         dbRef.child(user.fid).setValue(user)
     }
 
-    override suspend fun getUserById(id: String): User? {
-        return dbRef.child(id).get().await().getValue(User::class.java)
+    override suspend fun getUserByFID(fid: String): User? {
+        return dbRef.child(fid).get().await().getValue(User::class.java)
     }
 
     override suspend fun getAllUsers(): HashMap<String, User>? {
         return dbRef.get().await().getValue<HashMap<String, User>>()
     }
 
-    override suspend fun addChatToUserChatList(userId: String, chat: Chat) {
-        dbRef.child(userId)
+    override suspend fun addChatToUserChatList(fid: String, chat: Chat) {
+        dbRef.child(fid)
             .child(chatIdListKey)
             .child(chat.lastMessageTime)
             .setValue(chat.id)
     }
 
-    override suspend fun updateSentInvites(userId: String, sentInvites: List<String>) {
-        dbRef.child(userId).child(sentInvitesKey).setValue(sentInvites)
+    override suspend fun updateSentInvites(fid: String, sentInvites: List<String>) {
+        dbRef.child(fid).child(sentInvitesKey).setValue(sentInvites)
     }
 
-    override suspend fun updateReceivedInvites(userId: String, receivedInvites: List<String>) {
-        dbRef.child(userId).child(gottenInvitesKey).setValue(receivedInvites)
+    override suspend fun updateReceivedInvites(fid: String, receivedInvites: List<String>) {
+        dbRef.child(fid).child(gottenInvitesKey).setValue(receivedInvites)
     }
 
-    override suspend fun updateFriendList(userId: String, friendList: List<String>) {
-        dbRef.child(userId).child(friendListKey).setValue(friendList)
+    override suspend fun updateFriendList(fid: String, friendList: List<String>) {
+        dbRef.child(fid).child(friendListKey).setValue(friendList)
     }
 
-    override suspend fun getSentInviteList(userId: String): List<String>? {
-        return dbRef.child(userId)
+    override suspend fun getSentInviteList(fid: String): List<String>? {
+        return dbRef.child(fid)
             .child(sentInvitesKey).get().await().getValue<List<String>>()
     }
 
-    override suspend fun getReceivedInviteList(userId: String): List<String>? {
-        return dbRef.child(userId)
+    override suspend fun getReceivedInviteList(fid: String): List<String>? {
+        return dbRef.child(fid)
             .child(gottenInvitesKey).get().await().getValue<List<String>>()
     }
 
-    override suspend fun getFriendList(userId: String): List<String>? {
-        return dbRef.child(userId)
+    override suspend fun getFriendList(fid: String): List<String>? {
+        return dbRef.child(fid)
             .child(friendListKey).get().await().getValue<List<String>>()
     }
 }

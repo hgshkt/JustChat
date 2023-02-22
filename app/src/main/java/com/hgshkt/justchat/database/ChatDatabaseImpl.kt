@@ -15,13 +15,4 @@ class ChatDatabaseImpl : ChatDatabase {
     override suspend fun getChatById(id: String): Chat {
         return dbRef.child(id).get().await().getValue(Chat::class.java)!!
     }
-
-    override suspend fun getChatList(idList: List<String>): List<Chat> {
-        val list = mutableListOf<Chat>()
-            for (id in idList) {
-                val chat = dbRef.child(id).get().await().getValue(Chat::class.java)!!
-                list.add(chat)
-            }
-        return list
-    }
 }

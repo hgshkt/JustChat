@@ -39,36 +39,36 @@ class FriendController {
         makeFriends(sender, receiver)
     }
 
-    suspend fun getSentInviteList(userId: String): List<String>? {
-        return db.getSentInviteList(userId)
+    suspend fun getSentInviteList(userFID: String): List<String>? {
+        return db.getSentInviteList(userFID)
     }
 
-    suspend fun getReceivedInviteList(userId: String): List<String>? {
-        return db.getReceivedInviteList(userId)
+    suspend fun getReceivedInviteList(userFID: String): List<String>? {
+        return db.getReceivedInviteList(userFID)
     }
 
-    suspend fun idInSentInviteList(senderId: String, receiverId: String): Boolean {
-        val list = getSentInviteList(senderId) ?: return false
-        if (list.contains(receiverId)) {
+    suspend fun idInSentInviteList(senderFID: String, receiverFID: String): Boolean {
+        val list = getSentInviteList(senderFID) ?: return false
+        if (list.contains(receiverFID)) {
             return true
         }
         return false
     }
 
-    suspend fun idInGottenInviteList(senderId: String, receiverId: String): Boolean {
-        val list = getReceivedInviteList(receiverId) ?: return false
-        if (list.contains(senderId)) {
+    suspend fun idInGottenInviteList(senderFID: String, receiverFID: String): Boolean {
+        val list = getReceivedInviteList(receiverFID) ?: return false
+        if (list.contains(senderFID)) {
             return true
         }
         return false
     }
 
-    suspend fun areFriends(firstId: String, secondId: String): Boolean {
-        val firstFriendList = db.getFriendList(firstId) ?: return false
-        val secondFriendList = db.getFriendList(secondId) ?: return false
+    suspend fun areFriends(firstFID: String, secondFID: String): Boolean {
+        val firstFriendList = db.getFriendList(firstFID) ?: return false
+        val secondFriendList = db.getFriendList(secondFID) ?: return false
 
-        val firstHasSecond = firstFriendList.contains(secondId)
-        val secondHasFirst = secondFriendList.contains(firstId)
+        val firstHasSecond = firstFriendList.contains(secondFID)
+        val secondHasFirst = secondFriendList.contains(firstFID)
         return firstHasSecond && secondHasFirst
     }
 

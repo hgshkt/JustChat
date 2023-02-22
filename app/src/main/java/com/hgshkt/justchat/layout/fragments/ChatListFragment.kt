@@ -6,13 +6,12 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.auth.FirebaseAuth
 import com.hgshkt.justchat.R
-import com.hgshkt.justchat.layout.activities.LoginActivity
 import com.hgshkt.justchat.adapters.ChatListAdapter
+import com.hgshkt.justchat.auth.AppAuth
 import com.hgshkt.justchat.auth.CurrentUser
-import com.hgshkt.justchat.database.ChatDatabase
-import com.hgshkt.justchat.database.ChatDatabaseImpl
+import com.hgshkt.justchat.controllers.ChatController
+import com.hgshkt.justchat.layout.activities.LoginActivity
 import com.hgshkt.justchat.models.Chat
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -24,10 +23,6 @@ class ChatListFragment : Fragment(R.layout.fragment_chats) {
     lateinit var chatIdList: List<String>
     lateinit var chatList: List<Chat>
 
-    lateinit var db: ChatDatabase
-
-    private lateinit var auth: FirebaseAuth
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -37,13 +32,13 @@ class ChatListFragment : Fragment(R.layout.fragment_chats) {
     override fun onStart() {
         super.onStart()
 
-        if (auth.currentUser == null) {
+        val auth = AppAuth()
+        if (!auth.entered) {
+            auth.signOut()
             Intent(requireContext(), LoginActivity::class.java).also {
                 startActivity(it)
             }
-        } else {
-            updateUI()
-        }
+        } else updateUI()
     }
 
     private fun updateUI() {
@@ -58,7 +53,8 @@ class ChatListFragment : Fragment(R.layout.fragment_chats) {
     private suspend fun updateAdapter() {
         val user = CurrentUser.get()
         chatIdList = user!!.chatIdList
-        chatList = db.getChatList(chatIdList)
+        chatList = ChatController().getChatListByIdList(chatIdList)
+
         recyclerView.adapter = ChatListAdapter(
             context = requireContext(),
             chatList = chatList
@@ -67,8 +63,5 @@ class ChatListFragment : Fragment(R.layout.fragment_chats) {
 
     private fun init() {
         recyclerView = requireView().findViewById(R.id.chats_rv)
-
-        db = ChatDatabaseImpl()
-        auth = FirebaseAuth.getInstance()
     }
 }

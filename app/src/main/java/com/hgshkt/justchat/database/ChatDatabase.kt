@@ -7,6 +7,4 @@ interface ChatDatabase {
     suspend fun addChat(chat: Chat)
 
     suspend fun getChatById(id: String): Chat
-
-    suspend fun getChatList(idList: List<String>): List<Chat>
 }

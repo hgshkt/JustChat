@@ -1,19 +1,16 @@
 package com.hgshkt.justchat.layout.activities
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
-import android.widget.Toast
-import com.google.firebase.auth.FirebaseAuth
+import androidx.appcompat.app.AppCompatActivity
 import com.hgshkt.justchat.R
+import com.hgshkt.justchat.auth.AppAuth
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import java.lang.Exception
 
 class LoginActivity : AppCompatActivity() {
 
@@ -23,33 +20,24 @@ class LoginActivity : AppCompatActivity() {
     lateinit var etEmail: EditText
     lateinit var etPassword: EditText
 
-    lateinit var auth: FirebaseAuth
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        init()
-        setListeners()
+        CoroutineScope(Dispatchers.Default).launch {
+            init()
+            setListeners()
+        }
     }
 
     private fun login() {
         val email = etEmail.text.toString()
         val password = etPassword.text.toString()
 
-        if(email.isNotEmpty() && password.isNotEmpty()) {
-            CoroutineScope(Dispatchers.IO).launch {
-                try{
-                    auth.signInWithEmailAndPassword(email, password)
-                } catch (exception: Exception) {
-                    withContext(Dispatchers.Main) {
-                        Toast.makeText(this@LoginActivity, "Error", Toast.LENGTH_LONG).show()
-                    }
-                }
-                Intent(this@LoginActivity, MainActivity::class.java).also {
-                    startActivity(it)
-                }
-            }
+        AppAuth().login(email, password, this)
+
+        Intent(this@LoginActivity, MainActivity::class.java).also {
+            startActivity(it)
         }
     }
 
@@ -73,7 +61,5 @@ class LoginActivity : AppCompatActivity() {
 
         etEmail = findViewById(R.id.et_email)
         etPassword = findViewById(R.id.et_password)
-
-        auth = FirebaseAuth.getInstance()
     }
 }

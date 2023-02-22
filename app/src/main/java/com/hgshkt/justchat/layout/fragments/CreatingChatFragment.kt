@@ -22,7 +22,6 @@ class CreatingChatFragment : Fragment() {
     lateinit var button: Button
 
     lateinit var membersFID: List<String>
-    lateinit var friendFIDList: List<String>
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,21 +39,19 @@ class CreatingChatFragment : Fragment() {
         super.onStart()
 
         CoroutineScope(Dispatchers.Default).launch {
-            val async = async { CurrentUser.get()!!.friendList }
-
             setListeners()
-            bindRecyclerView(async)
+            bindRecyclerView()
         }
     }
 
-    private suspend fun bindRecyclerView(async: Deferred<List<String>>) {
+    private fun bindRecyclerView() {
         CoroutineScope(Dispatchers.Default).launch {
             recyclerView.setHasFixedSize(true)
             recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
             val adapter = FriendListAdapter(
                 requireContext(),
-                async.await(),
+                CurrentUser.get()!!.friendList,
                 findNavController(),
                 true
             )
