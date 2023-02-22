@@ -18,7 +18,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class ChatListFragment : Fragment(R.layout.fragment_chats){
+class ChatListFragment : Fragment(R.layout.fragment_chats) {
     lateinit var recyclerView: RecyclerView
 
     lateinit var chatIdList: List<String>
@@ -42,9 +42,7 @@ class ChatListFragment : Fragment(R.layout.fragment_chats){
                 startActivity(it)
             }
         } else {
-            CoroutineScope(Dispatchers.IO).launch {
-                updateUI()
-            }
+            updateUI()
         }
     }
 
@@ -68,7 +66,7 @@ class ChatListFragment : Fragment(R.layout.fragment_chats){
     }
 
     private fun init() {
-        recyclerView = view!!.findViewById(R.id.chats_rv)
+        recyclerView = requireView().findViewById(R.id.chats_rv)
 
         db = ChatDatabaseImpl()
         auth = FirebaseAuth.getInstance()

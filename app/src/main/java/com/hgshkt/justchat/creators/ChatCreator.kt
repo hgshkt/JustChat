@@ -1,5 +1,6 @@
 package com.hgshkt.justchat.creators
 
+import com.hgshkt.justchat.auth.CurrentUser
 import com.hgshkt.justchat.database.ChatDatabase
 import com.hgshkt.justchat.database.ChatDatabaseImpl
 import com.hgshkt.justchat.database.UserDatabase
@@ -11,18 +12,24 @@ import kotlinx.coroutines.launch
 
 class ChatCreator {
 
-    private val chatDatabase : ChatDatabase = ChatDatabaseImpl()
+    private val chatDatabase: ChatDatabase = ChatDatabaseImpl()
     private val userDatabase: UserDatabase = UserDatabaseImpl()
 
     fun createChat(chatName: String, membersId: List<String>) {
-        val chat = Chat(chatName, membersId)
+        CoroutineScope(Dispatchers.Default).launch {
+            val chat = Chat(chatName, membersId)
 
-        CoroutineScope(Dispatchers.IO).launch {
-            chatDatabase.addChat(chat)
-        }
-        for (userId in membersId) {
             CoroutineScope(Dispatchers.IO).launch {
-                userDatabase.addChatToUserChatList(userId, chat)
+                launch {
+                    val currentUser = CurrentUser.get()!!
+                    userDatabase.addChatToUserChatList(currentUser.fid, chat)
+                }
+                chatDatabase.addChat(chat)
+            }
+            for (userId in membersId) {
+                CoroutineScope(Dispatchers.IO).launch {
+                    userDatabase.addChatToUserChatList(userId, chat)
+                }
             }
         }
     }

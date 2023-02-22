@@ -5,7 +5,7 @@ class User {
     var id: String = "id"
     var email: String = "email"
     var password: String = "password"
-    var firebaseId: String = "firebaseId"
+    var fid: String = "fid"
     var bio: String = "User didn't tell about self..."
     var avatarUri: String? = null
 
@@ -22,12 +22,12 @@ class User {
         id: String,
         email: String,
         password: String,
-        firebaseId: String
+        fid: String
     ) {
         this.name = name
         this.id = id
         this.email = email
         this.password = password
-        this.firebaseId = firebaseId
+        this.fid = fid
     }
 }

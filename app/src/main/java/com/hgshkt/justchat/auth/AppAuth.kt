@@ -23,7 +23,7 @@ class AppAuth {
                     id = customId,
                     email = email,
                     password = password,
-                    firebaseId = firebaseId
+                    fid = firebaseId
                 )
 
                 val db : UserDatabase = UserDatabaseImpl()

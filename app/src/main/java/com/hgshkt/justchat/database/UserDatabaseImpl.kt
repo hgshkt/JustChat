@@ -18,7 +18,7 @@ class UserDatabaseImpl : UserDatabase {
     private var dbRef = FirebaseDatabase.getInstance().getReference(path)
 
     override suspend fun addUser(user: User) {
-        dbRef.child(user.firebaseId).setValue(user)
+        dbRef.child(user.fid).setValue(user)
     }
 
     override suspend fun getUserById(id: String): User? {

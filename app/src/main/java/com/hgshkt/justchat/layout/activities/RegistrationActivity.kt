@@ -2,6 +2,7 @@ package com.hgshkt.justchat.layout.activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
@@ -11,6 +12,7 @@ import com.hgshkt.justchat.auth.AppAuth
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 class RegistrationActivity : AppCompatActivity() {
 
@@ -44,21 +46,20 @@ class RegistrationActivity : AppCompatActivity() {
         val password = etPassword.text.toString()
 
         CoroutineScope(Dispatchers.IO).launch {
-            auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener {
-                auth.signInWithEmailAndPassword(email, password).addOnCompleteListener {
-                    val appAuth = AppAuth()
-                    appAuth.createUser(
-                        name = name,
-                        customId = id,
-                        email = email,
-                        password = password,
-                        firebaseId = auth.currentUser!!.uid
-                    )
+            auth.createUserWithEmailAndPassword(email, password).await()
+            auth.signInWithEmailAndPassword(email, password).await()
+            val appAuth = AppAuth()
+            Log.i("taggg", "${auth.currentUser}")
+            appAuth.createUser(
+                name = name,
+                customId = id,
+                email = email,
+                password = password,
+                firebaseId = auth.currentUser!!.uid
+            )
 
-                    Intent(this@RegistrationActivity, MainActivity::class.java).also {
-                        startActivity(it)
-                    }
-                }
+            Intent(this@RegistrationActivity, MainActivity::class.java).also {
+                startActivity(it)
             }
         }
     }

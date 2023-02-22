@@ -195,11 +195,11 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
     private fun loadId() {
         runBlocking {
-            currentUserFirebaseId = CurrentUser.get()!!.firebaseId
+            currentUserFirebaseId = CurrentUser.get()!!.fid
             if (arguments != null && requireArguments().containsKey("id")) {
                 val id = requireArguments().getString("id")!!
                 val user = userController.getUserById(id)
-                profileFirebaseId = user!!.firebaseId
+                profileFirebaseId = user!!.fid
             } else {
                 profileFirebaseId = currentUserFirebaseId
             }

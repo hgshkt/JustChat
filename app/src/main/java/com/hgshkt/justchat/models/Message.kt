@@ -1,17 +1,22 @@
 package com.hgshkt.justchat.models
 
+import java.util.*
+
 class Message {
+    var id: String
     var text: String
-    var author: String
+    var authorFid: String
     var date: Long
 
     constructor(
         text: String,
-        author: String,
+        authorFid: String,
         date: Long
     ) {
         this.text = text
-        this.author = author
+        this.authorFid = authorFid
         this.date = date
+
+        id = UUID.randomUUID().toString()
     }
 }

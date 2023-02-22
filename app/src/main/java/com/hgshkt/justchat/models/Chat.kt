@@ -6,20 +6,20 @@ class Chat {
     lateinit var name: String
     lateinit var id: String
     lateinit var lastMessageTime: String
-    lateinit var messages: List<Message>
-    lateinit var membersId: List<String>
+    lateinit var messagesId: List<String>
+    lateinit var membersFid: List<String>
 
     constructor() {}
 
     constructor(
         name: String,
-        membersId: List<String>
+        membersFid: List<String>
     ) {
         this.name = name
-        this.membersId = membersId
+        this.membersFid = membersFid
 
         this.id = UUID.randomUUID().toString()
-        this.messages = mutableListOf()
+        this.messagesId = mutableListOf()
         this.lastMessageTime = System.currentTimeMillis().toString()
     }
 }

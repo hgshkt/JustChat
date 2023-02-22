@@ -25,6 +25,7 @@ class FriendListAdapter(
 ) : RecyclerView.Adapter<FriendListAdapter.FriendViewHolder>() {
 
     private val userController = UserController()
+    private var membersFID : List<String>? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FriendViewHolder {
         val view = LayoutInflater
@@ -52,11 +53,23 @@ class FriendListAdapter(
                     val bundle = Bundle()
                     navController.navigate(R.id.friend_to_profile, bundle)
                 }
+
+                holder.checkBox.setOnCheckedChangeListener { button, isChecked ->
+                    if (isChecked) {
+                        (membersFID as MutableList<String>).add(friend.fid)
+                    } else {
+                        (membersFID as MutableList<String>).remove(friend.fid)
+                    }
+                }
             }
         }
     }
 
     override fun getItemCount() = friendFirebaseIdList.size
+
+    fun addMembersList(membersFID: List<String>) {
+        this.membersFID = membersFID
+    }
 
     inner class FriendViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         var avatar: ImageView
