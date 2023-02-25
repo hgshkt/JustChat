@@ -16,9 +16,7 @@ class AppAuth {
 
     val entered: Boolean
         get() {
-            if (auth.currentUser == null)
-                return false
-            return true
+            return auth.currentUser != null
         }
 
     fun login(email: String, password: String, context: Context) {

@@ -1,5 +1,6 @@
 package com.hgshkt.justchat.layout.activities
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
@@ -12,6 +13,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
 import com.hgshkt.justchat.R
+import com.hgshkt.justchat.auth.AppAuth
 
 class MainActivity : AppCompatActivity() {
 
@@ -26,10 +28,18 @@ class MainActivity : AppCompatActivity() {
 
         init()
 
-        navigationView.setupWithNavController(navController)
-        appBarConfiguration = AppBarConfiguration(navController.graph, drawerLayout)
+        val auth = AppAuth()
 
-        setupActionBarWithNavController(navController, appBarConfiguration)
+        if (auth.entered) {
+            navigationView.setupWithNavController(navController)
+            appBarConfiguration = AppBarConfiguration(navController.graph, drawerLayout)
+
+            setupActionBarWithNavController(navController, appBarConfiguration)
+        } else {
+            Intent(applicationContext, LoginActivity::class.java).also {
+                startActivity(it)
+            }
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {

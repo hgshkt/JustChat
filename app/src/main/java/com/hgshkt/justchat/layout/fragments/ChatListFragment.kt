@@ -32,14 +32,7 @@ class ChatListFragment : Fragment(R.layout.fragment_chat_list) {
 
     override fun onStart() {
         super.onStart()
-
-        val auth = AppAuth()
-        if (!auth.entered) {
-            auth.signOut()
-            Intent(requireContext(), LoginActivity::class.java).also {
-                startActivity(it)
-            }
-        } else updateUI()
+        updateUI()
     }
 
     private fun updateUI() {
