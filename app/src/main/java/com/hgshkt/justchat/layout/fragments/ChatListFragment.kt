@@ -17,7 +17,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class ChatListFragment : Fragment(R.layout.fragment_chats) {
+class ChatListFragment : Fragment(R.layout.fragment_chat_list) {
     lateinit var recyclerView: RecyclerView
 
     lateinit var chatIdList: List<String>

@@ -14,6 +14,9 @@
         android:id="@+id/creating_chat_fragment"
         android:name="com.hgshkt.justchat.layout.fragments.CreatingChatFragment"
         android:label="New chat">
+        <action
+            android:id="@+id/action_creating_chat_fragment_to_chat_fragment"
+            app:destination="@id/chat_fragment" />
     </fragment>
 
     <fragment
@@ -32,6 +35,15 @@
         <action
             android:id="@+id/friend_to_profile"
             app:destination="@id/profile_fragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/chat_fragment"
+        android:name="com.hgshkt.justchat.layout.fragments.CreatingChatFragment"
+        android:label="New chat">
+        <action
+            android:id="@+id/action_chat_fragment_to_chat_list_fragment"
+            app:destination="@id/chat_list_fragment" />
     </fragment>
 
 </navigation>
