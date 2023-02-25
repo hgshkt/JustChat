@@ -16,6 +16,7 @@ import com.hgshkt.justchat.models.Chat
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class ChatListFragment : Fragment(R.layout.fragment_chat_list) {
     lateinit var recyclerView: RecyclerView
@@ -51,14 +52,17 @@ class ChatListFragment : Fragment(R.layout.fragment_chat_list) {
     }
 
     private suspend fun updateAdapter() {
-        val user = CurrentUser.get()
-        chatIdList = user!!.chatIdList
-        chatList = ChatController().getChatListByIdList(chatIdList)
+        withContext(Dispatchers.IO) {
+            CurrentUser.get()
+        }.also {
+            chatIdList = it!!.chatIdList
+            chatList = ChatController().getChatListByIdList(chatIdList)
 
-        recyclerView.adapter = ChatListAdapter(
-            context = requireContext(),
-            chatList = chatList
-        )
+            recyclerView.adapter = ChatListAdapter(
+                context = requireContext(),
+                chatList = chatList
+            )
+        }
     }
 
     private fun init() {
