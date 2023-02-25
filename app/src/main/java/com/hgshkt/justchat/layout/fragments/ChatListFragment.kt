@@ -1,6 +1,5 @@
 package com.hgshkt.justchat.layout.fragments
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
@@ -8,10 +7,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.hgshkt.justchat.R
 import com.hgshkt.justchat.adapters.ChatListAdapter
-import com.hgshkt.justchat.auth.AppAuth
 import com.hgshkt.justchat.auth.CurrentUser
 import com.hgshkt.justchat.controllers.ChatController
-import com.hgshkt.justchat.layout.activities.LoginActivity
 import com.hgshkt.justchat.models.Chat
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
