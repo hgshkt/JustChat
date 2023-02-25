@@ -48,7 +48,9 @@ class ChatListFragment : Fragment(R.layout.fragment_chat_list) {
         withContext(Dispatchers.IO) {
             CurrentUser.get()
         }.also {
-            chatIdList = it!!.chatIdList
+            if (it == null) return
+
+            chatIdList = it.chatIdList
             chatList = ChatController().getChatListByIdList(chatIdList)
 
             recyclerView.adapter = ChatListAdapter(
