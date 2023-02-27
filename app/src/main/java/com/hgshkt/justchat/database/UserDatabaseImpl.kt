@@ -9,7 +9,7 @@ import kotlinx.coroutines.tasks.await
 class UserDatabaseImpl : UserDatabase {
 
     private val path = "users"
-    private val chatIdListKey = "chatIdList"
+    private val chatIdMapKey = "chatIdMap"
     private val sentInvitesKey = "sentInvites"
     private val gottenInvitesKey = "gottenInvites"
     private val friendListKey = "friendList"
@@ -31,7 +31,7 @@ class UserDatabaseImpl : UserDatabase {
 
     override suspend fun addChatToUserChatList(fid: String, chat: Chat) {
         dbRef.child(fid)
-            .child(chatIdListKey)
+            .child(chatIdMapKey)
             .child(chat.lastMessageTime)
             .setValue(chat.id)
     }

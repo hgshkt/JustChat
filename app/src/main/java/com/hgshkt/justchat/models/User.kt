@@ -9,7 +9,7 @@ class User {
     var bio: String = "User didn't tell about self..."
     var avatarUri: String? = null
 
-    var chatIdList: List<String> = mutableListOf()
+    var chatIdMap: HashMap<String, String> = hashMapOf()
     var gottenInvites: List<String> = mutableListOf()
     var sentInvites: List<String> = mutableListOf()
     var friendList: List<String> = mutableListOf()

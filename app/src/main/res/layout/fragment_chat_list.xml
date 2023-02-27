@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/chats_rv"
+        android:id="@+id/chat_list_rv"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="1dp"

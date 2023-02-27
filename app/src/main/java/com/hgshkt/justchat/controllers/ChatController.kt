@@ -6,14 +6,19 @@ import com.hgshkt.justchat.models.Chat
 
 class ChatController {
 
-    val chatDB: ChatDatabase = ChatDatabaseImpl()
+    private val db: ChatDatabase = ChatDatabaseImpl()
 
-    suspend fun getChatListByIdList(idList: List<String>): List<Chat> {
+    suspend fun getChatList(idList: List<String>): List<Chat> {
         val list = mutableListOf<Chat>()
         for (id in idList) {
-            val chat = chatDB.getChatById(id)
-            list.add(chat)
+            val chat = db.getChatById(id)
+            if (chat != null)
+                list.add(chat)
         }
         return list
+    }
+
+    suspend fun getChat(id: String): Chat? {
+        return db.getChatById(id)
     }
 }

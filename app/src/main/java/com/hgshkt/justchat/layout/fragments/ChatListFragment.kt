@@ -18,6 +18,7 @@ import kotlinx.coroutines.withContext
 class ChatListFragment : Fragment(R.layout.fragment_chat_list) {
     lateinit var recyclerView: RecyclerView
 
+    lateinit var chatIdMap: HashMap<String, String>
     lateinit var chatIdList: List<String>
     lateinit var chatList: List<Chat>
 
@@ -47,8 +48,9 @@ class ChatListFragment : Fragment(R.layout.fragment_chat_list) {
         }.also {
             if (it == null) return
 
-            chatIdList = it.chatIdList
-            chatList = ChatController().getChatListByIdList(chatIdList)
+            chatIdMap = it.chatIdMap
+            chatIdList = mapToValueList(chatIdMap)
+            chatList = ChatController().getChatList(chatIdList)
 
             recyclerView.adapter = ChatListAdapter(
                 context = requireContext(),
@@ -57,7 +59,15 @@ class ChatListFragment : Fragment(R.layout.fragment_chat_list) {
         }
     }
 
+    private fun <K, V>mapToValueList(map: HashMap<K, V>): List<V> {
+        val list: List<V> = mutableListOf()
+        for (value in map.values) {
+            (list as MutableList).add(value)
+        }
+        return list
+    }
+
     private fun init() {
-        recyclerView = requireView().findViewById(R.id.chats_rv)
+        recyclerView = requireView().findViewById(R.id.chat_list_rv)
     }
 }

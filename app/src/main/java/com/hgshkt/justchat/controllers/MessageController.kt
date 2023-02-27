@@ -1,14 +1,18 @@
-package com.hgshkt.justchat.creators
+package com.hgshkt.justchat.controllers
 
+import com.hgshkt.justchat.database.MessageDatabase
 import com.hgshkt.justchat.database.MessageDatabaseImpl
 import com.hgshkt.justchat.models.Message
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class MessageCreator {
+class MessageController {
+    private val db: MessageDatabase = MessageDatabaseImpl()
 
-    private val db = MessageDatabaseImpl()
+    suspend fun getMessage(id: String): Message {
+        return db.getMessage(id)
+    }
 
     fun create(message: Message) {
         CoroutineScope(Dispatchers.IO).launch {
