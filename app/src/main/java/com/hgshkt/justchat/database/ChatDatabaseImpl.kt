@@ -1,6 +1,7 @@
 package com.hgshkt.justchat.database
 
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.hgshkt.justchat.models.Chat
 import kotlinx.coroutines.tasks.await
 
@@ -19,5 +20,12 @@ class ChatDatabaseImpl : ChatDatabase {
 
     override suspend fun addMessageToChat(chatId: String, messageId: String, time: String) {
         dbRef.child(chatId).child(messagesKey).child(time).setValue(messageId)
+    }
+
+    override suspend fun addChatChangeListener(
+        chatId: String,
+        listener: ValueEventListener
+    ) {
+        dbRef.child(chatId).addValueEventListener(listener)
     }
 }

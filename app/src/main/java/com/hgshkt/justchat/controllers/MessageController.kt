@@ -6,6 +6,7 @@ import com.hgshkt.justchat.models.Message
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class MessageController {
     private val db: MessageDatabase = MessageDatabaseImpl()
@@ -19,4 +20,14 @@ class MessageController {
             db.addMessage(message)
         }
     }
+
+    fun getMessages(messagesIdList: List<String>): List<Message> =
+        runBlocking(Dispatchers.IO) {
+            val list = mutableListOf<Message>()
+            for (id in messagesIdList) {
+                val massage = db.getMessage(id)
+                list.add(massage)
+            }
+            return@runBlocking list
+        }
 }

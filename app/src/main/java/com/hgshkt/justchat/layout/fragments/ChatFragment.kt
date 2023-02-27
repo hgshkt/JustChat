@@ -47,13 +47,8 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
 
             j.join()
 
-            manager = ChatManager(currentChat, requireContext())
-            recyclerView.adapter = manager.adapter
+            manager = ChatManager(currentChat, requireContext(), recyclerView)
         }
-    }
-
-    private fun updateAdapter() {
-        manager.updateAdapter()
     }
 
     private suspend fun loadChat() {
@@ -68,8 +63,9 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
 
     private fun sendMessage() {
         val text = editText.text.toString()
-        editText.text.clear()
         val authorFID = CurrentUser.get()?.fid ?: return
+
+        editText.text.clear()
 
         val message = Message(text = text, authorFid = authorFID)
         manager.sendMessage(message)

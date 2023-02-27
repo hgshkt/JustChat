@@ -10,6 +10,7 @@ import com.hgshkt.justchat.R
 import com.hgshkt.justchat.adapters.ChatListAdapter
 import com.hgshkt.justchat.auth.CurrentUser
 import com.hgshkt.justchat.controllers.ChatController
+import com.hgshkt.justchat.mapToValueList
 import com.hgshkt.justchat.models.Chat
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -59,14 +60,6 @@ class ChatListFragment : Fragment(R.layout.fragment_chat_list) {
                 navController = findNavController()
             )
         }
-    }
-
-    private fun <K, V>mapToValueList(map: HashMap<K, V>): List<V> {
-        val list: List<V> = mutableListOf()
-        for (value in map.values) {
-            (list as MutableList).add(value)
-        }
-        return list
     }
 
     private fun init() {
