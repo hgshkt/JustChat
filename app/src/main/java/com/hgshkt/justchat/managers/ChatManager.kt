@@ -13,7 +13,8 @@ class ChatManager(val chat: Chat, val context: Context) {
     var adapter: MessagesAdapter
     private lateinit var messageList: List<Message>
 
-    private val messageNumber = 10
+    private var messageNumber = 0
+    private val messageNumberIncrease = 10
     private val messageController = MessageController()
 
     init {
@@ -28,12 +29,16 @@ class ChatManager(val chat: Chat, val context: Context) {
     }
 
     private suspend fun loadMessages() {
-        messageList = mutableListOf()
+        messageNumber += messageNumberIncrease
+        messageList = listOf()
         if (chat.messagesId.isEmpty()) return
 
-        val messagesId = chat.messagesId
+        val messagesId = chat.messagesId.toSortedMap()
+        val keys = messagesId.keys.toMutableList()
         for (i in 0 until messageNumber) {
-            val message = messageController.getMessage(messagesId[i])
+            val time = keys[i]
+            val id = messagesId[time]
+            val message = messageController.getMessage(id!!)
             (messageList as MutableList).add(message)
         }
     }
