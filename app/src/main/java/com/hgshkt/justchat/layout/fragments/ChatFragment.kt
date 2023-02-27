@@ -37,10 +37,6 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
         }
         init()
         setListeners()
-    }
-
-    override fun onStart() {
-        super.onStart()
         updateUI()
     }
 
@@ -56,6 +52,10 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
         }
     }
 
+    private fun updateAdapter() {
+        manager.updateAdapter()
+    }
+
     private suspend fun loadChat() {
         val id = requireArguments().getString("id")!!
         val chat = ChatController().getChat(id)
@@ -68,6 +68,7 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
 
     private fun sendMessage() {
         val text = editText.text.toString()
+        editText.text.clear()
         val authorFID = CurrentUser.get()?.fid ?: return
 
         val message = Message(text = text, authorFid = authorFID)
