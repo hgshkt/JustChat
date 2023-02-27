@@ -2,8 +2,8 @@ package com.hgshkt.justchat.layout.fragments
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -22,7 +22,7 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
 
     lateinit var recyclerView: RecyclerView
     lateinit var editText: EditText
-    lateinit var sendButton: Button
+    lateinit var sendButton: ImageView
 
     lateinit var currentChat: Chat
     lateinit var manager: ChatManager

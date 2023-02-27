@@ -1,17 +1,20 @@
 package com.hgshkt.justchat.adapters
 
 import android.content.Context
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.navigation.NavController
 import androidx.recyclerview.widget.RecyclerView
 import com.hgshkt.justchat.R
 import com.hgshkt.justchat.models.Chat
 
 class ChatListAdapter(
     private val context: Context,
-    private val chatList: List<Chat>
+    private val chatList: List<Chat>,
+    private val navController: NavController
 ) : RecyclerView.Adapter<ChatListAdapter.ChatViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatViewHolder {
@@ -31,10 +34,9 @@ class ChatListAdapter(
     }
 
     private fun openChat(chat: Chat) {
-        /*
-        TODO
-            open chat activity for this chat
-            */
+        val bundle = Bundle()
+        bundle.putString("id", chat.id)
+        navController.navigate(R.id.chat_list_to_chat, bundle)
     }
 
     override fun getItemCount(): Int {

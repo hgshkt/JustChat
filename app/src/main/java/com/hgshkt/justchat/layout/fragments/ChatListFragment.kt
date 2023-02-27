@@ -3,6 +3,7 @@ package com.hgshkt.justchat.layout.fragments
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.hgshkt.justchat.R
@@ -54,7 +55,8 @@ class ChatListFragment : Fragment(R.layout.fragment_chat_list) {
 
             recyclerView.adapter = ChatListAdapter(
                 context = requireContext(),
-                chatList = chatList
+                chatList = chatList,
+                navController = findNavController()
             )
         }
     }

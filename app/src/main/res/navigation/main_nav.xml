@@ -8,6 +8,9 @@
         android:id="@+id/chat_list_fragment"
         android:name="com.hgshkt.justchat.layout.fragments.ChatListFragment"
         android:label="Chats">
+        <action
+            android:id="@+id/chat_list_to_chat"
+            app:destination="@id/chat_fragment" />
     </fragment>
 
     <fragment
@@ -39,11 +42,12 @@
 
     <fragment
         android:id="@+id/chat_fragment"
-        android:name="com.hgshkt.justchat.layout.fragments.CreatingChatFragment"
-        android:label="New chat">
+        android:name="com.hgshkt.justchat.layout.fragments.ChatFragment"
+        android:label="ChatFragment" >
         <action
             android:id="@+id/action_chat_fragment_to_chat_list_fragment"
             app:destination="@id/chat_list_fragment" />
     </fragment>
+
 
 </navigation>

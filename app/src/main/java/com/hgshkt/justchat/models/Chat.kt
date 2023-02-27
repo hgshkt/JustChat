@@ -4,10 +4,11 @@ import java.util.*
 
 class Chat {
     lateinit var name: String
-    lateinit var id: String
-    lateinit var lastMessageTime: String
-    lateinit var messagesId: List<String>
     lateinit var membersFid: List<String>
+
+    var id: String = UUID.randomUUID().toString()
+    var lastMessageTime: String = System.currentTimeMillis().toString()
+    var messagesId: List<String> = mutableListOf()
 
     constructor() {}
 
@@ -17,9 +18,5 @@ class Chat {
     ) {
         this.name = name
         this.membersFid = membersFid
-
-        this.id = UUID.randomUUID().toString()
-        this.messagesId = mutableListOf()
-        this.lastMessageTime = System.currentTimeMillis().toString()
     }
 }
