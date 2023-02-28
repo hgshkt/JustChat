@@ -23,9 +23,9 @@ class ChatController {
         return list
     }
 
-    fun addListener(chatId: String, listener: ValueEventListener) {
+    fun addMessagesChangedListener(chatId: String, listener: ValueEventListener) {
         runBlocking(Dispatchers.IO) {
-            db.addChatChangeListener(chatId, listener)
+            db.addChatMessagesChangeListener(chatId, listener)
         }
     }
 

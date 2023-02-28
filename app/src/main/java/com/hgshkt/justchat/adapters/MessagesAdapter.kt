@@ -1,6 +1,7 @@
 package com.hgshkt.justchat.adapters
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,7 +19,7 @@ import kotlinx.coroutines.withContext
 
 class MessagesAdapter(
     private val context: Context,
-    private val messageList: List<Message>
+    var messageList: List<Message>
 ) : RecyclerView.Adapter<MessagesAdapter.MessageViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MessageViewHolder {

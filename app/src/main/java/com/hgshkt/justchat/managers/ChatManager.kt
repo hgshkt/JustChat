@@ -27,28 +27,22 @@ class ChatManager(
     lateinit var adapter: MessagesAdapter
     private lateinit var messageList: List<Message>
 
-    private var messageNumber = 0
-    private val messageNumberIncrease = 10
     private val messageController = MessageController()
     private val chatController = ChatController()
 
     init {
         runBlocking(Dispatchers.IO) {
-            loadMessages()
+            updateMessageList()
             updateAdapter()
-
-            chatController.addListener(chat.id, object : ValueEventListener {
+            chatController.addMessagesChangedListener(chat.id, object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    chat = snapshot.getValue<Chat>()!!
-                    val messagesId = mapToValueList(chat.messagesId)
-
-                    messageList = messageController.getMessages(messagesId)
-
-                    updateAdapter()
+                    chat.messagesId = snapshot.getValue<HashMap<String, String>>() ?: hashMapOf()
+                    updateMessageList()
+                    insertMessage()
                 }
 
                 override fun onCancelled(error: DatabaseError) {
-                    Log.w("ChatManager", "loadPost:onCancelled", error.toException())
+                    Log.w("ChatManager", "cancelled", error.toException())
                 }
             })
         }
@@ -63,21 +57,10 @@ class ChatManager(
         )
     }
 
-    private suspend fun loadMessages() {
-        messageNumber += messageNumberIncrease
-        messageList = mutableListOf()
-        if (chat.messagesId.isEmpty()) return
-
-        val messagesId = chat.messagesId.toSortedMap()
-        val keys = messagesId.keys.toMutableList()
-        for (i in 0 until messageNumber) {
-            if (keys.size < messageNumber - 1 && i >= keys.size) break
-
-            val time = keys[i]
-            val id = messagesId[time]
-            val message = messageController.getMessage(id!!)
-            (messageList as MutableList).add(message)
-        }
+    private fun updateMessageList() {
+        val sortedMap = chat.messagesId.toSortedMap()
+        val messagesId = mapToValueList(sortedMap)
+        messageList = messageController.getMessages(messagesId)
     }
 
     private fun updateAdapter() {
@@ -85,5 +68,10 @@ class ChatManager(
             adapter = MessagesAdapter(context, messageList)
             recyclerView.adapter = adapter
         }
+    }
+
+    private fun insertMessage() {
+        adapter.messageList = messageList
+        recyclerView.adapter?.notifyDataSetChanged()
     }
 }

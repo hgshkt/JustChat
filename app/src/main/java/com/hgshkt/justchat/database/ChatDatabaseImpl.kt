@@ -22,10 +22,10 @@ class ChatDatabaseImpl : ChatDatabase {
         dbRef.child(chatId).child(messagesKey).child(time).setValue(messageId)
     }
 
-    override suspend fun addChatChangeListener(
+    override suspend fun addChatMessagesChangeListener(
         chatId: String,
         listener: ValueEventListener
     ) {
-        dbRef.child(chatId).addValueEventListener(listener)
+        dbRef.child(chatId).child(messagesKey).addValueEventListener(listener)
     }
 }
