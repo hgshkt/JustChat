@@ -71,7 +71,10 @@ class CreatingChatFragment : Fragment() {
     private fun createChat() {
         val chatName = etChatName.text.toString()
         val chatCreator = ChatCreator()
-        chatCreator.createChat(chatName, membersFID)
+        val chat = chatCreator.createChat(chatName, membersFID)
+        val bundle = Bundle()
+        bundle.putString("id", chat.id)
+        findNavController().navigate(R.id.action_creating_chat_fragment_to_chat_fragment, bundle)
     }
 
     private fun init(root: View) {

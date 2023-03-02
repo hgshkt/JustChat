@@ -51,6 +51,7 @@ class FriendListAdapter(
 
                 holder.itemView.setOnClickListener {
                     val bundle = Bundle()
+                    bundle.putString("id", friend.fid)
                     navController.navigate(R.id.friend_to_profile, bundle)
                 }
 
