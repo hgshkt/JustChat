@@ -82,5 +82,4 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
         editText = requireView().findViewById(R.id.chat_et)
         sendButton = requireView().findViewById(R.id.chat_send)
     }
-
 }

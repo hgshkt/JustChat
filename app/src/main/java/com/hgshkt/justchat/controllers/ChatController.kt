@@ -29,6 +29,12 @@ class ChatController {
         }
     }
 
+    fun updateChatLastMessageTime(chatId: String, time: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            db.updateLastMessageTime(chatId, time)
+        }
+    }
+
     suspend fun getChat(id: String): Chat? {
         return db.getChatById(id)
     }

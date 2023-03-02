@@ -11,5 +11,7 @@ interface ChatDatabase {
 
     suspend fun addMessageToChat(chatId: String, messageId: String, time: String)
 
+    suspend fun updateLastMessageTime(id: String, time: String)
+
     suspend fun addChatMessagesChangeListener(chatId: String, listener: ValueEventListener)
 }

@@ -9,7 +9,12 @@ class Chat {
 
     var id: String = UUID.randomUUID().toString()
     var lastMessageTime: String = System.currentTimeMillis().toString()
-    var messagesId: HashMap<String, String> = hashMapOf()
+
+    /**
+     * key is message date time in milliseconds
+     * value is message id
+     */
+    var messagesHashMap: HashMap<String, String> = hashMapOf()
 
     constructor() {}
 

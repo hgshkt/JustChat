@@ -7,7 +7,10 @@ import kotlinx.coroutines.tasks.await
 
 class ChatDatabaseImpl : ChatDatabase {
     private val path = "chats"
-    private val messagesKey = "messagesId"
+
+    private val messagesKey = "messagesHashMap"
+    private val lastMessageTimeKey = "lastMessageTime"
+
     var dbRef = FirebaseDatabase.getInstance().getReference(path)
 
     override suspend fun addChat(chat: Chat) {
@@ -20,6 +23,10 @@ class ChatDatabaseImpl : ChatDatabase {
 
     override suspend fun addMessageToChat(chatId: String, messageId: String, time: String) {
         dbRef.child(chatId).child(messagesKey).child(time).setValue(messageId)
+    }
+
+    override suspend fun updateLastMessageTime(id: String, time: String) {
+        dbRef.child(id).child(lastMessageTimeKey).setValue(time)
     }
 
     override suspend fun addChatMessagesChangeListener(

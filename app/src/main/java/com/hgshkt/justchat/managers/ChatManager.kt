@@ -24,7 +24,7 @@ class ChatManager(
     val recyclerView: RecyclerView
 ) {
 
-    lateinit var adapter: MessagesAdapter
+    private lateinit var adapter: MessagesAdapter
     private lateinit var messageList: List<Message>
 
     private val messageController = MessageController()
@@ -34,9 +34,10 @@ class ChatManager(
         runBlocking(Dispatchers.IO) {
             updateMessageList()
             updateAdapter()
+
             chatController.addMessagesChangedListener(chat.id, object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    chat.messagesId = snapshot.getValue<HashMap<String, String>>() ?: hashMapOf()
+                    chat.messagesHashMap = snapshot.getValue<HashMap<String, String>>() ?: hashMapOf()
                     updateMessageList()
                     insertMessage()
                 }
@@ -55,10 +56,11 @@ class ChatManager(
             messageId = message.id,
             time = message.date.toString()
         )
+        chatController.updateChatLastMessageTime(chat.id, message.date.toString())
     }
 
     private fun updateMessageList() {
-        val sortedMap = chat.messagesId.toSortedMap()
+        val sortedMap = chat.messagesHashMap.toSortedMap()
         val messagesId = mapToValueList(sortedMap)
         messageList = messageController.getMessages(messagesId)
     }
