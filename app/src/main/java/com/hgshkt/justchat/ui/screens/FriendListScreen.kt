@@ -20,9 +20,7 @@ fun FriendListScreen() {
 
     LaunchedEffect(AppAuth().currentUserFID) {
         idList = UserDatabaseImpl().getFriendList(AppAuth().currentUserFID!!)!!
-        repeat(idList.size) {
-            userList = loadUsers(idList)
-        }
+        userList = loadUsers(idList)
     }
 
     LazyColumn(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
