@@ -1,16 +1,16 @@
 package com.hgshkt.justchat.ui.navigation
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.navArgument
+import com.hgshkt.justchat.auth.AppAuth
+import com.hgshkt.justchat.ui.screens.ChatListScreen
+import com.hgshkt.justchat.ui.screens.CreatingChatScreen
+import com.hgshkt.justchat.ui.screens.FriendListScreen
+import com.hgshkt.justchat.ui.screens.ProfileScreen
 
 @Composable
 fun Navigation(navController: NavHostController) {
@@ -27,56 +27,18 @@ fun Navigation(navController: NavHostController) {
         composable(route = Screen.FriendListScreen.route) {
             FriendListScreen()
         }
-        composable(route = Screen.ProfileScreen.route) {
-            ProfileScreen()
+        composable(
+            route = Screen.ProfileScreen.route,
+            arguments = listOf(
+                navArgument("userFID") {
+                    type = NavType.StringType
+                    defaultValue = AppAuth().currentUserFID
+                    nullable = true
+                }
+            )
+        ) {
+            ProfileScreen(it.arguments?.getString("userFID"))
         }
     }
 }
 
-@Composable
-fun ChatListScreen() {
-    Column(
-        verticalArrangement = Arrangement.Center,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 50.dp)
-    ) {
-        Text(text = "Chat list screen")
-    }
-}
-
-@Composable
-fun CreatingChatScreen() {
-    Column(
-        verticalArrangement = Arrangement.Center,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 50.dp)
-    ) {
-        Text(text = "Creating chat screen")
-    }
-}
-
-@Composable
-fun FriendListScreen() {
-    Column(
-        verticalArrangement = Arrangement.Center,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 50.dp)
-    ) {
-        Text(text = "Friend list screen")
-    }
-}
-
-@Composable
-fun ProfileScreen() {
-    Column(
-        verticalArrangement = Arrangement.Center,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 50.dp)
-    ) {
-        Text(text = "Profile screen")
-    }
-}

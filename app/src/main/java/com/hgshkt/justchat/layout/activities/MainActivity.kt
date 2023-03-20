@@ -69,7 +69,6 @@ class MainActivity : AppCompatActivity() {
                                 )
                             ),
                             onItemClick = {
-                                println("Clicked on ${it.title}")
                                 navController.navigate(it.id)
                                 scope.launch {
                                     scaffoldState.drawerState.close()

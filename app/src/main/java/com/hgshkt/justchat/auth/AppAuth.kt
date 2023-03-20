@@ -19,6 +19,9 @@ class AppAuth {
             return auth.currentUser != null
         }
 
+    val currentUserFID: String?
+    get() = auth.currentUser?.uid
+
     fun login(email: String, password: String, context: Context) {
         if (email.isNotEmpty() && password.isNotEmpty()) {
             CoroutineScope(Dispatchers.IO).launch {
