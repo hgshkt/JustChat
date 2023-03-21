@@ -23,7 +23,9 @@ fun FriendListScreen() {
         userList = loadUsers(idList)
     }
 
-    LazyColumn(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
+    LazyColumn(modifier = Modifier
+        .fillMaxWidth()
+        .padding(16.dp)) {
         items(userList.size) {
             UserItem(user = userList[it])
         }
@@ -31,7 +33,9 @@ fun FriendListScreen() {
 }
 
 @Composable
-fun UserItem(user: User) {
+fun UserItem(
+    user: User,
+    onClickEvent: () -> Unit = {}) {
     Column(
         verticalArrangement = Arrangement.Center,
         modifier = Modifier
