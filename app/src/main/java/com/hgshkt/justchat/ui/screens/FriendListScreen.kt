@@ -7,11 +7,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.hgshkt.justchat.auth.AppAuth
-import com.hgshkt.justchat.database.UserDatabaseImpl
 import com.hgshkt.justchat.models.User
+import com.hgshkt.justchat.viewmodels.FriendListViewModel
 
 @Composable
 fun FriendListScreen() {
+    val viewModel = FriendListViewModel()
 
     var idList by remember { mutableStateOf(emptyList<String>()) }
     var userList by remember {
@@ -19,13 +20,15 @@ fun FriendListScreen() {
     }
 
     LaunchedEffect(AppAuth().currentUserFID) {
-        idList = UserDatabaseImpl().getFriendList(AppAuth().currentUserFID!!)!!
-        userList = loadUsers(idList)
+        idList = viewModel.idList
+        userList = viewModel.userList
     }
 
-    LazyColumn(modifier = Modifier
-        .fillMaxWidth()
-        .padding(16.dp)) {
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+    ) {
         items(userList.size) {
             UserItem(user = userList[it])
         }
@@ -35,7 +38,8 @@ fun FriendListScreen() {
 @Composable
 fun UserItem(
     user: User,
-    onClickEvent: () -> Unit = {}) {
+    onClickEvent: () -> Unit = {}
+) {
     Column(
         verticalArrangement = Arrangement.Center,
         modifier = Modifier
@@ -46,13 +50,4 @@ fun UserItem(
         Text(text = "id: ${user.id}")
         Spacer(modifier = Modifier.height(100.dp))
     }
-}
-
-private suspend fun loadUsers(idList: List<String>): List<User> {
-    val users = mutableListOf<User>()
-    idList.forEach {
-        val user = UserDatabaseImpl().getUserByFID(it)!!
-        users.add(user)
-    }
-    return users
 }
