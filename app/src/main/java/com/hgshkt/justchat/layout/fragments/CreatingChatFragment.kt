@@ -51,7 +51,7 @@ class CreatingChatFragment : Fragment() {
 
             val adapter = FriendListAdapter(
                 requireContext(),
-                CurrentUser.instance!!.friendList,
+                CurrentUser.get().friendList,
                 findNavController(),
                 true
             )

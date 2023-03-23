@@ -63,7 +63,7 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
 
     private fun sendMessage() {
         val text = editText.text.toString()
-        val authorFID = CurrentUser.instance?.fid ?: return
+        val authorFID = CurrentUser.get().fid
 
         editText.text.clear()
 

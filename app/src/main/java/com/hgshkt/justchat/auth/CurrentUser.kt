@@ -8,14 +8,12 @@ object CurrentUser {
     private val controller: UserController = UserController()
     private val auth: AppAuth = AppAuth()
 
-    var instance: User? = null
-        private set
-        get() {
-            if (field == null) {
-                controller.addOnValueChangeListener(auth.currentUserFID!!) {
-                    instance = it.getValue(User::class.java)
-                }
-            }
-            return controller.getUserByFID(AppAuth().currentUserFID!!)
+    fun get() : User {
+        return controller.getUserByFID(auth.currentUserFID!!)!!
+    }
+    fun addValueChangeListener(event: (user: User) -> Unit) {
+        controller.addOnValueChangeListener(auth.currentUserFID!!) {
+            event(it.getValue(User::class.java)!!)
         }
+    }
 }

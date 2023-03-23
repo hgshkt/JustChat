@@ -46,10 +46,8 @@ class ChatListFragment : Fragment(R.layout.fragment_chat_list) {
 
     private suspend fun updateAdapter() {
         withContext(Dispatchers.IO) {
-            CurrentUser.instance
+            CurrentUser.get()
         }.also {
-            if (it == null) return
-
             chatIdMap = it.chatIdMap
             chatIdList = mapToValueList(chatIdMap)
             chatList = ChatController().getChatList(chatIdList)

@@ -4,7 +4,10 @@ import com.google.firebase.database.DataSnapshot
 import com.hgshkt.justchat.database.UserDatabase
 import com.hgshkt.justchat.database.UserDatabaseImpl
 import com.hgshkt.justchat.models.User
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class UserController {
     private val db: UserDatabase = UserDatabaseImpl()

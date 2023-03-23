@@ -20,7 +20,7 @@ class ChatCreator {
 
         CoroutineScope(Dispatchers.IO).launch {
             launch {
-                val currentUser = CurrentUser.instance!!
+                val currentUser = CurrentUser.get()
                 userDatabase.addChatToUserChatList(currentUser.fid, chat)
             }
             chatDatabase.addChat(chat)

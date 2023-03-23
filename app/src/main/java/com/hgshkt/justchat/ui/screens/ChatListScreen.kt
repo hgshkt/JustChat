@@ -6,34 +6,22 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.hgshkt.justchat.auth.AppAuth
 import com.hgshkt.justchat.database.ChatDatabaseImpl
-import com.hgshkt.justchat.database.UserDatabaseImpl
-import com.hgshkt.justchat.mapToValueList
 import com.hgshkt.justchat.models.Chat
+import com.hgshkt.justchat.viewmodels.ChatListViewModel
 
 @Composable
 fun ChatListScreen() {
-
-    var idList by remember { mutableStateOf(emptyList<String>()) }
-    var chatList by remember {
-        mutableStateOf(emptyList<Chat>())
-    }
-
-    LaunchedEffect(AppAuth().currentUserFID) {
-        val user = UserDatabaseImpl().getUserByFID(AppAuth().currentUserFID!!)
-        idList = mapToValueList(user!!.chatIdMap)
-        chatList = loadChats(idList)
-    }
+    val viewModel = ChatListViewModel()
 
     LazyColumn(modifier = Modifier
         .fillMaxWidth()
         .padding(16.dp)){
-        items(chatList.size) {
-            ChatItem(chatList[it])
+        items(viewModel.chatList.size) {
+            ChatItem(viewModel.chatList[it])
         }
     }
 }

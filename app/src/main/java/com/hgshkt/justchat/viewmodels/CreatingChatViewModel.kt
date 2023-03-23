@@ -13,7 +13,7 @@ class CreatingChatViewModel : ViewModel() {
         private set
 
     init {
-        idList = CurrentUser.instance!!.friendList
+        idList = CurrentUser.get().friendList
         idList.forEach { fid ->
             val user = UserController().getUserByFID(fid)!!
             userList.add(user)

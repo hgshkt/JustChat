@@ -37,7 +37,7 @@ class FriendsFragment : Fragment(R.layout.fragment_friends) {
 
     private fun bindRecyclerView() {
         CoroutineScope(Dispatchers.IO).launch {
-            val friendFIDList = async { CurrentUser.instance!!.friendList }
+            val friendFIDList = async { CurrentUser.get().friendList }
 
             recyclerView.setHasFixedSize(true)
             recyclerView.layoutManager = LinearLayoutManager(requireContext())

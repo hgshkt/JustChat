@@ -35,9 +35,10 @@ class ChatController {
         }
     }
 
-    suspend fun getChat(id: String): Chat? {
-        return db.getChatById(id)
+    fun getChat(id: String): Chat? = runBlocking {
+        return@runBlocking db.getChatById(id)
     }
+
 
     fun addMessageToChat(chatId: String, messageId: String, time: String) {
         CoroutineScope(Dispatchers.IO).launch {
