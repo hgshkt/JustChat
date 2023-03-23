@@ -20,7 +20,7 @@ class AppAuth {
         }
 
     val currentUserFID: String?
-    get() = auth.currentUser?.uid
+        get() = auth.currentUser?.uid
 
     fun login(email: String, password: String, context: Context) {
         if (email.isNotEmpty() && password.isNotEmpty()) {
@@ -39,7 +39,7 @@ class AppAuth {
     suspend fun registration(
         email: String,
         password: String,
-        name:String,
+        name: String,
         id: String
     ) {
         val auth = FirebaseAuth.getInstance()

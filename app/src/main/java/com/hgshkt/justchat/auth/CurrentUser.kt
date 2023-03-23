@@ -9,15 +9,13 @@ object CurrentUser {
     private val controller: UserController = UserController()
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
 
-    private var instance: User? = null
+    var instance: User? = null
+        private set
 
 
-    fun get(): User? {
-        if (auth.currentUser == null) return null
-
-        val fid = auth.currentUser!!.uid
-        instance = controller.getUserByFID(fid)
-
-        return instance
+    init {
+        controller.addOnValueChangeListener(auth.currentUser!!.uid) {
+            instance = it.getValue(User::class.java)
+        }
     }
 }

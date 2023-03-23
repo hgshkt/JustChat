@@ -1,5 +1,6 @@
 package com.hgshkt.justchat.database
 
+import com.google.firebase.database.DataSnapshot
 import com.hgshkt.justchat.models.Chat
 import com.hgshkt.justchat.models.User
 
@@ -20,6 +21,8 @@ interface UserDatabase {
      * @param fid is user id
      */
     suspend fun getUserByFID(fid: String): User?
+
+    suspend fun addOnValueChangeListener(fid: String, event: (snapshot: DataSnapshot) -> Unit)
 
     /**
      * Returns HashMap of all users. Value is user, keys contains id

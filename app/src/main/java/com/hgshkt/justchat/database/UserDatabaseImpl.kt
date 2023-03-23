@@ -1,6 +1,9 @@
 package com.hgshkt.justchat.database
 
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.getValue
 import com.hgshkt.justchat.models.Chat
 import com.hgshkt.justchat.models.User
@@ -23,6 +26,18 @@ class UserDatabaseImpl : UserDatabase {
 
     override suspend fun getUserByFID(fid: String): User? {
         return dbRef.child(fid).get().await().getValue(User::class.java)
+    }
+
+    override suspend fun addOnValueChangeListener(fid: String, event: (snapshot: DataSnapshot) -> Unit) {
+        dbRef.child(fid).addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                event(snapshot)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+        })
     }
 
     override suspend fun getAllUsers(): HashMap<String, User>? {

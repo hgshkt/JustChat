@@ -46,7 +46,7 @@ class ChatListFragment : Fragment(R.layout.fragment_chat_list) {
 
     private suspend fun updateAdapter() {
         withContext(Dispatchers.IO) {
-            CurrentUser.get()
+            CurrentUser.instance
         }.also {
             if (it == null) return
 

@@ -1,5 +1,6 @@
 package com.hgshkt.justchat.controllers
 
+import com.google.firebase.database.DataSnapshot
 import com.hgshkt.justchat.database.UserDatabase
 import com.hgshkt.justchat.database.UserDatabaseImpl
 import com.hgshkt.justchat.models.User
@@ -11,6 +12,12 @@ class UserController {
     fun updateUser(user: User) {
         CoroutineScope(Dispatchers.IO).launch {
             db.addUser(user)
+        }
+    }
+
+    fun addOnValueChangeListener(fid: String, event: (snapshot: DataSnapshot) -> Unit) {
+        CoroutineScope(Dispatchers.IO).launch {
+            db.addOnValueChangeListener(fid, event)
         }
     }
 

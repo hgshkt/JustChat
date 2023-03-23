@@ -109,20 +109,20 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         CoroutineScope(Dispatchers.IO).launch {
             when (status) {
                 Status.FRIEND -> friendController.stopFriendship(
-                    CurrentUser.get()!!,
+                    CurrentUser.instance!!,
                     profileUser
                 )
                 Status.SENDER -> friendController.acceptInvite(
                     profileUser,
-                    CurrentUser.get()!!
+                    CurrentUser.instance!!
                 )
                 Status.CURRENT -> updateEditable()
                 Status.RECIPIENT -> friendController.cancelInviting(
-                    CurrentUser.get()!!,
+                    CurrentUser.instance!!,
                     profileUser
                 )
                 Status.DEFAULT -> friendController.sendInvite(
-                    CurrentUser.get()!!,
+                    CurrentUser.instance!!,
                     profileUser
                 )
             }
@@ -195,7 +195,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
     private fun loadId() {
         runBlocking {
-            currentUserFirebaseId = CurrentUser.get()!!.fid
+            currentUserFirebaseId = CurrentUser.instance!!.fid
             if (arguments != null && requireArguments().containsKey("id")) {
                 val id = requireArguments().getString("id")!!
                 val user = userController.getUserById(id)
