@@ -5,7 +5,7 @@ import com.hgshkt.justchat.auth.CurrentUser
 import com.hgshkt.justchat.controllers.UserController
 import com.hgshkt.justchat.models.User
 
-class FriendListViewModel : ViewModel() {
+class CreatingChatViewModel : ViewModel() {
     var idList: List<String> = mutableListOf()
         private set
 
