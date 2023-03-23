@@ -11,17 +11,16 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.google.firebase.database.FirebaseDatabase
 import com.hgshkt.justchat.models.User
-import kotlinx.coroutines.tasks.await
+import com.hgshkt.justchat.viewmodels.ProfileViewModel
 
 @Composable
-fun ProfileScreen(userId: String?) {
+fun ProfileScreen(fid: String?) {
     val user = remember { mutableStateOf(User()) }
+    val viewModel = ProfileViewModel(fid)
 
-    LaunchedEffect(userId) {
-        val profileRef = FirebaseDatabase.getInstance().getReference("users/$userId")
-        user.value = profileRef.get().await().getValue(User::class.java)!!
+    LaunchedEffect(fid) {
+        user.value = viewModel.getUser()
     }
 
     Column(
