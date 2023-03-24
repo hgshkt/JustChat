@@ -1,32 +1,25 @@
 package com.hgshkt.justchat.viewmodels
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import com.hgshkt.justchat.auth.CurrentUser
 import com.hgshkt.justchat.controllers.ChatController
 import com.hgshkt.justchat.models.Chat
 
 class ChatListViewModel : ViewModel() {
+    private val controller: ChatController = ChatController()
+    private var idList: List<String> = mutableListOf()
 
-    var idList by mutableStateOf(emptyList<String>())
-    var chatList by mutableStateOf(emptyList<Chat>())
+    var chatList = mutableStateListOf<Chat>()
 
     init {
         CurrentUser.addValueChangeListener {
             idList = it.chatIdMap.values.toList()
-            chatList = loadChats(idList)
+            chatList.clear()
+            idList.forEach {fid ->
+                val chat = controller.getChat(fid)!!
+                chatList.add(chat)
+            }
         }
-    }
-
-
-    fun loadChats(idList: List<String>): List<Chat> {
-        val chats = mutableListOf<Chat>()
-        idList.forEach {
-            val chat = ChatController().getChat(it)!!
-            chats.add(chat)
-        }
-        return chats
     }
 }

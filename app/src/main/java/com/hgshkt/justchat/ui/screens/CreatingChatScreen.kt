@@ -16,12 +16,11 @@ import com.hgshkt.justchat.models.User
 import com.hgshkt.justchat.ui.items.UserItem
 import com.hgshkt.justchat.viewmodels.CreatingChatViewModel
 
-private val viewModel: CreatingChatViewModel = CreatingChatViewModel()
-private val userList = viewModel.userList
-var chatName = viewModel.chatName
-
 @Composable
 fun CreatingChatScreen() {
+    val viewModel = remember { CreatingChatViewModel() }
+    val chatName = viewModel.chatName
+
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -55,7 +54,7 @@ fun CreatingChatScreen() {
                 .fillMaxWidth()
                 .fillMaxHeight(0.8f)
         ) {
-            FriendList {user ->
+            FriendList(viewModel) { user ->
                 viewModel.click(user)
             }
         }
@@ -75,10 +74,17 @@ fun CreatingChatScreen() {
  * @param event is event that occurs after clicking on UserItem
  */
 @Composable
-private fun FriendList(event: (user: User) -> Unit = {}) {
-    LazyColumn(modifier = Modifier
-        .fillMaxWidth()
-        .padding(16.dp)) {
+private fun FriendList(
+    viewModel: CreatingChatViewModel,
+    event: (user: User) -> Unit = {}
+) {
+    val userList = viewModel.userList
+
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+    ) {
         items(userList.size) {
             UserItem(user = userList[it]) { user ->
                 event(user)
