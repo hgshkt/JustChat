@@ -1,22 +1,26 @@
 package com.hgshkt.justchat.viewmodels
 
+import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import com.hgshkt.justchat.auth.CurrentUser
 import com.hgshkt.justchat.controllers.UserController
 import com.hgshkt.justchat.models.User
 
 class FriendListViewModel : ViewModel() {
-    var idList: List<String> = mutableListOf()
-        private set
+    private val controller: UserController = UserController()
+    private var idList: List<String> = mutableListOf()
 
-    var userList: MutableList<User> = mutableListOf()
+    var userList = mutableStateListOf<User>()
         private set
 
     init {
-        idList = CurrentUser.get().friendList
-        idList.forEach { fid ->
-            val user = UserController().getUserByFID(fid)!!
-            userList.add(user)
+        CurrentUser.addValueChangeListener {
+            idList = it.friendList
+            userList.clear()
+            idList.forEach { fid ->
+                val user = controller.getUserByFID(fid)!!
+                userList.add(user)
+            }
         }
     }
 }
