@@ -12,15 +12,16 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.hgshkt.justchat.auth.AppAuth
 import com.hgshkt.justchat.models.User
 import com.hgshkt.justchat.ui.items.UserItem
 import com.hgshkt.justchat.viewmodels.CreatingChatViewModel
 
+private val viewModel: CreatingChatViewModel = CreatingChatViewModel()
+private val userList = viewModel.userList
+var chatName = viewModel.chatName
+
 @Composable
 fun CreatingChatScreen() {
-    var chatNameState by remember { mutableStateOf("") }
-
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -44,9 +45,9 @@ fun CreatingChatScreen() {
         TextField(modifier = Modifier
             .fillMaxWidth(),
             placeholder = { Text(text = "Chat name") },
-            value = chatNameState,
+            value = chatName.value,
             onValueChange = {
-                chatNameState = it
+                chatName.value = it
             })
         Spacer(modifier = Modifier.height(16.dp))
         Box(
@@ -54,13 +55,15 @@ fun CreatingChatScreen() {
                 .fillMaxWidth()
                 .fillMaxHeight(0.8f)
         ) {
-            FriendList()
+            FriendList {user ->
+                viewModel.click(user)
+            }
         }
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier.padding(16.dp)
         ) {
-            Button(onClick = { /*TODO createChat()*/ }) {
+            Button(onClick = { viewModel.createChat() }) {
                 Text(text = "Create")
             }
         }
@@ -72,25 +75,13 @@ fun CreatingChatScreen() {
  * @param event is event that occurs after clicking on UserItem
  */
 @Composable
-fun FriendList(event: () -> Unit = {}) {
-    val viewModel = CreatingChatViewModel()
-
-    var idList by remember { mutableStateOf(emptyList<String>()) }
-    var userList by remember {
-        mutableStateOf(emptyList<User>())
-    }
-
-    LaunchedEffect(AppAuth().currentUserFID) {
-        idList = viewModel.idList
-        userList = viewModel.userList
-    }
-
+private fun FriendList(event: (user: User) -> Unit = {}) {
     LazyColumn(modifier = Modifier
         .fillMaxWidth()
         .padding(16.dp)) {
         items(userList.size) {
-            UserItem(user = userList[it]) {
-                event()
+            UserItem(user = userList[it]) { user ->
+                event(user)
             }
         }
     }
