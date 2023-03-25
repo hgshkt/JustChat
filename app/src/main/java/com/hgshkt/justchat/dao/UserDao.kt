@@ -1,4 +1,4 @@
-package com.hgshkt.justchat.controllers
+package com.hgshkt.justchat.dao
 
 import com.google.firebase.database.DataSnapshot
 import com.hgshkt.justchat.database.UserDatabase
@@ -9,7 +9,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
-class UserController {
+class UserDao {
     private val db: UserDatabase = UserDatabaseImpl()
 
     fun updateUser(user: User) {
@@ -25,8 +25,7 @@ class UserController {
     }
 
     fun getUserById(id: String): User? {
-        val users = getAllUsers()
-        users.forEach {
+        getAllUsers().forEach {
             if (it.id == id) return it
         }
         return null
@@ -40,11 +39,7 @@ class UserController {
 
     fun getAllUsers(): List<User> {
         return runBlocking(Dispatchers.IO) {
-            val list = mutableListOf<User>()
-            val map = db.getAllUsers()
-            if (map == null) return@runBlocking list
-            list.addAll(map.values)
-            return@runBlocking list
+            return@runBlocking db.getAllUsers()?.values?.toList() ?: emptyList()
         }
     }
 }

@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.hgshkt.justchat.R
 import com.hgshkt.justchat.adapters.FriendListAdapter
 import com.hgshkt.justchat.auth.CurrentUser
-import com.hgshkt.justchat.controllers.UserController
+import com.hgshkt.justchat.dao.UserDao
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -23,7 +23,7 @@ class FriendsFragment : Fragment(R.layout.fragment_friends) {
     lateinit var searchButton: ImageView
     lateinit var recyclerView: RecyclerView
 
-    private lateinit var controller: UserController
+    private lateinit var dao: UserDao
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -62,7 +62,7 @@ class FriendsFragment : Fragment(R.layout.fragment_friends) {
     private fun searchById() {
         val searchId = etSearch.text.toString()
 
-        if (controller.getUserById(searchId) == null) {
+        if (dao.getUserById(searchId) == null) {
             CoroutineScope(Dispatchers.Main).launch {
                 Toast.makeText(
                     requireContext(),
@@ -83,6 +83,6 @@ class FriendsFragment : Fragment(R.layout.fragment_friends) {
         searchButton = requireView().findViewById(R.id.friend_search_button)
         recyclerView = requireView().findViewById(R.id.rv_friends)
 
-        controller = UserController()
+        dao = UserDao()
     }
 }

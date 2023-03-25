@@ -1,7 +1,6 @@
 package com.hgshkt.justchat.adapters
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.hgshkt.justchat.R
-import com.hgshkt.justchat.controllers.UserController
+import com.hgshkt.justchat.dao.UserDao
 import com.hgshkt.justchat.models.Message
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -33,7 +32,7 @@ class MessagesAdapter(
         val message = messageList[position]
 
         CoroutineScope(Dispatchers.IO).launch {
-            val user = UserController().getUserByFID(message.authorFid)
+            val user = UserDao().getUserByFID(message.authorFid)
             withContext(Dispatchers.Main) {
                 val userName = user?.name ?: "name"
                 holder.tvName.text = userName

@@ -1,4 +1,4 @@
-package com.hgshkt.justchat.controllers
+package com.hgshkt.justchat.dao
 
 import com.google.firebase.database.ValueEventListener
 import com.hgshkt.justchat.database.ChatDatabase
@@ -9,19 +9,20 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
-class ChatController {
+class ChatDao {
 
     private val db: ChatDatabase = ChatDatabaseImpl()
 
-    suspend fun getChatList(idList: List<String>): List<Chat> {
+    fun getChatList(idList: List<String>): List<Chat> = runBlocking {
         val list = mutableListOf<Chat>()
         for (id in idList) {
             val chat = db.getChatById(id)
             if (chat != null)
                 list.add(chat)
         }
-        return list
+        return@runBlocking list
     }
+
 
     fun addMessagesChangedListener(chatId: String, listener: ValueEventListener) {
         runBlocking(Dispatchers.IO) {

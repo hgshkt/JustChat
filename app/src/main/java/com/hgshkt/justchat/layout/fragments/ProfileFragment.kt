@@ -11,7 +11,7 @@ import com.bumptech.glide.Glide
 import com.hgshkt.justchat.R
 import com.hgshkt.justchat.auth.CurrentUser
 import com.hgshkt.justchat.controllers.FriendController
-import com.hgshkt.justchat.controllers.UserController
+import com.hgshkt.justchat.dao.UserDao
 import com.hgshkt.justchat.loaders.AvatarLoader
 import com.hgshkt.justchat.models.User
 import kotlinx.coroutines.*
@@ -30,7 +30,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     lateinit var etBio: EditText
 
     private lateinit var friendController: FriendController
-    private lateinit var userController: UserController
+    private lateinit var userDao: UserDao
     private lateinit var profileUser: User
     private lateinit var currentUserFirebaseId: String
     private lateinit var status: Status
@@ -46,7 +46,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         val task = loader.upload(uri!!, name)
         task.addOnCompleteListener {
             profileUser.avatarUri = it.result.toString()
-            userController.updateUser(profileUser)
+            userDao.updateUser(profileUser)
         }
     }
 
@@ -68,7 +68,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
 
     private fun loadUsers() {
-        profileUser = userController.getUserByFID(profileFirebaseId)!!
+        profileUser = userDao.getUserByFID(profileFirebaseId)!!
     }
 
     private fun updateUI() {
@@ -142,7 +142,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                 profileUser.id = id
                 profileUser.bio = bio
 
-                userController.updateUser(profileUser)
+                userDao.updateUser(profileUser)
             }
             CoroutineScope(Dispatchers.Main).launch {
                 etName.visibility = View.INVISIBLE
@@ -198,7 +198,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             currentUserFirebaseId = CurrentUser.get().fid
             if (arguments != null && requireArguments().containsKey("id")) {
                 val id = requireArguments().getString("id")!!
-                val user = userController.getUserById(id)
+                val user = userDao.getUserById(id)
                 profileFirebaseId = user!!.fid
             } else {
                 profileFirebaseId = currentUserFirebaseId
@@ -227,7 +227,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         etBio = requireView().findViewById(R.id.profile_et_bio)
 
         friendController = FriendController()
-        userController = UserController()
+        userDao = UserDao()
     }
 
     private enum class Status {

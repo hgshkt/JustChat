@@ -4,11 +4,11 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.hgshkt.justchat.auth.CurrentUser
-import com.hgshkt.justchat.controllers.UserController
+import com.hgshkt.justchat.dao.UserDao
 import com.hgshkt.justchat.models.User
 
 class CreatingChatViewModel : ViewModel() {
-    private val controller: UserController = UserController()
+    private val dao: UserDao = UserDao()
     private var idList: List<String> = mutableListOf()
 
     var chatName = mutableStateOf("")
@@ -22,7 +22,7 @@ class CreatingChatViewModel : ViewModel() {
             idList = it.friendList
             userList.clear()
             idList.forEach { fid ->
-                val user = controller.getUserByFID(fid)!!
+                val user = dao.getUserByFID(fid)!!
                 userList.add(user)
             }
         }

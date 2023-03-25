@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.hgshkt.justchat.R
 import com.hgshkt.justchat.auth.CurrentUser
-import com.hgshkt.justchat.controllers.ChatController
+import com.hgshkt.justchat.dao.ChatDao
 import com.hgshkt.justchat.managers.ChatManager
 import com.hgshkt.justchat.models.Chat
 import com.hgshkt.justchat.models.Message
@@ -53,7 +53,7 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
 
     private suspend fun loadChat() {
         val id = requireArguments().getString("id")!!
-        val chat = ChatController().getChat(id)
+        val chat = ChatDao().getChat(id)
         if (chat == null) {
             // TODO to chat list
         } else {

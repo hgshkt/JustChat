@@ -1,4 +1,4 @@
-package com.hgshkt.justchat.controllers
+package com.hgshkt.justchat.dao
 
 import com.hgshkt.justchat.database.MessageDatabase
 import com.hgshkt.justchat.database.MessageDatabaseImpl
@@ -8,11 +8,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
-class MessageController {
+class MessageDao {
     private val db: MessageDatabase = MessageDatabaseImpl()
 
-    suspend fun getMessage(id: String): Message {
-        return db.getMessage(id)
+    fun getMessage(id: String): Message = runBlocking {
+        return@runBlocking db.getMessage(id)
     }
 
     fun create(message: Message) {
@@ -21,13 +21,12 @@ class MessageController {
         }
     }
 
-    fun getMessages(messagesIdList: List<String>): List<Message> =
-        runBlocking(Dispatchers.IO) {
-            val list = mutableListOf<Message>()
-            for (id in messagesIdList) {
-                val massage = db.getMessage(id)
-                list.add(massage)
-            }
-            return@runBlocking list
+    fun getMessages(messagesIdList: List<String>): List<Message> = runBlocking(Dispatchers.IO) {
+        val list = mutableListOf<Message>()
+        messagesIdList.forEach {
+            val massage = db.getMessage(it)
+            list.add(massage)
         }
+        return@runBlocking list
+    }
 }

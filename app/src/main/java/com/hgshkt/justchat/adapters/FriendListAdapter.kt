@@ -12,7 +12,7 @@ import androidx.navigation.NavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.hgshkt.justchat.R
-import com.hgshkt.justchat.controllers.UserController
+import com.hgshkt.justchat.dao.UserDao
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -24,7 +24,7 @@ class FriendListAdapter(
     private val withCheckBox: Boolean
 ) : RecyclerView.Adapter<FriendListAdapter.FriendViewHolder>() {
 
-    private val userController = UserController()
+    private val userDao = UserDao()
     private var membersFID : List<String>? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FriendViewHolder {
@@ -38,7 +38,7 @@ class FriendListAdapter(
     override fun onBindViewHolder(holder: FriendViewHolder, position: Int) {
         CoroutineScope(Dispatchers.Default).launch {
             val fid = friendFirebaseIdList[position]
-            val friend = userController.getUserByFID(fid)!!
+            val friend = userDao.getUserByFID(fid)!!
 
             launch(Dispatchers.Main) {
                 holder.tvName.text = friend.name
@@ -55,7 +55,7 @@ class FriendListAdapter(
                     navController.navigate(R.id.friend_to_profile, bundle)
                 }
 
-                holder.checkBox.setOnCheckedChangeListener { button, isChecked ->
+                holder.checkBox.setOnCheckedChangeListener { _, isChecked ->
                     if (isChecked) {
                         (membersFID as MutableList<String>).add(friend.fid)
                     } else {

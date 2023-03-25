@@ -3,11 +3,11 @@ package com.hgshkt.justchat.viewmodels
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import com.hgshkt.justchat.auth.CurrentUser
-import com.hgshkt.justchat.controllers.ChatController
+import com.hgshkt.justchat.dao.ChatDao
 import com.hgshkt.justchat.models.Chat
 
 class ChatListViewModel : ViewModel() {
-    private val controller: ChatController = ChatController()
+    private val controller: ChatDao = ChatDao()
     private var idList: List<String> = mutableListOf()
 
     var chatList = mutableStateListOf<Chat>()

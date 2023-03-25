@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.hgshkt.justchat.R
 import com.hgshkt.justchat.adapters.ChatListAdapter
 import com.hgshkt.justchat.auth.CurrentUser
-import com.hgshkt.justchat.controllers.ChatController
+import com.hgshkt.justchat.dao.ChatDao
 import com.hgshkt.justchat.mapToValueList
 import com.hgshkt.justchat.models.Chat
 import kotlinx.coroutines.CoroutineScope
@@ -50,7 +50,7 @@ class ChatListFragment : Fragment(R.layout.fragment_chat_list) {
         }.also {
             chatIdMap = it.chatIdMap
             chatIdList = mapToValueList(chatIdMap)
-            chatList = ChatController().getChatList(chatIdList)
+            chatList = ChatDao().getChatList(chatIdList)
 
             recyclerView.adapter = ChatListAdapter(
                 context = requireContext(),
