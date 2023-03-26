@@ -19,7 +19,7 @@ fun Navigation(navController: NavHostController) {
         startDestination = Screen.ChatListScreen.route
     ) {
         composable(route = Screen.ChatListScreen.route) {
-            ChatListScreen()
+            ChatListScreen(navController)
         }
         composable(route = Screen.CreatingChatScreen.route) {
             CreatingChatScreen()

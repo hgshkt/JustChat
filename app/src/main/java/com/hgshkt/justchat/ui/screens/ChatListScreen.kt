@@ -1,24 +1,35 @@
 package com.hgshkt.justchat.ui.screens
 
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.hgshkt.justchat.ui.items.ChatItem
+import com.hgshkt.justchat.ui.theme.ChatListBackground
 import com.hgshkt.justchat.viewmodels.ChatListViewModel
 
 @Composable
-fun ChatListScreen() {
+fun ChatListScreen(
+    navController: NavController
+) {
     val viewModel = ChatListViewModel()
     val chatList = viewModel.chatList
 
     LazyColumn(modifier = Modifier
-        .fillMaxWidth()
+        .fillMaxSize()
+        .background(ChatListBackground)
         .padding(16.dp)){
         items(chatList.size) {
-            ChatItem(chatList[it])
+            ChatItem(chatList[it]) { chat ->
+                viewModel.openChat(
+                    navController = navController,
+                    chat = chat
+                )
+            }
         }
     }
 }

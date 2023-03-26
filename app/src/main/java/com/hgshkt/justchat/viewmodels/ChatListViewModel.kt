@@ -2,6 +2,7 @@ package com.hgshkt.justchat.viewmodels
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
+import androidx.navigation.NavController
 import com.hgshkt.justchat.auth.CurrentUser
 import com.hgshkt.justchat.dao.ChatDao
 import com.hgshkt.justchat.models.Chat
@@ -21,5 +22,15 @@ class ChatListViewModel : ViewModel() {
                 chatList.add(chat)
             }
         }
+    }
+
+    fun openChat(
+        navController: NavController,
+        chat: Chat
+    ) {
+        /*
+         * TODO() navController.navigate(Screen.ChatScreen.route)
+         *
+         */
     }
 }
