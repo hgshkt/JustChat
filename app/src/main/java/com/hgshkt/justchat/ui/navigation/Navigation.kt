@@ -7,10 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navArgument
 import com.hgshkt.justchat.auth.AppAuth
-import com.hgshkt.justchat.ui.screens.ChatListScreen
-import com.hgshkt.justchat.ui.screens.CreatingChatScreen
-import com.hgshkt.justchat.ui.screens.FriendListScreen
-import com.hgshkt.justchat.ui.screens.ProfileScreen
+import com.hgshkt.justchat.ui.screens.*
 
 @Composable
 fun Navigation(navController: NavHostController) {
@@ -38,6 +35,12 @@ fun Navigation(navController: NavHostController) {
             )
         ) {
             ProfileScreen(it.arguments?.getString("userFID"))
+        }
+        composable(route = Screen.LoginScreen.route) {
+            LoginScreen()
+        }
+        composable(route = Screen.RegistrationScreen.route) {
+            RegistrationScreen()
         }
     }
 }

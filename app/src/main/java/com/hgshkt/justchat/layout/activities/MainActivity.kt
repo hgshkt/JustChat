@@ -1,6 +1,7 @@
 package com.hgshkt.justchat.layout.activities
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
@@ -10,6 +11,7 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.navigation.compose.rememberNavController
+import com.hgshkt.justchat.auth.AppAuth
 import com.hgshkt.justchat.ui.AppBar
 import com.hgshkt.justchat.ui.DrawerBody
 import com.hgshkt.justchat.ui.MenuItem
@@ -23,62 +25,69 @@ class MainActivity : AppCompatActivity() {
     @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent {
-            NavigationDrawerComposeTheme {
-                val navController = rememberNavController()
-                val scaffoldState = rememberScaffoldState()
-                val scope = rememberCoroutineScope()
-                Scaffold(
-                    scaffoldState = scaffoldState,
-                    topBar = {
-                        AppBar(
-                            onNavigationIconClick = {
-                                scope.launch {
-                                    scaffoldState.drawerState.open()
+
+        if (AppAuth().entered) {
+            setContent {
+                NavigationDrawerComposeTheme {
+                    val navController = rememberNavController()
+                    val scaffoldState = rememberScaffoldState()
+                    val scope = rememberCoroutineScope()
+                    Scaffold(
+                        scaffoldState = scaffoldState,
+                        topBar = {
+                            AppBar(
+                                onNavigationIconClick = {
+                                    scope.launch {
+                                        scaffoldState.drawerState.open()
+                                    }
                                 }
-                            }
-                        )
-                    },
-                    drawerGesturesEnabled = scaffoldState.drawerState.isOpen,
-                    drawerContent = {
-                        DrawerBody(
-                            items = listOf(
-                                MenuItem(
-                                    id = Screen.ChatListScreen.route,
-                                    title = "Chats",
-                                    contentDescription = "Go to chat list screen",
-                                    icon = Icons.Default.Email
+                            )
+                        },
+                        drawerGesturesEnabled = scaffoldState.drawerState.isOpen,
+                        drawerContent = {
+                            DrawerBody(
+                                items = listOf(
+                                    MenuItem(
+                                        id = Screen.ChatListScreen.route,
+                                        title = "Chats",
+                                        contentDescription = "Go to chat list screen",
+                                        icon = Icons.Default.Email
+                                    ),
+                                    MenuItem(
+                                        id = Screen.CreatingChatScreen.route,
+                                        title = "Create chat",
+                                        contentDescription = "Go to creating chat screen",
+                                        icon = Icons.Default.Add
+                                    ),
+                                    MenuItem(
+                                        id = Screen.FriendListScreen.route,
+                                        title = "Friends",
+                                        contentDescription = "Go to friend list screen",
+                                        icon = Icons.Default.Person
+                                    ),
+                                    MenuItem(
+                                        id = Screen.ProfileScreen.route,
+                                        title = "Profile",
+                                        contentDescription = "Go to profile screen",
+                                        icon = Icons.Default.AccountBox
+                                    )
                                 ),
-                                MenuItem(
-                                    id = Screen.CreatingChatScreen.route,
-                                    title = "Create chat",
-                                    contentDescription = "Go to creating chat screen",
-                                    icon = Icons.Default.Add
-                                ),
-                                MenuItem(
-                                    id = Screen.FriendListScreen.route,
-                                    title = "Friends",
-                                    contentDescription = "Go to friend list screen",
-                                    icon = Icons.Default.Person
-                                ),
-                                MenuItem(
-                                    id = Screen.ProfileScreen.route,
-                                    title = "Profile",
-                                    contentDescription = "Go to profile screen",
-                                    icon = Icons.Default.AccountBox
-                                )
-                            ),
-                            onItemClick = {
-                                navController.navigate(it.id)
-                                scope.launch {
-                                    scaffoldState.drawerState.close()
+                                onItemClick = {
+                                    navController.navigate(it.id)
+                                    scope.launch {
+                                        scaffoldState.drawerState.close()
+                                    }
                                 }
-                            }
-                        )
+                            )
+                        }
+                    ) {
+                        Navigation(navController = navController)
                     }
-                ) {
-                    Navigation(navController = navController)
                 }
+            }
+        } else {
+            Intent(applicationContext, LoginActivity::class.java).apply {
+                startActivity(this)
             }
         }
     }

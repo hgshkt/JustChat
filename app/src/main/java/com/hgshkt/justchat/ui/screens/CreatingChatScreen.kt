@@ -41,8 +41,9 @@ fun CreatingChatScreen() {
                 )
             )
         }
-        TextField(modifier = Modifier
-            .fillMaxWidth(),
+        TextField(
+            modifier = Modifier
+                .fillMaxWidth(),
             placeholder = { Text(text = "Chat name") },
             value = chatName.value,
             onValueChange = {
