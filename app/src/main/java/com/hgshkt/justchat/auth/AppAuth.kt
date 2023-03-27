@@ -1,14 +1,11 @@
 package com.hgshkt.justchat.auth
 
-import android.content.Context
-import android.widget.Toast
+import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.hgshkt.justchat.creators.UserCreator
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.tasks.await
-import kotlinx.coroutines.withContext
 
 class AppAuth {
 
@@ -22,15 +19,13 @@ class AppAuth {
     val currentUserFID: String?
         get() = auth.currentUser?.uid
 
-    fun login(email: String, password: String, context: Context) {
+    fun login(email: String, password: String) {
         if (email.isNotEmpty() && password.isNotEmpty()) {
-            CoroutineScope(Dispatchers.IO).launch {
+            runBlocking(Dispatchers.IO) {
                 try {
-                    auth.signInWithEmailAndPassword(email, password)
+                    auth.signInWithEmailAndPassword(email, password).await()
                 } catch (exception: Exception) {
-                    withContext(Dispatchers.Main) {
-                        Toast.makeText(context, "Error", Toast.LENGTH_LONG).show()
-                    }
+                    Log.i("AppAuth", exception.message.toString())
                 }
             }
         }

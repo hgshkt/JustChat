@@ -37,7 +37,7 @@ fun Navigation(navController: NavHostController) {
             ProfileScreen(it.arguments?.getString("userFID"))
         }
         composable(route = Screen.LoginScreen.route) {
-            LoginScreen()
+            LoginScreen(navController)
         }
         composable(route = Screen.RegistrationScreen.route) {
             RegistrationScreen()

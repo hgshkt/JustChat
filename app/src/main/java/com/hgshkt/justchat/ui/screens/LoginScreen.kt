@@ -8,20 +8,25 @@ import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.hgshkt.justchat.ui.theme.ButtonBack
 import com.hgshkt.justchat.ui.theme.ChatListBackground
+import com.hgshkt.justchat.viewmodels.LoginViewModel
 
-@Preview
 @Composable
 fun LoginScreen(
-
+    navController: NavController
 ) {
+    val viewModel = remember { LoginViewModel(navController) }
+    val email = viewModel.email.value
+    val password = viewModel.password.value
+
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier
@@ -42,9 +47,9 @@ fun LoginScreen(
                     .fillMaxWidth(0.8f)
                     .padding(12.dp),
                 placeholder = { Text(text = "Email") },
-                value = "",
+                value = email,
                 onValueChange = {
-
+                    viewModel.email.value = it
                 }
             )
             TextField(
@@ -52,9 +57,9 @@ fun LoginScreen(
                     .fillMaxWidth(0.8f)
                     .padding(12.dp),
                 placeholder = { Text(text = "Password") },
-                value = "",
+                value = password,
                 onValueChange = {
-
+                    viewModel.password.value = it
                 }
             )
             Button(
@@ -65,7 +70,7 @@ fun LoginScreen(
                 ),
                 shape = RoundedCornerShape(20.dp),
                 onClick = {
-
+                    viewModel.login()
                 }
             ) {
                 Text(
@@ -83,7 +88,7 @@ fun LoginScreen(
                 ),
                 shape = RoundedCornerShape(20.dp),
                 onClick = {
-
+                    viewModel.openRegistrationScreen()
                 }
             ) {
                 Text(

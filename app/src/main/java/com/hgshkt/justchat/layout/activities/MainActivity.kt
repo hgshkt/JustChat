@@ -1,7 +1,6 @@
 package com.hgshkt.justchat.layout.activities
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
@@ -9,6 +8,8 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.rememberScaffoldState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.navigation.compose.rememberNavController
 import com.hgshkt.justchat.auth.AppAuth
@@ -17,6 +18,7 @@ import com.hgshkt.justchat.ui.DrawerBody
 import com.hgshkt.justchat.ui.MenuItem
 import com.hgshkt.justchat.ui.navigation.Navigation
 import com.hgshkt.justchat.ui.navigation.Screen
+import com.hgshkt.justchat.ui.screens.LoginScreen
 import com.hgshkt.justchat.ui.theme.NavigationDrawerComposeTheme
 import kotlinx.coroutines.launch
 
@@ -26,12 +28,16 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if (AppAuth().entered) {
-            setContent {
-                NavigationDrawerComposeTheme {
-                    val navController = rememberNavController()
-                    val scaffoldState = rememberScaffoldState()
-                    val scope = rememberCoroutineScope()
+        setContent {
+            NavigationDrawerComposeTheme {
+                val navController = rememberNavController()
+                val scaffoldState = rememberScaffoldState()
+                val scope = rememberCoroutineScope()
+                val isLoggedIn = remember { mutableStateOf(
+                    AppAuth().entered
+                ) }
+
+                if (isLoggedIn.value) {
                     Scaffold(
                         scaffoldState = scaffoldState,
                         topBar = {
@@ -83,12 +89,11 @@ class MainActivity : AppCompatActivity() {
                     ) {
                         Navigation(navController = navController)
                     }
+                } else {
+                    LoginScreen(navController = navController)
                 }
             }
-        } else {
-            Intent(applicationContext, LoginActivity::class.java).apply {
-                startActivity(this)
-            }
         }
+
     }
 }
