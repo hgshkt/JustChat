@@ -17,7 +17,7 @@ fun LoginNavigation(navController: NavHostController) {
             LoginScreen(navController)
         }
         composable(route = Screen.RegistrationScreen.route) {
-            RegistrationScreen()
+            RegistrationScreen(navController)
         }
     }
 }

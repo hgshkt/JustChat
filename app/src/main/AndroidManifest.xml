@@ -25,7 +25,6 @@
         <activity
             android:name=".layout.activities.LoginActivity"
             android:theme="@style/Theme.JustChat" />
-        <activity android:name=".layout.activities.RegistrationActivity" />
     </application>
 
 </manifest>

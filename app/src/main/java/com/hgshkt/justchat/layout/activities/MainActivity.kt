@@ -1,6 +1,7 @@
 package com.hgshkt.justchat.layout.activities
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
@@ -18,7 +19,6 @@ import com.hgshkt.justchat.ui.DrawerBody
 import com.hgshkt.justchat.ui.MenuItem
 import com.hgshkt.justchat.ui.navigation.Navigation
 import com.hgshkt.justchat.ui.navigation.Screen
-import com.hgshkt.justchat.ui.screens.LoginScreen
 import com.hgshkt.justchat.ui.theme.NavigationDrawerComposeTheme
 import kotlinx.coroutines.launch
 
@@ -27,7 +27,6 @@ class MainActivity : AppCompatActivity() {
     @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContent {
             NavigationDrawerComposeTheme {
                 val navController = rememberNavController()
@@ -90,7 +89,9 @@ class MainActivity : AppCompatActivity() {
                         Navigation(navController = navController)
                     }
                 } else {
-                    LoginScreen(navController = navController)
+//                    LoginScreen(navController = navController)
+                    val intent = Intent(applicationContext, LoginActivity::class.java)
+                    startActivity(intent)
                 }
             }
         }

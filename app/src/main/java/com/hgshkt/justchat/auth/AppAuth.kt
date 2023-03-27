@@ -31,7 +31,7 @@ class AppAuth {
         }
     }
 
-    suspend fun registration(
+    fun registration(
         email: String,
         password: String,
         name: String,
@@ -39,17 +39,19 @@ class AppAuth {
     ) {
         val auth = FirebaseAuth.getInstance()
 
-        auth.createUserWithEmailAndPassword(email, password).await()
-        auth.signInWithEmailAndPassword(email, password).await()
+        runBlocking(Dispatchers.IO) {
+            auth.createUserWithEmailAndPassword(email, password).await()
+            auth.signInWithEmailAndPassword(email, password).await()
 
-        val creator = UserCreator()
-        creator.createUser(
-            name = name,
-            customId = id,
-            email = email,
-            password = password,
-            firebaseId = auth.currentUser!!.uid
-        )
+            val creator = UserCreator()
+            creator.createUser(
+                name = name,
+                customId = id,
+                email = email,
+                password = password,
+                firebaseId = auth.currentUser!!.uid
+            )
+        }
     }
 
     fun signOut() {
