@@ -3,9 +3,12 @@ package com.hgshkt.justchat.ui.screens
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Button
+import androidx.compose.material.Checkbox
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
@@ -55,8 +58,8 @@ fun CreatingChatScreen() {
                 .fillMaxWidth()
                 .fillMaxHeight(0.8f)
         ) {
-            FriendList(viewModel) { user ->
-                viewModel.click(user)
+            FriendList(viewModel) { user, checked ->
+                viewModel.invite(user, checked)
             }
         }
         Box(
@@ -77,7 +80,7 @@ fun CreatingChatScreen() {
 @Composable
 private fun FriendList(
     viewModel: CreatingChatViewModel,
-    event: (user: User) -> Unit = {}
+    event: (user: User, checked: Boolean) -> Unit
 ) {
     val userList = viewModel.userList
 
@@ -87,8 +90,25 @@ private fun FriendList(
             .padding(16.dp)
     ) {
         items(userList.size) {
-            UserItem(user = userList[it]) { user ->
-                event(user)
+            val checkedState = remember {
+                mutableStateOf(false)
+            }
+            Row {
+                UserItem(user = userList[it]) { user ->
+                    checkedState.value = !checkedState.value
+                    event(user, checkedState.value)
+                }
+                Box(
+                    modifier = Modifier.padding(10.dp)
+                ) {
+                    Checkbox(
+                        checked = checkedState.value,
+                        onCheckedChange = { checked ->
+                            checkedState.value = checked
+                            event(userList[it], checked)
+                        }
+                    )
+                }
             }
         }
     }

@@ -15,8 +15,8 @@ class ChatCreator {
     private val chatDatabase: ChatDatabase = ChatDatabaseImpl()
     private val userDatabase: UserDatabase = UserDatabaseImpl()
 
-    fun createChat(chatName: String, membersId: List<String>): Chat {
-        val chat = Chat(chatName, membersId)
+    fun createChat(chatName: String, membersFID: List<String>): Chat {
+        val chat = Chat(chatName, membersFID)
 
         CoroutineScope(Dispatchers.IO).launch {
             launch {
@@ -26,7 +26,7 @@ class ChatCreator {
             chatDatabase.addChat(chat)
         }
         CoroutineScope(Dispatchers.Default).launch {
-            for (userId in membersId) {
+            for (userId in membersFID) {
                 CoroutineScope(Dispatchers.IO).launch {
                     userDatabase.addChatToUserChatList(userId, chat)
                 }

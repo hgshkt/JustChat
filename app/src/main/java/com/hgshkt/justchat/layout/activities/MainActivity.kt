@@ -89,7 +89,6 @@ class MainActivity : AppCompatActivity() {
                         Navigation(navController = navController)
                     }
                 } else {
-//                    LoginScreen(navController = navController)
                     val intent = Intent(applicationContext, LoginActivity::class.java)
                     startActivity(intent)
                 }
