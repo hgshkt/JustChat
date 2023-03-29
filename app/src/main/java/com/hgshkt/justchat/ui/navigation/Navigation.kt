@@ -22,10 +22,10 @@ fun Navigation(navController: NavHostController) {
             CreatingChatScreen()
         }
         composable(route = Screen.FriendListScreen.route) {
-            FriendListScreen()
+            FriendListScreen(navController)
         }
         composable(
-            route = Screen.ProfileScreen.route,
+            route = Screen.ProfileScreen.route + "?userFID={userFID}",
             arguments = listOf(
                 navArgument("userFID") {
                     type = NavType.StringType
@@ -34,7 +34,9 @@ fun Navigation(navController: NavHostController) {
                 }
             )
         ) {
-            ProfileScreen(it.arguments?.getString("userFID"))
+            ProfileScreen(
+                fid = it.arguments?.getString("userFID")
+            )
         }
     }
 }

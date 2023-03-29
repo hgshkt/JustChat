@@ -7,12 +7,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.hgshkt.justchat.ui.items.UserItem
 import com.hgshkt.justchat.viewmodels.FriendListViewModel
 
 @Composable
-fun FriendListScreen() {
-    val viewModel = remember { FriendListViewModel() }
+fun FriendListScreen(
+    navController: NavController
+) {
+    val viewModel = remember {
+        FriendListViewModel(
+            navController = navController
+        )
+    }
     val userList = viewModel.userList
 
     LazyColumn(
@@ -21,7 +28,9 @@ fun FriendListScreen() {
             .padding(16.dp)
     ) {
         items(userList.size) {
-            UserItem(user = userList[it])
+            UserItem(user = userList[it]) { user ->
+                viewModel.openProfile(user)
+            }
         }
     }
 }

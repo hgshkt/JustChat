@@ -17,7 +17,9 @@ import coil.compose.rememberImagePainter
 import com.hgshkt.justchat.viewmodels.ProfileViewModel
 
 @Composable
-fun ProfileScreen(fid: String?) {
+fun ProfileScreen(
+    fid: String?
+) {
     val viewModel = remember {
         ProfileViewModel(fid)
     }
@@ -28,7 +30,12 @@ fun ProfileScreen(fid: String?) {
     ) {
         Column {
             Row(
-                modifier = Modifier.padding(top = 10.dp, bottom = 10.dp, start = 10.dp, end = 20.dp)
+                modifier = Modifier.padding(
+                    top = 10.dp,
+                    bottom = 10.dp,
+                    start = 10.dp,
+                    end = 20.dp
+                )
             ) {
                 Surface(
                     color = MaterialTheme.colors.surface,
