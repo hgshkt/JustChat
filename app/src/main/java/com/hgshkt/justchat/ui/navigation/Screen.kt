@@ -10,6 +10,8 @@ sealed class Screen(val route: String) {
 
     object RegistrationScreen : Screen("registration_screen")
 
+    object ChatScreen : Screen("chat_screen")
+
     fun withArg(
         argName: String,
         argValue: String

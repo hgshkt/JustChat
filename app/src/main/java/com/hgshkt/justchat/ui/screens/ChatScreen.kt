@@ -13,18 +13,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hgshkt.justchat.ui.items.MessageItem
 import com.hgshkt.justchat.viewmodels.ChatViewModel
 
-@Preview
 @Composable
-fun ChatScreen() {
+fun ChatScreen(
+    id: String
+) {
     val viewModel = remember {
-        ChatViewModel(
-            "5ad1b3d3-5fb2-4843-bc82-f4bc56a70fd2" // id for testing
-        )
+        ChatViewModel(id)
     }
     val fakeMessages = remember {
         viewModel.messages

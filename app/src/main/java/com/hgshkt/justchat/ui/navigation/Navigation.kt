@@ -38,6 +38,16 @@ fun Navigation(navController: NavHostController) {
                 fid = it.arguments?.getString("userFID")
             )
         }
+        composable(
+            route = Screen.ChatScreen.route + "?id={id}",
+            arguments = listOf(
+                navArgument("id") {
+                    type = NavType.StringType
+                }
+            )
+        ) {
+            ChatScreen(id = it.arguments?.getString("id")!!)
+        }
     }
 }
 

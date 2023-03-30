@@ -6,6 +6,7 @@ import androidx.navigation.NavController
 import com.hgshkt.justchat.auth.CurrentUser
 import com.hgshkt.justchat.dao.ChatDao
 import com.hgshkt.justchat.models.Chat
+import com.hgshkt.justchat.ui.navigation.Screen
 
 class ChatListViewModel : ViewModel() {
     private val controller: ChatDao = ChatDao()
@@ -28,9 +29,6 @@ class ChatListViewModel : ViewModel() {
         navController: NavController,
         chat: Chat
     ) {
-        /*
-         * TODO() navController.navigate(Screen.ChatScreen.route)
-         *
-         */
+        navController.navigate(Screen.ChatScreen.withArg("id", chat.id))
     }
 }
