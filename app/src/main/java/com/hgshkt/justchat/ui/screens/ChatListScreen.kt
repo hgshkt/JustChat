@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -16,13 +17,15 @@ import com.hgshkt.justchat.viewmodels.ChatListViewModel
 fun ChatListScreen(
     navController: NavController
 ) {
-    val viewModel = ChatListViewModel()
+    val viewModel = remember { ChatListViewModel() }
     val chatList = viewModel.chatList
 
-    LazyColumn(modifier = Modifier
-        .fillMaxSize()
-        .background(ChatListBackground)
-        .padding(16.dp)){
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(ChatListBackground)
+            .padding(16.dp)
+    ) {
         items(chatList.size) {
             ChatItem(chatList[it]) { chat ->
                 viewModel.openChat(
