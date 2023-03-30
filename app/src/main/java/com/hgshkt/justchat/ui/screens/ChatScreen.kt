@@ -9,27 +9,26 @@ import androidx.compose.material.TextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.hgshkt.justchat.auth.AppAuth
-import com.hgshkt.justchat.models.Message
 import com.hgshkt.justchat.ui.items.MessageItem
+import com.hgshkt.justchat.viewmodels.ChatViewModel
 
 @Preview
 @Composable
 fun ChatScreen() {
-    // fakeMessages creating for ChatScreen preview
-    val fakeMessages = listOf(
-        Message("m1", "sqvFngw8B9chPZqvr6h15RMMD5U2"),
-        Message("m2", "sqvFngw8B9chPZqvr6h15RMMD5U2"),
-        Message("m3", AppAuth().currentUserFID!!),
-        Message("m4", "vcV16uxLCuPUOxswSFfvn6ebFu63"),
-        Message("m5", "sqvFngw8B9chPZqvr6h15RMMD5U2"),
-        Message("m6", "vcV16uxLCuPUOxswSFfvn6ebFu63"),
-    )
+    val viewModel = remember {
+        ChatViewModel(
+            "5ad1b3d3-5fb2-4843-bc82-f4bc56a70fd2" // id for testing
+        )
+    }
+    val fakeMessages = remember {
+        viewModel.messages
+    }
     Box(
         modifier = Modifier
             .fillMaxSize()

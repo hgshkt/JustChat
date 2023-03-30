@@ -1,5 +1,7 @@
 package com.hgshkt.justchat.database
 
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.hgshkt.justchat.models.Chat
@@ -11,7 +13,7 @@ class ChatDatabaseImpl : ChatDatabase {
     private val messagesKey = "messagesHashMap"
     private val lastMessageTimeKey = "lastMessageTime"
 
-    var dbRef = FirebaseDatabase.getInstance().getReference(path)
+    private var dbRef = FirebaseDatabase.getInstance().getReference(path)
 
     override suspend fun addChat(chat: Chat) {
         dbRef.child(chat.id).setValue(chat)
@@ -19,6 +21,18 @@ class ChatDatabaseImpl : ChatDatabase {
 
     override suspend fun getChatById(id: String): Chat {
         return dbRef.child(id).get().await().getValue(Chat::class.java)!!
+    }
+
+    override suspend fun getChat(chatId: String, event: (chat: Chat?) -> Unit) {
+        dbRef.child(chatId).addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                event(snapshot.getValue(Chat::class.java))
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+        })
     }
 
     override suspend fun addMessageToChat(chatId: String, messageId: String, time: String) {

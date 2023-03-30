@@ -9,6 +9,8 @@ interface ChatDatabase {
 
     suspend fun getChatById(id: String): Chat?
 
+    suspend fun getChat(chatId: String, event: (chat: Chat?) -> Unit)
+
     suspend fun addMessageToChat(chatId: String, messageId: String, time: String)
 
     suspend fun updateLastMessageTime(id: String, time: String)

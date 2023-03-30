@@ -11,7 +11,7 @@ import kotlinx.coroutines.runBlocking
 class MessageDao {
     private val db: MessageDatabase = MessageDatabaseImpl()
 
-    fun getMessage(id: String): Message = runBlocking {
+    fun getMessage(id: String): Message = runBlocking(Dispatchers.IO) {
         return@runBlocking db.getMessage(id)
     }
 

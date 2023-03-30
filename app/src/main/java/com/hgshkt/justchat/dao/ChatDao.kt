@@ -36,8 +36,17 @@ class ChatDao {
         }
     }
 
-    fun getChat(id: String): Chat? = runBlocking {
+    fun getChat(id: String): Chat? = runBlocking(Dispatchers.IO) {
         return@runBlocking db.getChatById(id)
+    }
+
+    suspend fun getChat(
+        id: String,
+        event: (chat: Chat?) -> Unit
+    ) {
+        db.getChat(id) {
+            event(it)
+        }
     }
 
 

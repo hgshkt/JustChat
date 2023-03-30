@@ -32,9 +32,11 @@ class MainActivity : AppCompatActivity() {
                 val navController = rememberNavController()
                 val scaffoldState = rememberScaffoldState()
                 val scope = rememberCoroutineScope()
-                val isLoggedIn = remember { mutableStateOf(
-                    AppAuth().entered
-                ) }
+                val isLoggedIn = remember {
+                    mutableStateOf(
+                        AppAuth().entered
+                    )
+                }
 
                 if (isLoggedIn.value) {
                     Scaffold(
