@@ -9,6 +9,7 @@ import androidx.compose.material.TextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,9 +25,10 @@ fun ChatScreen(
     val viewModel = remember {
         ChatViewModel(id)
     }
-    val fakeMessages = remember {
+    val messages = remember {
         viewModel.messages
     }
+    val messageText = remember { viewModel.messageText }
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -37,8 +39,8 @@ fun ChatScreen(
                 .fillMaxSize()
         ) {
             LazyColumn {
-                items(fakeMessages.size) {
-                    MessageItem(fakeMessages[it])
+                items(messages.size) {
+                    MessageItem(messages[it])
                 }
             }
             Row(
@@ -49,9 +51,9 @@ fun ChatScreen(
                     modifier = Modifier
                         .fillMaxWidth(0.85f),
                     placeholder = { Text("Message") },
-                    value = "",
+                    value = messageText.value,
                     onValueChange = {
-
+                        messageText.value = it
                     })
                 Image(
                     alignment = Alignment.Center,
@@ -61,7 +63,7 @@ fun ChatScreen(
                         .fillMaxSize()
                         .padding(8.dp)
                         .clickable {
-
+                            viewModel.sendMessage()
                         }
                 )
             }
