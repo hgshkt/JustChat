@@ -7,6 +7,9 @@ import com.hgshkt.justchat.auth.CurrentUser
 import com.hgshkt.justchat.dao.ChatDao
 import com.hgshkt.justchat.models.Chat
 import com.hgshkt.justchat.ui.navigation.Screen
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class ChatListViewModel : ViewModel() {
     private val controller: ChatDao = ChatDao()
@@ -19,8 +22,10 @@ class ChatListViewModel : ViewModel() {
             idList = it.chatIdMap.values.toList()
             chatList.clear()
             idList.forEach {fid ->
-                val chat = controller.getChat(fid)!!
-                chatList.add(chat)
+                CoroutineScope(Dispatchers.IO).launch {
+                    val chat = controller.getChat(fid)!!
+                    chatList.add(chat)
+                }
             }
         }
     }
