@@ -1,4 +1,4 @@
-package com.hgshkt.justchat.ui
+package com.hgshkt.justchat.ui.navigation
 
 import androidx.compose.ui.graphics.vector.ImageVector
 

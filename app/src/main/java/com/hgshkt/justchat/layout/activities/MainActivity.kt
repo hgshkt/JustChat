@@ -14,11 +14,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.navigation.compose.rememberNavController
 import com.hgshkt.justchat.auth.AppAuth
-import com.hgshkt.justchat.ui.AppBar
-import com.hgshkt.justchat.ui.DrawerBody
-import com.hgshkt.justchat.ui.MenuItem
+import com.hgshkt.justchat.ui.navigation.AppBar
+import com.hgshkt.justchat.ui.navigation.DrawerBody
+import com.hgshkt.justchat.ui.navigation.MenuItem
 import com.hgshkt.justchat.ui.navigation.Navigation
 import com.hgshkt.justchat.ui.navigation.Screen
+import com.hgshkt.justchat.ui.navigation.SignOutButton
 import com.hgshkt.justchat.ui.theme.NavigationDrawerComposeTheme
 import kotlinx.coroutines.launch
 
@@ -86,6 +87,7 @@ class MainActivity : AppCompatActivity() {
                                     }
                                 }
                             )
+                            SignOutButton(navController.context)
                         }
                     ) {
                         Navigation(navController = navController)

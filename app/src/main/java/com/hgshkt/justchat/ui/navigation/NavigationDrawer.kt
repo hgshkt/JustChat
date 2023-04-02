@@ -1,4 +1,4 @@
-package com.hgshkt.justchat.ui
+package com.hgshkt.justchat.ui.navigation
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*

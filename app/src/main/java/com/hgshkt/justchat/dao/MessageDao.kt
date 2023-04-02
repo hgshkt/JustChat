@@ -6,12 +6,13 @@ import com.hgshkt.justchat.models.Message
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class MessageDao {
     private val db: MessageDatabase = MessageDatabaseImpl()
 
-    suspend fun getMessage(id: String): Message {
-        return db.getMessage(id)
+    fun getMessage(id: String): Message = runBlocking(Dispatchers.IO) {
+        return@runBlocking db.getMessage(id)
     }
 
     fun create(message: Message) {
@@ -20,12 +21,12 @@ class MessageDao {
         }
     }
 
-    suspend fun getMessages(messagesIdList: List<String>): List<Message> {
+    fun getMessages(messagesIdList: List<String>): List<Message> = runBlocking(Dispatchers.IO) {
         val list = mutableListOf<Message>()
         messagesIdList.forEach {
             val massage = db.getMessage(it)
             list.add(massage)
         }
-        return list
+        return@runBlocking list
     }
 }
