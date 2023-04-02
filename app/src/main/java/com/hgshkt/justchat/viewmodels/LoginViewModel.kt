@@ -1,6 +1,7 @@
 package com.hgshkt.justchat.viewmodels
 
 import android.content.Intent
+import android.widget.Toast
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
@@ -12,16 +13,26 @@ class LoginViewModel(
     private val navController: NavController
 ) : ViewModel() {
 
+    private val auth = AppAuth()
+
     val email = mutableStateOf("")
     val password = mutableStateOf("")
-
     fun login() {
-        AppAuth().login(
+        auth.login(
             email = email.value,
             password = password.value
-        )
-        val intent = Intent(navController.context, MainActivity::class.java)
-        navController.context.startActivity(intent)
+        ) { isEmailVerified ->
+            if (isEmailVerified) {
+                val intent = Intent(navController.context, MainActivity::class.java)
+                navController.context.startActivity(intent)
+            } else {
+                Toast.makeText(
+                    navController.context,
+                    "Email not confirmed.",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }
     }
 
     fun openRegistrationScreen() {
