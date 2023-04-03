@@ -27,7 +27,7 @@ enum class ProfileStatus {
      * Status of profile that received invite from current user
      */
     GOTTEN_INVITE  {
-        override var status = Status.CURRENT
+        override var status = Status.GOTTEN_INVITE
         override var icon = Icons.Default.Close
         override var buttonText = "Cancel inviting"
 
@@ -40,7 +40,7 @@ enum class ProfileStatus {
      * Status of profile that sent invite to current user
      */
     SENT_INVITE  {
-        override var status = Status.CURRENT
+        override var status = Status.SENT_INVITE
         override var icon = Icons.Default.Add
         override var buttonText = "Add"
 
@@ -53,7 +53,7 @@ enum class ProfileStatus {
      * Status of current user's friend profile
      */
     FRIEND  {
-        override var status = Status.CURRENT
+        override var status = Status.FRIEND
         override var icon = Icons.Default.Clear
         override var buttonText = "Delete friend"
 
@@ -66,7 +66,7 @@ enum class ProfileStatus {
      * Status of default profile
      */
     DEFAULT  {
-        override var status = Status.CURRENT
+        override var status = Status.DEFAULT
         override var icon = Icons.Default.Add
         override var buttonText = "Send invite"
 
@@ -85,9 +85,8 @@ enum class ProfileStatus {
         suspend fun getProfileStatusFor(fid: String): ProfileStatus {
             val status = getStatusFor(fid)
             for (profileStatus in values()) {
-                if (profileStatus.status == status) {
+                if (profileStatus.status == status)
                     return profileStatus
-                }
             }
             return DEFAULT
         }

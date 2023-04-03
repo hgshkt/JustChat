@@ -7,7 +7,6 @@ import com.hgshkt.justchat.models.User
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 class FriendController {
     private val db: UserDatabase = UserDatabaseImpl()
@@ -73,14 +72,12 @@ class FriendController {
         return firstHasSecond && secondHasFirst
     }
 
-    fun stopFriendship(user1: User, user2: User) {
-        runBlocking {
-            if (areFriends(user1.fid, user2.fid)) {
-                (user1.friendList as MutableList).remove(user2.fid)
-                (user2.friendList as MutableList).remove(user1.fid)
-                db.updateFriendList(user1.fid, user1.friendList)
-                db.updateFriendList(user1.fid, user2.friendList)
-            }
+    private suspend fun stopFriendship(user1: User, user2: User) {
+        if (areFriends(user1.fid, user2.fid)) {
+            (user1.friendList as MutableList).remove(user2.fid)
+            (user2.friendList as MutableList).remove(user1.fid)
+            db.updateFriendList(user1.fid, user1.friendList)
+            db.updateFriendList(user2.fid, user2.friendList)
         }
     }
 
@@ -122,8 +119,9 @@ class FriendController {
 
     suspend fun acceptInvite(fid: String) {
         val currentUser = db.getUserByFID(AppAuth().currentUserFID!!)!!
-        val recipient = db.getUserByFID(fid)!!
-        acceptInvite(currentUser, recipient)
+        val sender = db.getUserByFID(fid)!!
+        acceptInvite(sender, currentUser)
+        cancelInviting(sender, currentUser)
     }
 
     suspend fun stopFriendship(fid: String) {

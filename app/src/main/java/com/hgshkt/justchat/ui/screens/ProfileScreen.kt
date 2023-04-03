@@ -131,6 +131,7 @@ fun ProfileScreen(
 
 @Composable
 fun ProfileButton(viewModel: ProfileViewModel) {
+    val status = viewModel.status.value
     Surface(
         color = MaterialTheme.colors.surface,
         elevation = 8.dp,
@@ -147,10 +148,10 @@ fun ProfileButton(viewModel: ProfileViewModel) {
                 .padding(vertical = 4.dp, horizontal = 14.dp)
         ) {
             Text(
-                text = viewModel.buttonText
+                text = status.buttonText
             )
             Image(
-                imageVector = viewModel.buttonIcon,
+                imageVector = status.icon,
                 contentDescription = null
             )
         }
