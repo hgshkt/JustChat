@@ -1,5 +1,6 @@
 package com.hgshkt.justchat.controllers
 
+import com.hgshkt.justchat.auth.AppAuth
 import com.hgshkt.justchat.database.UserDatabase
 import com.hgshkt.justchat.database.UserDatabaseImpl
 import com.hgshkt.justchat.models.User
@@ -20,7 +21,7 @@ class FriendController {
         }
     }
 
-    fun sendInvite(sender: User, receiver: User) {
+    private fun sendInvite(sender: User, receiver: User) {
         (sender.sentInvites as MutableList).add(receiver.fid)
         (receiver.gottenInvites as MutableList).add(sender.fid)
         CoroutineScope(Dispatchers.IO).launch {
@@ -83,16 +84,51 @@ class FriendController {
         }
     }
 
-    fun cancelInviting(sender: User, receiver: User) {
-        runBlocking {
-            val senderHasRecipient = idInSentInviteList(sender.fid, receiver.fid)
-            val recipientHasSender = idInGottenInviteList(sender.fid, receiver.fid)
-            if (senderHasRecipient && recipientHasSender) {
-                (sender.sentInvites as MutableList).remove(receiver.fid)
-                (receiver.gottenInvites as MutableList).remove(sender.fid)
-                db.updateSentInvites(sender.fid, sender.sentInvites)
-                db.updateReceivedInvites(receiver.fid, receiver.gottenInvites)
-            }
+    private suspend fun cancelInviting(sender: User, receiver: User) {
+        val senderHasRecipient = idInSentInviteList(sender.fid, receiver.fid)
+        val recipientHasSender = idInGottenInviteList(sender.fid, receiver.fid)
+        if (senderHasRecipient && recipientHasSender) {
+            (sender.sentInvites as MutableList).remove(receiver.fid)
+            (receiver.gottenInvites as MutableList).remove(sender.fid)
+            db.updateSentInvites(sender.fid, sender.sentInvites)
+            db.updateReceivedInvites(receiver.fid, receiver.gottenInvites)
         }
+    }
+
+    suspend fun gottenInvite(userFid: String): Boolean {
+        val currentUserFid = AppAuth().currentUserFID!!
+        return idInGottenInviteList(currentUserFid, userFid)
+                && idInSentInviteList(currentUserFid, userFid)
+    }
+
+    suspend fun sentInvite(userFid: String): Boolean {
+        val currentUserFid = AppAuth().currentUserFID!!
+        return idInGottenInviteList(userFid, currentUserFid)
+                && idInSentInviteList(userFid, currentUserFid)
+    }
+
+    suspend fun sendInviteTo(fid: String) {
+        val sender = db.getUserByFID(AppAuth().currentUserFID!!)!!
+        val recipient = db.getUserByFID(fid)!!
+        sendInvite(sender, recipient)
+    }
+
+    suspend fun cancelInviting(fid: String) {
+        val currentUser = db.getUserByFID(AppAuth().currentUserFID!!)!!
+        val recipient = db.getUserByFID(fid)!!
+
+        cancelInviting(currentUser, recipient)
+    }
+
+    suspend fun acceptInvite(fid: String) {
+        val currentUser = db.getUserByFID(AppAuth().currentUserFID!!)!!
+        val recipient = db.getUserByFID(fid)!!
+        acceptInvite(currentUser, recipient)
+    }
+
+    suspend fun stopFriendship(fid: String) {
+        val currentUser = db.getUserByFID(AppAuth().currentUserFID!!)!!
+        val friend = db.getUserByFID(fid)!!
+        stopFriendship(currentUser, friend)
     }
 }

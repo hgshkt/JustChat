@@ -97,7 +97,11 @@ fun ProfileScreen(
                             )
                         }
                     }
-                    ProfileButton(viewModel)
+                    Box(
+                        modifier = Modifier.padding(vertical = 12.dp)
+                    ) {
+                        ProfileButton(viewModel)
+                    }
                 }
             }
             Box(
@@ -127,32 +131,28 @@ fun ProfileScreen(
 
 @Composable
 fun ProfileButton(viewModel: ProfileViewModel) {
-    Box(
-        modifier = Modifier.padding(vertical = 12.dp)
-    ) {
-        Surface(
-            color = MaterialTheme.colors.surface,
-            elevation = 8.dp,
-            modifier = Modifier
-                .fillMaxWidth()
-                .wrapContentHeight()
-                .clickable {
-                    viewModel.buttonClick()
-                }
-        ) {
-            Row(
-                horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier
-                    .padding(vertical = 4.dp, horizontal = 14.dp)
-            ) {
-                Text(
-                    text = viewModel.buttonText
-                )
-                Image(
-                    imageVector = viewModel.buttonIcon,
-                    contentDescription = null
-                )
+    Surface(
+        color = MaterialTheme.colors.surface,
+        elevation = 8.dp,
+        modifier = Modifier
+            .fillMaxWidth()
+            .wrapContentHeight()
+            .clickable {
+                viewModel.buttonClick()
             }
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier
+                .padding(vertical = 4.dp, horizontal = 14.dp)
+        ) {
+            Text(
+                text = viewModel.buttonText
+            )
+            Image(
+                imageVector = viewModel.buttonIcon,
+                contentDescription = null
+            )
         }
     }
 }

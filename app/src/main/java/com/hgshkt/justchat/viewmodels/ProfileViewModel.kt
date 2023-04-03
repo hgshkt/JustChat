@@ -1,21 +1,23 @@
 package com.hgshkt.justchat.viewmodels
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.hgshkt.justchat.auth.CurrentUser
+import com.hgshkt.justchat.controllers.ProfileStatus
 import com.hgshkt.justchat.dao.UserDao
 import com.hgshkt.justchat.models.User
+import kotlinx.coroutines.launch
 
 class ProfileViewModel(private val fid: String?) : ViewModel() {
 
-    // values for current profile status
-    val buttonIcon = Icons.Default.Edit
-    val buttonText = "Edit"
+    val user = mutableStateOf(User())
+    val status = mutableStateOf(ProfileStatus.DEFAULT)
+
+    val buttonIcon = status.value.icon
+    val buttonText = status.value.buttonText
 
     private val dao: UserDao = UserDao()
-    val user = mutableStateOf(User())
 
     init {
         if (fid == null)
@@ -26,9 +28,15 @@ class ProfileViewModel(private val fid: String?) : ViewModel() {
             dao.addOnValueChangeListener(fid) {
                 user.value = it.getValue(User::class.java)!!
             }
+
+        viewModelScope.launch {
+            status.value = ProfileStatus.getProfileStatusFor(fid!!)
+        }
     }
 
     fun buttonClick() {
-
+        viewModelScope.launch {
+            status.value.buttonClick(fid!!)
+        }
     }
 }
