@@ -74,6 +74,12 @@ class MainActivity : AppCompatActivity() {
                                         icon = Icons.Default.Person
                                     ),
                                     MenuItem(
+                                        id = Screen.SearchScreen.route,
+                                        title = "Search friends",
+                                        contentDescription = "Go to search screen",
+                                        icon = Icons.Default.Search
+                                    ),
+                                    MenuItem(
                                         id = Screen.ProfileScreen.route,
                                         title = "Profile",
                                         contentDescription = "Go to profile screen",

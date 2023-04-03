@@ -6,11 +6,13 @@ sealed class Screen(val route: String) {
     object FriendListScreen : Screen("friend_list_screen")
     object ProfileScreen : Screen("profile_screen")
 
+    object SearchScreen : Screen("search_screen")
+
+    object ChatScreen : Screen("chat_screen")
+
     object LoginScreen : Screen("login_screen")
 
     object RegistrationScreen : Screen("registration_screen")
-
-    object ChatScreen : Screen("chat_screen")
 
     fun withArg(
         argName: String,

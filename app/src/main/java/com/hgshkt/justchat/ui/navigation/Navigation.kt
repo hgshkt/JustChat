@@ -24,6 +24,9 @@ fun Navigation(navController: NavHostController) {
         composable(route = Screen.FriendListScreen.route) {
             FriendListScreen(navController)
         }
+        composable(route = Screen.SearchScreen.route) {
+            SearchScreen(navController)
+        }
         composable(
             route = Screen.ProfileScreen.route + "?userFID={userFID}",
             arguments = listOf(
