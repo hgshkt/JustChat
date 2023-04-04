@@ -22,7 +22,6 @@ class ProfileViewModel(private var fid: String?) : ViewModel() {
 
             viewModelScope.launch {
                 status.value = ProfileStatus.getProfileStatusFor(fid!!)
-                println(status.value)
             }
         }
     }

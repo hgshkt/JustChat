@@ -1,5 +1,8 @@
 package com.hgshkt.justchat.ui.screens
 
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -10,10 +13,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
+import com.hgshkt.justchat.loaders.uploadAvatar
 import com.hgshkt.justchat.viewmodels.ProfileViewModel
 
 @Composable
@@ -24,6 +29,11 @@ fun ProfileScreen(
         ProfileViewModel(fid)
     }
     val user = viewModel.user.value
+
+    val launcher =
+        rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { uri: Uri? ->
+            uploadAvatar(uri!!)
+        }
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -46,9 +56,12 @@ fun ProfileScreen(
                     Image(
                         painter = rememberImagePainter(user.avatarUri),
                         contentDescription = null,
+                        contentScale = ContentScale.Crop,
                         modifier = Modifier
-                            .height(150.dp)
-                            .width(150.dp)
+                            .size(150.dp)
+                            .clickable {
+                                launcher.launch("image/*")
+                            }
                     )
                 }
                 Column(
