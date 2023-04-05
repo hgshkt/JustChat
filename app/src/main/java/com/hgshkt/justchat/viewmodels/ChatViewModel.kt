@@ -4,6 +4,10 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.google.firebase.database.ChildEventListener
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.hgshkt.justchat.auth.AppAuth
 import com.hgshkt.justchat.dao.ChatDao
 import com.hgshkt.justchat.dao.MessageDao
@@ -26,18 +30,7 @@ class ChatViewModel(
 
     init {
         CoroutineScope(Dispatchers.IO).launch {
-            chatDao.getChat(id) {
-                chatState.value = it!! // TODO() chat can be nullable
-                loadMessages()
-            }
-        }
-    }
-
-    private fun loadMessages() {
-        messages.clear()
-        val map = chatState.value.messagesHashMap.toSortedMap()
-        map.values.forEach {
-            messages.add(messageDao.getMessage(it))
+            chatState.value = chatDao.getChat(id)!!
         }
     }
 
@@ -45,5 +38,33 @@ class ChatViewModel(
         val message = Message(messageText.value, currentUserFID!!)
         ChatManager(id).sendMessage(message)
         messageText.value = ""
+    }
+
+    fun fetchMessagesFromFirebase(messages: MutableList<Message>) {
+        viewModelScope.launch {
+            chatDao.addChatMessagesChangeListener(id, object : ChildEventListener {
+                override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+                    val message = messageDao.getMessage(snapshot.value.toString())
+                    message.let { messages.add(it) }
+                }
+
+                override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
+
+                }
+
+                override fun onChildRemoved(snapshot: DataSnapshot) {
+                    val message = messageDao.getMessage(snapshot.value.toString())
+                    message.let { messages.remove(it) }
+                }
+
+                override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
+
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+
+                }
+            })
+        }
     }
 }

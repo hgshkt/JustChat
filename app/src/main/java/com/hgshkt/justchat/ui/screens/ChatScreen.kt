@@ -34,6 +34,10 @@ fun ChatScreen(
     }
     val messageText = remember { viewModel.messageText }
 
+    LaunchedEffect(Unit) {
+        viewModel.fetchMessagesFromFirebase(messages)
+    }
+
     val constraints = ConstraintSet {
         val lazyColumn = createRefFor("lazyColumn")
         val textField = createRefFor("textField")

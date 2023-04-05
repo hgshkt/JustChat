@@ -1,5 +1,6 @@
 package com.hgshkt.justchat.dao
 
+import com.google.firebase.database.ChildEventListener
 import com.hgshkt.justchat.database.ChatDatabase
 import com.hgshkt.justchat.database.ChatDatabaseImpl
 import com.hgshkt.justchat.models.Chat
@@ -35,5 +36,12 @@ class ChatDao {
         CoroutineScope(Dispatchers.IO).launch {
             db.addMessageToChat(chatId, messageId, time)
         }
+    }
+
+    suspend fun addChatMessagesChangeListener(
+        chatId: String,
+        listener: ChildEventListener
+    ) {
+        db.addChatMessagesChangeListener(chatId, listener)
     }
 }
