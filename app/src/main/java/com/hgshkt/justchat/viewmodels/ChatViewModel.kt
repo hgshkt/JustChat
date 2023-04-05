@@ -14,8 +14,6 @@ import com.hgshkt.justchat.dao.MessageDao
 import com.hgshkt.justchat.managers.ChatManager
 import com.hgshkt.justchat.models.Chat
 import com.hgshkt.justchat.models.Message
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class ChatViewModel(
@@ -29,7 +27,7 @@ class ChatViewModel(
     var messageText = mutableStateOf("")
 
     init {
-        CoroutineScope(Dispatchers.IO).launch {
+        viewModelScope.launch {
             chatState.value = chatDao.getChat(id)!!
         }
     }

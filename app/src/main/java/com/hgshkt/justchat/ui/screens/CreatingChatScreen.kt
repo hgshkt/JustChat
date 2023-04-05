@@ -15,13 +15,16 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.hgshkt.justchat.models.User
 import com.hgshkt.justchat.ui.items.UserItem
 import com.hgshkt.justchat.viewmodels.CreatingChatViewModel
 
 @Composable
-fun CreatingChatScreen() {
-    val viewModel = remember { CreatingChatViewModel() }
+fun CreatingChatScreen(
+    navController: NavController
+) {
+    val viewModel = remember { CreatingChatViewModel(navController) }
     val chatName = viewModel.chatName
 
     Column(
