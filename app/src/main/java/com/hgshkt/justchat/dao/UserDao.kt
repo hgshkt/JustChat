@@ -1,6 +1,8 @@
 package com.hgshkt.justchat.dao
 
+import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
+import com.hgshkt.justchat.auth.AppAuth
 import com.hgshkt.justchat.database.UserDatabase
 import com.hgshkt.justchat.database.UserDatabaseImpl
 import com.hgshkt.justchat.models.User
@@ -41,5 +43,13 @@ class UserDao {
         return runBlocking(Dispatchers.IO) {
             return@runBlocking db.getAllUsers()?.values?.toList() ?: emptyList()
         }
+    }
+
+
+    suspend fun addChatListChangeListener(
+        listener: ChildEventListener
+    ) {
+        val fid = AppAuth().currentUserFID
+        db.addChatListChangeListener(fid!!, listener)
     }
 }

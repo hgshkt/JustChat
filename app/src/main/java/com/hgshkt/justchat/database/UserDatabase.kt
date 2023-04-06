@@ -1,5 +1,6 @@
 package com.hgshkt.justchat.database
 
+import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.hgshkt.justchat.models.Chat
 import com.hgshkt.justchat.models.User
@@ -63,4 +64,6 @@ interface UserDatabase {
      * @param fid is user's id whose list must be gotten
      */
     suspend fun getFriendList(fid: String): List<String>?
+
+    suspend fun addChatListChangeListener(fid: String, listener: ChildEventListener)
 }

@@ -1,9 +1,6 @@
 package com.hgshkt.justchat.database
 
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
 import com.google.firebase.database.ktx.getValue
 import com.hgshkt.justchat.models.Chat
 import com.hgshkt.justchat.models.User
@@ -76,5 +73,12 @@ class UserDatabaseImpl : UserDatabase {
     override suspend fun getFriendList(fid: String): List<String>? {
         return dbRef.child(fid)
             .child(friendListKey).get().await().getValue<List<String>>()
+    }
+
+    override suspend fun addChatListChangeListener(
+        fid: String,
+        listener: ChildEventListener
+    ) {
+        dbRef.child(fid).child(chatIdMapKey).addChildEventListener(listener)
     }
 }
