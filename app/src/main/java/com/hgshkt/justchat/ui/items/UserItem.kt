@@ -19,6 +19,7 @@ fun UserItem(
     onClickEvent: (user: User) -> Unit = {}
 ) {
     Box(modifier = Modifier
+        .fillMaxWidth()
         .clickable {
             onClickEvent(user)
         }) {
@@ -35,7 +36,6 @@ fun UserItem(
             Column(
                 verticalArrangement = Arrangement.Center,
                 modifier = Modifier
-                    .fillMaxWidth()
                     .padding(start = 12.dp)
             ) {
                 Text(

@@ -24,8 +24,9 @@ class ChatCreator {
 
         withContext(Dispatchers.IO) {
             chatDatabase.addChat(chat)
-            if (avatarUri != null)
-            uploadChatAvatar(chat.id, avatarUri)
+            if (avatarUri != null) {
+                uploadChatAvatar(chat.id, avatarUri)
+            }
 
             val memberUpdates = membersFID.map {
                 async {
