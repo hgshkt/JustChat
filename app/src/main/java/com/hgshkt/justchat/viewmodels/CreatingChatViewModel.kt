@@ -4,6 +4,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
+import com.hgshkt.justchat.auth.AppAuth
 import com.hgshkt.justchat.auth.CurrentUser
 import com.hgshkt.justchat.creators.ChatCreator
 import com.hgshkt.justchat.dao.UserDao
@@ -42,6 +43,7 @@ class CreatingChatViewModel(
     }
 
     fun createChat() {
+        membersFID.add(AppAuth().currentUserFID!!)
         val chat = ChatCreator().createChat(
             chatName = chatName.value,
             membersFID = membersFID

@@ -31,18 +31,13 @@ class ChatListViewModel : ViewModel() {
                 }
 
                 override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
-                    val chatId = snapshot.value.toString()
-                    viewModelScope.launch {
-                        val chat = chatDao.getChat(chatId)
-                        chatList.add(0, chat!!)
-                    }
+
                 }
 
                 override fun onChildRemoved(snapshot: DataSnapshot) {
                     val chatId = snapshot.value.toString()
-                    viewModelScope.launch {
-                        val chat = chatDao.getChat(chatId)
-                        chatList.remove(chat!!)
+                    chatList.removeIf {
+                        it.id == chatId
                     }
                 }
 

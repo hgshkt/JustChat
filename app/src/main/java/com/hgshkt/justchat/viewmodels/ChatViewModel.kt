@@ -21,6 +21,8 @@ class ChatViewModel(
 ) : ViewModel() {
     private var chatDao: ChatDao = ChatDao()
     private var messageDao: MessageDao = MessageDao()
+    private lateinit var manager: ChatManager
+
     private var chatState: MutableState<Chat> = mutableStateOf(Chat())
     private var currentUserFID = AppAuth().currentUserFID
     var messages = mutableStateListOf<Message>()
@@ -29,12 +31,13 @@ class ChatViewModel(
     init {
         viewModelScope.launch {
             chatState.value = chatDao.getChat(id)!!
+            manager = ChatManager(chatState.value)
         }
     }
 
     fun sendMessage() {
         val message = Message(messageText.value, currentUserFID!!)
-        ChatManager(id).sendMessage(message)
+        manager.sendMessage(message)
         messageText.value = ""
     }
 
