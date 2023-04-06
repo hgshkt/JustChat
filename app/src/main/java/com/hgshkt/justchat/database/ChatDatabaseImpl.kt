@@ -9,6 +9,7 @@ class ChatDatabaseImpl : ChatDatabase {
 
     private val messagesKey = "messagesHashMap"
     private val lastMessageTimeKey = "lastMessageTime"
+    private val avatarUriKey = "avatarUri"
 
     private var dbRef = FirebaseDatabase.getInstance().getReference(path)
 
@@ -45,5 +46,8 @@ class ChatDatabaseImpl : ChatDatabase {
         listener: ChildEventListener
     ) {
         dbRef.child(chatId).child(messagesKey).addChildEventListener(listener)
+    }
+    override suspend fun updateChatAvatar(chatId: String, avatarUri: String) {
+        dbRef.child(chatId).child(avatarUriKey).setValue(avatarUri)
     }
 }

@@ -44,4 +44,10 @@ class ChatDao {
     ) {
         db.addChatMessagesChangeListener(chatId, listener)
     }
+
+    fun updateChatAvatar(chatId: String, avatarUri: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            db.updateChatAvatar(chatId, avatarUri)
+        }
+    }
 }

@@ -1,5 +1,6 @@
 package com.hgshkt.justchat.viewmodels
 
+import android.net.Uri
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -10,11 +11,16 @@ import com.hgshkt.justchat.creators.ChatCreator
 import com.hgshkt.justchat.dao.UserDao
 import com.hgshkt.justchat.models.User
 import com.hgshkt.justchat.ui.navigation.Screen
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class CreatingChatViewModel(
     private val navController: NavController
 ) : ViewModel() {
     private val dao: UserDao = UserDao()
+
     private var idList: List<String> = mutableListOf()
     private val membersFID: MutableList<String> = mutableListOf()
 
@@ -23,6 +29,8 @@ class CreatingChatViewModel(
 
     var userList = mutableStateListOf<User>()
         private set
+
+    var avatarUri = mutableStateOf<Uri?>(null)
 
     init {
         CurrentUser.addValueChangeListener {
@@ -43,11 +51,16 @@ class CreatingChatViewModel(
     }
 
     fun createChat() {
-        membersFID.add(AppAuth().currentUserFID!!)
-        val chat = ChatCreator().createChat(
-            chatName = chatName.value,
-            membersFID = membersFID
-        )
-        navController.navigate(Screen.ChatScreen.withArg("id", chat.id))
+        CoroutineScope(Dispatchers.IO).launch {
+            membersFID.add(AppAuth().currentUserFID!!)
+            val chat = ChatCreator().createChat(
+                chatName = chatName.value,
+                avatarUri = avatarUri.value,
+                membersFID = membersFID
+            )
+            withContext(Dispatchers.Main) {
+                navController.navigate(Screen.ChatScreen.withArg("id", chat.id))
+            }
+        }
     }
 }
