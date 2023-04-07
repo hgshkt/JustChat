@@ -12,7 +12,7 @@ class MessageViewModel(private val message: Message): ViewModel() {
     var user = mutableStateOf(User())
 
     init {
-        userDao.addOnValueChangeListener(message.authorFid) {
+        userDao.addOnValueChangeListener(message.authorFid!!) {
             user.value = it.getValue(User::class.java)!!
         }
     }

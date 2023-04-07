@@ -28,6 +28,6 @@ class ChatManager(
             userDao.updateUser(user)
         }
 
-        chatDao.updateChatLastMessageTime(chat.id, message.date.toString())
+        chatDao.updateChatLastMessage(chat.id, message)
     }
 }

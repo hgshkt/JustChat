@@ -10,6 +10,7 @@ class Chat {
 
     var id: String = UUID.randomUUID().toString()
     var lastMessageTime: String = System.currentTimeMillis().toString()
+    var lastMessage: Message = Message()
 
     /**
      * key is message date time in milliseconds

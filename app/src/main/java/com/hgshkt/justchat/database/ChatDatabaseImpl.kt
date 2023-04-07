@@ -2,6 +2,7 @@ package com.hgshkt.justchat.database
 
 import com.google.firebase.database.*
 import com.hgshkt.justchat.models.Chat
+import com.hgshkt.justchat.models.Message
 import kotlinx.coroutines.tasks.await
 
 class ChatDatabaseImpl : ChatDatabase {
@@ -10,6 +11,7 @@ class ChatDatabaseImpl : ChatDatabase {
     private val messagesKey = "messagesHashMap"
     private val lastMessageTimeKey = "lastMessageTime"
     private val avatarUriKey = "avatarUri"
+    private val lastMessageKey = "lastMessage"
 
     private var dbRef = FirebaseDatabase.getInstance().getReference(path)
 
@@ -49,5 +51,9 @@ class ChatDatabaseImpl : ChatDatabase {
     }
     override suspend fun updateChatAvatar(chatId: String, avatarUri: String) {
         dbRef.child(chatId).child(avatarUriKey).setValue(avatarUri)
+    }
+
+    override suspend fun updateListMessage(chatId: String, message: Message) {
+        dbRef.child(chatId).child(lastMessageKey).setValue(message)
     }
 }
