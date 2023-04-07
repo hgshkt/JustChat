@@ -33,9 +33,10 @@ class MainActivity : AppCompatActivity() {
                 val navController = rememberNavController()
                 val scaffoldState = rememberScaffoldState()
                 val scope = rememberCoroutineScope()
+                val auth = AppAuth()
                 val isLoggedIn = remember {
                     mutableStateOf(
-                        AppAuth().entered
+                        auth.entered && auth.emailVerified
                     )
                 }
 
