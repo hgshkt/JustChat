@@ -14,12 +14,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.navigation.compose.rememberNavController
 import com.hgshkt.justchat.auth.AppAuth
-import com.hgshkt.justchat.ui.navigation.AppBar
-import com.hgshkt.justchat.ui.navigation.DrawerBody
-import com.hgshkt.justchat.ui.navigation.MenuItem
-import com.hgshkt.justchat.ui.navigation.Navigation
-import com.hgshkt.justchat.ui.navigation.Screen
-import com.hgshkt.justchat.ui.navigation.SignOutButton
+import com.hgshkt.justchat.ui.ChatBar
+import com.hgshkt.justchat.ui.navigation.*
 import com.hgshkt.justchat.ui.theme.NavigationDrawerComposeTheme
 import kotlinx.coroutines.launch
 
@@ -33,10 +29,16 @@ class MainActivity : AppCompatActivity() {
                 val navController = rememberNavController()
                 val scaffoldState = rememberScaffoldState()
                 val scope = rememberCoroutineScope()
-                val auth = AppAuth()
+                val idState = remember {mutableStateOf("")}
+                val navClick = {
+                    scope.launch {
+                        scaffoldState.drawerState.open()
+                    }
+                }
+                val screenType = remember { mutableStateOf(ScreenType.Main) }
                 val isLoggedIn = remember {
                     mutableStateOf(
-                        auth.entered && auth.emailVerified
+                        AppAuth().entered && AppAuth().emailVerified
                     )
                 }
 
@@ -44,13 +46,18 @@ class MainActivity : AppCompatActivity() {
                     Scaffold(
                         scaffoldState = scaffoldState,
                         topBar = {
-                            AppBar(
-                                onNavigationIconClick = {
-                                    scope.launch {
-                                        scaffoldState.drawerState.open()
+                            when (screenType.value) {
+                                ScreenType.Main -> {
+                                    AppBar {
+                                        navClick()
                                     }
                                 }
-                            )
+                                ScreenType.Chat -> {
+                                    ChatBar(id = idState.value, onNavigationIconClick = {
+                                        navClick()
+                                    })
+                                }
+                            }
                         },
                         drawerGesturesEnabled = scaffoldState.drawerState.isOpen,
                         drawerContent = {
@@ -97,7 +104,11 @@ class MainActivity : AppCompatActivity() {
                             SignOutButton(navController.context)
                         }
                     ) {
-                        Navigation(navController = navController)
+                        Navigation(
+                            navController = navController,
+                            idState = idState,
+                            screenType = screenType
+                        )
                     }
                 } else {
                     val intent = Intent(applicationContext, LoginActivity::class.java)
@@ -106,5 +117,9 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+    }
+
+    enum class ScreenType {
+        Main, Chat
     }
 }

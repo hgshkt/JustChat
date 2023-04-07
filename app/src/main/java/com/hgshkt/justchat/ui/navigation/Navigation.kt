@@ -1,30 +1,40 @@
 package com.hgshkt.justchat.ui.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navArgument
 import com.hgshkt.justchat.auth.AppAuth
+import com.hgshkt.justchat.layout.activities.MainActivity
 import com.hgshkt.justchat.ui.screens.*
 
 @Composable
-fun Navigation(navController: NavHostController) {
+fun Navigation(
+    navController: NavHostController,
+    idState: MutableState<String>,
+    screenType: MutableState<MainActivity.ScreenType>
+) {
     NavHost(
         navController = navController,
         startDestination = Screen.ChatListScreen.route
     ) {
         composable(route = Screen.ChatListScreen.route) {
+            screenType.value = MainActivity.ScreenType.Main
             ChatListScreen(navController)
         }
         composable(route = Screen.CreatingChatScreen.route) {
+            screenType.value = MainActivity.ScreenType.Main
             CreatingChatScreen(navController)
         }
         composable(route = Screen.FriendListScreen.route) {
+            screenType.value = MainActivity.ScreenType.Main
             FriendListScreen(navController)
         }
         composable(route = Screen.SearchScreen.route) {
+            screenType.value = MainActivity.ScreenType.Main
             SearchScreen(navController)
         }
         composable(
@@ -37,6 +47,7 @@ fun Navigation(navController: NavHostController) {
                 }
             )
         ) {
+            screenType.value = MainActivity.ScreenType.Main
             ProfileScreen(
                 fid = it.arguments?.getString("userFID")
             )
@@ -49,7 +60,10 @@ fun Navigation(navController: NavHostController) {
                 }
             )
         ) {
-            ChatScreen(id = it.arguments?.getString("id")!!)
+            screenType.value = MainActivity.ScreenType.Chat
+            val id = it.arguments?.getString("id")!!
+            idState.value = id
+            ChatScreen(id = id)
         }
     }
 }
