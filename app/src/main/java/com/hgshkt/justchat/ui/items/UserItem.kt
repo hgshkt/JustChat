@@ -7,6 +7,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -27,6 +28,7 @@ fun UserItem(
             modifier = Modifier.padding(10.dp)
         ) {
             Image(
+                contentScale = ContentScale.Crop,
                 painter = rememberImagePainter(user.avatarUri),
                 contentDescription = null,
                 modifier = Modifier
