@@ -96,7 +96,7 @@ private class ChatBarViewModel(
     val chatName = mutableStateOf("")
     val popupItems = mutableListOf(
         PopupItem(text = "Edit chat", modifier = Modifier.clickable {
-
+            openEditChat()
         }),
         PopupItem(text = "Members", modifier = Modifier.clickable {
             openMembersScreen()
@@ -115,6 +115,10 @@ private class ChatBarViewModel(
         }
     }
 
+
+    private fun openEditChat() {
+        navController.navigate(Screen.EditChatScreen.withArg("id", id))
+    }
     private fun openMembersScreen() {
         navController.navigate(Screen.ChatMembersScreen.withArg("id", id))
     }
