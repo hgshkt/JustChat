@@ -49,7 +49,24 @@ fun Navigation(
         ) {
             screenType.value = MainActivity.ScreenType.Main
             ProfileScreen(
-                fid = it.arguments?.getString("userFID")
+                fid = it.arguments?.getString("userFID"),
+                navController = navController
+            )
+        }
+        composable(
+            route = Screen.EditProfileScreen.route + "?userFID={userFID}",
+            arguments = listOf(
+                navArgument("userFID") {
+                    type = NavType.StringType
+                    defaultValue = AppAuth().currentUserFID
+                    nullable = true
+                }
+            )
+        ) {
+            screenType.value = MainActivity.ScreenType.Main
+            EditProfileScreen(
+                fid = it.arguments?.getString("userFID") ?: AppAuth().currentUserFID!!,
+                navController = navController
             )
         }
         composable(

@@ -17,16 +17,18 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.hgshkt.justchat.loaders.uploadUserAvatar
 import com.hgshkt.justchat.viewmodels.ProfileViewModel
 
 @Composable
 fun ProfileScreen(
-    fid: String?
+    fid: String?,
+    navController: NavController
 ) {
     val viewModel = remember {
-        ProfileViewModel(fid)
+        ProfileViewModel(fid, navController)
     }
     val user = viewModel.user.value
 
