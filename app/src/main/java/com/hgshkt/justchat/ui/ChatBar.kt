@@ -24,6 +24,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.hgshkt.justchat.database.ChatDatabaseImpl
 import com.hgshkt.justchat.managers.ChatManager
+import com.hgshkt.justchat.models.Chat
 import com.hgshkt.justchat.ui.items.PopupItem
 import com.hgshkt.justchat.ui.navigation.Screen
 import kotlinx.coroutines.launch
@@ -91,13 +92,14 @@ private class ChatBarViewModel(
     val navController: NavController,
     val id: String
 ) : ViewModel() {
+    var chat = Chat()
     val chatName = mutableStateOf("")
     val popupItems = mutableListOf(
         PopupItem(text = "Edit chat", modifier = Modifier.clickable {
 
         }),
         PopupItem(text = "Members", modifier = Modifier.clickable {
-
+            openMembersScreen()
         }),
         PopupItem(text = "Leave", modifier = Modifier.clickable {
             leave()
@@ -107,17 +109,20 @@ private class ChatBarViewModel(
     init {
         viewModelScope.launch {
             ChatDatabaseImpl().getChat(id) {
+                chat = it ?: Chat()
                 chatName.value = it?.name ?: "..."
             }
         }
     }
 
+    private fun openMembersScreen() {
+        navController.navigate(Screen.ChatMembersScreen.withArg("id", id))
+    }
+
     private fun leave() {
-        viewModelScope.launch {
-            val chat = ChatDatabaseImpl().getChatById(id)
-            val manager = ChatManager(chat)
-            manager.leave()
-        }
+        val manager = ChatManager(chat)
+        manager.leave()
+
         navController.navigate(Screen.ChatListScreen.route)
     }
 }

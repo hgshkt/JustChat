@@ -65,6 +65,19 @@ fun Navigation(
             idState.value = id
             ChatScreen(id = id)
         }
+        composable(
+            route = Screen.ChatMembersScreen.route + "?id={id}",
+            arguments = listOf(
+                navArgument("id") {
+                    type = NavType.StringType
+                }
+            )
+        ) {
+            screenType.value = MainActivity.ScreenType.Main
+            val id = it.arguments?.getString("id")!!
+            idState.value = id
+            ChatMembersScreen(id = id, navController = navController)
+        }
     }
 }
 
