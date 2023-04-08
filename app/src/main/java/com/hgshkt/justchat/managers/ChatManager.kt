@@ -1,5 +1,6 @@
 package com.hgshkt.justchat.managers
 
+import com.hgshkt.justchat.auth.CurrentUser
 import com.hgshkt.justchat.dao.ChatDao
 import com.hgshkt.justchat.dao.MessageDao
 import com.hgshkt.justchat.dao.UserDao
@@ -29,5 +30,14 @@ class ChatManager(
         }
 
         chatDao.updateChatLastMessage(chat.id, message)
+    }
+
+    fun leave() {
+        val user = CurrentUser.get()
+        user.chatIdMap.entries.removeIf { it.value == chat.id }
+        userDao.updateUser(user)
+
+        chat.membersFid -= user.fid
+        chatDao.updateChat(chat)
     }
 }

@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
                 val navController = rememberNavController()
                 val scaffoldState = rememberScaffoldState()
                 val scope = rememberCoroutineScope()
-                val idState = remember {mutableStateOf("")}
+                val idState = remember { mutableStateOf("") }
                 val navClick = {
                     scope.launch {
                         scaffoldState.drawerState.open()
@@ -53,9 +53,13 @@ class MainActivity : AppCompatActivity() {
                                     }
                                 }
                                 ScreenType.Chat -> {
-                                    ChatBar(id = idState.value, onNavigationIconClick = {
-                                        navClick()
-                                    })
+                                    ChatBar(
+                                        navController = navController,
+                                        id = idState.value,
+                                        onNavigationIconClick = {
+                                            navClick()
+                                        }
+                                    )
                                 }
                             }
                         },

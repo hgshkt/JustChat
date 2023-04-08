@@ -1,6 +1,8 @@
 package com.hgshkt.justchat.ui
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -19,16 +21,20 @@ import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavController
 import com.hgshkt.justchat.database.ChatDatabaseImpl
+import com.hgshkt.justchat.managers.ChatManager
 import com.hgshkt.justchat.ui.items.PopupItem
+import com.hgshkt.justchat.ui.navigation.Screen
 import kotlinx.coroutines.launch
 
 @Composable
 fun ChatBar(
+    navController: NavController,
     onNavigationIconClick: () -> Unit,
     id: String
 ) {
-    val viewModel = remember { ChatBarViewModel(id) }
+    val viewModel = remember { ChatBarViewModel(navController, id) }
     var isMenuExpanded by remember { mutableStateOf(false) }
 
     TopAppBar(
@@ -66,10 +72,14 @@ fun ChatBar(
             ) {
                 LazyColumn {
                     items(viewModel.popupItems.size) {
-                        Text(
-                            text = viewModel.popupItems[it].text,
-                            modifier = viewModel.popupItems[it].modifier
-                        )
+                        Box(
+                            modifier = viewModel.popupItems[it].modifier.fillMaxSize()
+                        ) {
+                            Text(
+                                text = viewModel.popupItems[it].text,
+                                modifier = Modifier.padding(16.dp)
+                            )
+                        }
                     }
                 }
             }
@@ -78,18 +88,19 @@ fun ChatBar(
 }
 
 private class ChatBarViewModel(
-    id: String
+    val navController: NavController,
+    val id: String
 ) : ViewModel() {
     val chatName = mutableStateOf("")
     val popupItems = mutableListOf(
-        PopupItem(text = "Edit chat", modifier = Modifier.padding(16.dp).clickable {
+        PopupItem(text = "Edit chat", modifier = Modifier.clickable {
 
         }),
-        PopupItem(text = "Members", modifier = Modifier.padding(16.dp).clickable {
+        PopupItem(text = "Members", modifier = Modifier.clickable {
 
         }),
-        PopupItem(text = "Leave", modifier = Modifier.padding(16.dp).clickable {
-
+        PopupItem(text = "Leave", modifier = Modifier.clickable {
+            leave()
         })
     )
 
@@ -99,5 +110,14 @@ private class ChatBarViewModel(
                 chatName.value = it?.name ?: "..."
             }
         }
+    }
+
+    private fun leave() {
+        viewModelScope.launch {
+            val chat = ChatDatabaseImpl().getChatById(id)
+            val manager = ChatManager(chat)
+            manager.leave()
+        }
+        navController.navigate(Screen.ChatListScreen.route)
     }
 }

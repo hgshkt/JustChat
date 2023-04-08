@@ -20,6 +20,12 @@ class ChatDao {
         }
     }
 
+    fun updateChat(chat: Chat) {
+        CoroutineScope(Dispatchers.IO).launch {
+            db.addChat(chat)
+        }
+    }
+
     suspend fun getChat(id: String): Chat? {
         return db.getChatById(id)
     }
