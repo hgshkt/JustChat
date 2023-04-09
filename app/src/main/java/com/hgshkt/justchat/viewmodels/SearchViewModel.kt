@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
-import com.hgshkt.justchat.auth.currentUser
+import com.hgshkt.justchat.auth.onCurrentUserChange
 import com.hgshkt.justchat.dao.UserDao
 import com.hgshkt.justchat.models.User
 import com.hgshkt.justchat.ui.navigation.Screen
@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 
 class SearchViewModel(
     private val navController: NavController
-): ViewModel() {
+) : ViewModel() {
 
     private val userDao: UserDao = UserDao()
     var userList: MutableList<User> = mutableStateListOf()
@@ -21,10 +21,13 @@ class SearchViewModel(
 
     init {
         viewModelScope.launch {
-            currentUser!!.gottenInvites.forEach {
-                viewModelScope.launch {
-                    val user = userDao.getUserByFID(it)!!
-                    userList.add(user)
+            onCurrentUserChange {
+                userList.clear()
+                it.gottenInvites.forEach {
+                    viewModelScope.launch {
+                        val user = userDao.getUserByFID(it)!!
+                        userList.add(user)
+                    }
                 }
             }
         }
