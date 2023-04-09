@@ -2,11 +2,13 @@ package com.hgshkt.justchat.viewmodels
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
-import com.hgshkt.justchat.auth.CurrentUser
+import com.hgshkt.justchat.auth.onCurrentUserChange
 import com.hgshkt.justchat.dao.UserDao
 import com.hgshkt.justchat.models.User
 import com.hgshkt.justchat.ui.navigation.Screen
+import kotlinx.coroutines.launch
 
 class FriendListViewModel(
     private val navController: NavController
@@ -18,12 +20,14 @@ class FriendListViewModel(
         private set
 
     init {
-        CurrentUser.addValueChangeListener {
+        onCurrentUserChange {
             idList = it.friendList
             userList.clear()
             idList.forEach { fid ->
-                val user = dao.getUserByFID(fid)!!
-                userList.add(user)
+                viewModelScope.launch {
+                    val user = dao.getUserByFID(fid)!!
+                    userList.add(user)
+                }
             }
         }
     }

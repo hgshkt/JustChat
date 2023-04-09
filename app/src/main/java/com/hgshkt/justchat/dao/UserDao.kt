@@ -9,7 +9,6 @@ import com.hgshkt.justchat.models.User
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 class UserDao {
     private val db: UserDatabase = UserDatabaseImpl()
@@ -26,23 +25,19 @@ class UserDao {
         }
     }
 
-    fun getUserById(id: String): User? {
+    suspend fun getUserById(id: String): User? {
         getAllUsers().forEach {
             if (it.id == id) return it
         }
         return null
     }
 
-    fun getUserByFID(fid: String): User? {
-        return runBlocking {
-            db.getUserByFID(fid)
-        }
+    suspend fun getUserByFID(fid: String): User? {
+        return db.getUserByFID(fid)
     }
 
-    fun getAllUsers(): List<User> {
-        return runBlocking(Dispatchers.IO) {
-            return@runBlocking db.getAllUsers()?.values?.toList() ?: emptyList()
-        }
+    suspend fun getAllUsers(): List<User> {
+        return db.getAllUsers()?.values?.toList() ?: emptyList()
     }
 
 

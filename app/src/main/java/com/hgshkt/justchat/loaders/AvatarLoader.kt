@@ -2,7 +2,7 @@ package com.hgshkt.justchat.loaders
 
 import android.net.Uri
 import com.google.firebase.storage.FirebaseStorage
-import com.hgshkt.justchat.auth.CurrentUser
+import com.hgshkt.justchat.auth.currentUser
 import com.hgshkt.justchat.dao.ChatDao
 import com.hgshkt.justchat.dao.UserDao
 import kotlinx.coroutines.CoroutineScope
@@ -15,21 +15,19 @@ private val userDao = UserDao()
 private val chatDao = ChatDao()
 
 fun uploadUserAvatar(uri: Uri) {
-    val currentUser = CurrentUser.get()
-
     val name = buildString {
         append(System.currentTimeMillis())
         append('-')
-        append(currentUser.id)
+        append(currentUser!!.id)
     }
 
     ref.child(name).putFile(uri)
         .continueWithTask { ref.child(name).downloadUrl }
 
         .addOnSuccessListener {
-            currentUser.avatarUri = it.toString()
+            currentUser!!.avatarUri = it.toString()
             CoroutineScope(Dispatchers.IO).launch {
-                userDao.updateUser(currentUser)
+                userDao.updateUser(currentUser!!)
             }
         }
 }

@@ -27,8 +27,10 @@ class ChatMembersViewModel(
                 idList = it?.membersFid ?: mutableListOf()
                 userList.clear()
                 idList.forEach { fid ->
-                    val user = dao.getUserByFID(fid)!!
-                    userList.add(user)
+                    viewModelScope.launch {
+                        val user = dao.getUserByFID(fid)!!
+                        userList.add(user)
+                    }
                 }
             }
         }

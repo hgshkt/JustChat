@@ -2,10 +2,12 @@ package com.hgshkt.justchat.viewmodels
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.hgshkt.justchat.dao.UserDao
 import com.hgshkt.justchat.models.User
 import com.hgshkt.justchat.ui.navigation.Screen
+import kotlinx.coroutines.launch
 
 class EditProfileViewModel(
     private val fid: String,
@@ -19,10 +21,12 @@ class EditProfileViewModel(
     var bio = mutableStateOf("")
 
     init {
-        user = userDao.getUserByFID(fid)!!
-        name.value = user.name
-        id.value = user.id
-        bio.value = user.bio
+        viewModelScope.launch {
+            user = userDao.getUserByFID(fid)!!
+            name.value = user.name
+            id.value = user.id
+            bio.value = user.bio
+        }
     }
 
     fun save() {

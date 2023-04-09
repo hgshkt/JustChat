@@ -2,18 +2,23 @@ package com.hgshkt.justchat.auth
 
 import com.hgshkt.justchat.dao.UserDao
 import com.hgshkt.justchat.models.User
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 
-object CurrentUser {
+private val dao: UserDao = UserDao()
+private val auth: AppAuth = AppAuth()
 
-    private val dao: UserDao = UserDao()
-    private val auth: AppAuth = AppAuth()
 
-    fun get() : User {
-        return dao.getUserByFID(auth.currentUserFID!!)!!
-    }
-    fun addValueChangeListener(event: (user: User) -> Unit) {
-        dao.addOnValueChangeListener(auth.currentUserFID!!) {
-            event(it.getValue(User::class.java)!!)
+var currentUser: User? = null
+    private set
+    get() {
+        return runBlocking(Dispatchers.IO) {
+            dao.getUserByFID(auth.currentUserFID!!)!!
         }
+    }
+
+fun onCurrentUserChange(event: (user: User) -> Unit) {
+    dao.addOnValueChangeListener(auth.currentUserFID!!) {
+        event(it.getValue(User::class.java)!!)
     }
 }
