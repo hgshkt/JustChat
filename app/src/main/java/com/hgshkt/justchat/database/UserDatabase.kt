@@ -2,7 +2,6 @@ package com.hgshkt.justchat.database
 
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
-import com.hgshkt.justchat.models.Chat
 import com.hgshkt.justchat.models.User
 
 interface UserDatabase {
@@ -13,7 +12,7 @@ interface UserDatabase {
 
     suspend fun getAllUsers(): HashMap<String, User>?
 
-    suspend fun updateChatList(fid: String, chatList: List<Chat>)
+    fun updateChatIdList(fid: String, chatList: List<String>)
 
     suspend fun getSentInviteList(fid: String): List<String>?
 

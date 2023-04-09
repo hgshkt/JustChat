@@ -20,13 +20,4 @@ class MessageDao {
             db.addMessage(message)
         }
     }
-
-    fun getMessages(messagesIdList: List<String>): List<Message> = runBlocking(Dispatchers.IO) {
-        val list = mutableListOf<Message>()
-        messagesIdList.forEach {
-            val massage = db.getMessage(it)
-            list.add(massage)
-        }
-        return@runBlocking list
-    }
 }

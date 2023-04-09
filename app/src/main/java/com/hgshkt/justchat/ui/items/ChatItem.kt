@@ -28,9 +28,9 @@ fun ChatItem(
 ) {
     val lastMessageAuthorState = remember { mutableStateOf(User()) }
 
-    LaunchedEffect(chat.lastMessage.authorFid) {
+    LaunchedEffect(chat.lastMessageAuthorFid) {
         if (chat.messagesHashMap.isNotEmpty()) {
-            val fid = chat.lastMessage.authorFid!!
+            val fid = chat.lastMessageAuthorFid
             lastMessageAuthorState.value = UserDao().getUserByFID(fid)!!
         }
     }
@@ -77,7 +77,7 @@ fun ChatItem(
                         text = buildString {
                             append(lastMessageAuthorState.value.name)
                             append(": ")
-                            append(chat.lastMessage.text)
+                            append(chat.lastMessageText)
                         },
                         style = TextStyle(
                             color = Color.Gray,

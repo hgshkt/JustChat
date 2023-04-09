@@ -6,9 +6,6 @@ import com.hgshkt.justchat.dao.MessageDao
 import com.hgshkt.justchat.dao.UserDao
 import com.hgshkt.justchat.models.Chat
 import com.hgshkt.justchat.models.Message
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class ChatManager(
     var chat: Chat
@@ -19,30 +16,20 @@ class ChatManager(
 
     fun sendMessage(message: Message) {
         messageDao.create(message)
-        chatDao.addMessageToChat(
-            chatId = chat.id,
-            messageId = message.id,
-            time = message.time
-        )
 
-        chat.membersFid.forEach {
-            CoroutineScope(Dispatchers.IO).launch {
-                val user = userDao.getUserByFID(it)!!
-                user.chatIdList.remove(chat.lastMessageTime)
-                user.chatIdMap[message.date.toString()] = chat.id
-                userDao.updateUser(user)
-            }
-        }
-
-        chatDao.updateChatLastMessage(chat.id, message)
+        chat.lastMessageTime = message.time
+        chat.lastMessageAuthorFid = message.authorFid
+        chat.lastMessageText = message.text
+        chat.messagesHashMap[message.time] = message.id
+        chatDao.updateChat(chat)
     }
 
     fun leave() {
         val user = currentUser!!
-        user.chatIdList.entries.removeIf { it.value == chat.id }
+        user.chatIdList.remove(chat.id)
         userDao.updateUser(user)
 
-        chat.membersFid -= user.fid
+        chat.membersFid.remove(user.fid)
         chatDao.updateChat(chat)
     }
 }

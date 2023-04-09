@@ -2,7 +2,6 @@ package com.hgshkt.justchat.database
 
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.getValue
-import com.hgshkt.justchat.models.Chat
 import com.hgshkt.justchat.models.User
 import kotlinx.coroutines.tasks.await
 
@@ -29,7 +28,7 @@ class UserDatabaseImpl : UserDatabase {
         return dbRef.get().await().getValue<HashMap<String, User>>()
     }
 
-    override suspend fun updateChatList(fid: String, chatList: List<Chat>) {
+    override fun updateChatIdList(fid: String, chatList: List<String>) {
         dbRef.child(fid)
             .child(chatIdListKey)
             .setValue(chatList)

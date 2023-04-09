@@ -45,7 +45,7 @@ fun OutgoingMessage(message: Message) {
                 .background(OutgoingMessageColor, shape = RoundedCornerShape(8.dp))
         ) {
             Text(
-                text = message.text!!,
+                text = message.text,
                 modifier = Modifier.padding(8.dp),
                 color = Color.Black,
                 fontSize = 16.sp,
@@ -90,7 +90,7 @@ fun IncomingMessage(message: Message) {
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = message.text!!,
+                    text = message.text,
                     fontSize = 14.sp,
                     maxLines = Int.MAX_VALUE,
                     overflow = TextOverflow.Clip

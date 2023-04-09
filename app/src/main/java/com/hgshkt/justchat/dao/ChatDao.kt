@@ -4,7 +4,6 @@ import com.google.firebase.database.ChildEventListener
 import com.hgshkt.justchat.database.ChatDatabase
 import com.hgshkt.justchat.database.ChatDatabaseImpl
 import com.hgshkt.justchat.models.Chat
-import com.hgshkt.justchat.models.Message
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -12,13 +11,6 @@ import kotlinx.coroutines.launch
 class ChatDao {
 
     private val db: ChatDatabase = ChatDatabaseImpl()
-
-    fun updateChatLastMessage(chatId: String, message: Message) {
-        CoroutineScope(Dispatchers.IO).launch {
-            db.updateLastMessageTime(chatId, message.time.toString())
-            db.updateListMessage(chatId, message)
-        }
-    }
 
     fun updateChat(chat: Chat) {
         CoroutineScope(Dispatchers.IO).launch {
@@ -42,7 +34,7 @@ class ChatDao {
 
     fun addMessageToChat(chatId: String, messageId: String, time: String) {
         CoroutineScope(Dispatchers.IO).launch {
-            db.addMessageToChat(chatId, messageId, time)
+            db.addMessageIdToChat(chatId, messageId, time)
         }
     }
 

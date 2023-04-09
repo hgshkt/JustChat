@@ -7,6 +7,7 @@ data class Chat(
     var name: String = "...",
     var avatarUri: String = "",
     var lastMessageAuthorFid: String = "",
+    var lastMessageText: String = "",
     var membersFid: MutableList<String> = mutableListOf(),
     var messagesHashMap: HashMap<String, String> = hashMapOf(),
     var id: String = UUID.randomUUID().toString(),

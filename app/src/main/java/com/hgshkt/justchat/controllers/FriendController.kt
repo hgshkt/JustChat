@@ -1,132 +1,85 @@
 package com.hgshkt.justchat.controllers
 
 import com.hgshkt.justchat.auth.AppAuth
-import com.hgshkt.justchat.database.UserDatabase
-import com.hgshkt.justchat.database.UserDatabaseImpl
-import com.hgshkt.justchat.models.User
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import com.hgshkt.justchat.auth.currentUser
+import com.hgshkt.justchat.dao.UserDao
 
 class FriendController {
-    private val db: UserDatabase = UserDatabaseImpl()
-
-    private fun makeFriends(user1: User, user2: User) {
-        (user1.friendList as MutableList).add(user2.fid)
-        (user2.friendList as MutableList).add(user1.fid)
-        CoroutineScope(Dispatchers.IO).launch {
-            db.updateFriendList(user1.fid, user1.friendList)
-            db.updateFriendList(user2.fid, user2.friendList)
-        }
-    }
-
-    private fun sendInvite(sender: User, receiver: User) {
-        (sender.sentInvites as MutableList).add(receiver.fid)
-        (receiver.gottenInvites as MutableList).add(sender.fid)
-        CoroutineScope(Dispatchers.IO).launch {
-            db.updateSentInvites(sender.fid, sender.sentInvites)
-            db.updateReceivedInvites(receiver.fid, receiver.gottenInvites)
-        }
-    }
-
-    fun acceptInvite(sender: User, receiver: User) {
-        (sender.sentInvites as MutableList).remove(receiver.fid)
-        (receiver.gottenInvites as MutableList).remove(sender.fid)
-        CoroutineScope(Dispatchers.IO).launch {
-            db.updateSentInvites(sender.fid, sender.sentInvites)
-            db.updateReceivedInvites(receiver.fid, receiver.gottenInvites)
-        }
-        makeFriends(sender, receiver)
-    }
-
-    suspend fun getSentInviteList(userFID: String): List<String>? {
-        return db.getSentInviteList(userFID)
-    }
-
-    suspend fun getReceivedInviteList(userFID: String): List<String>? {
-        return db.getReceivedInviteList(userFID)
-    }
-
-    suspend fun idInSentInviteList(senderFID: String, receiverFID: String): Boolean {
-        val list = getSentInviteList(senderFID) ?: return false
-        if (list.contains(receiverFID)) {
-            return true
-        }
-        return false
-    }
-
-    suspend fun idInGottenInviteList(senderFID: String, receiverFID: String): Boolean {
-        val list = getReceivedInviteList(receiverFID) ?: return false
-        if (list.contains(senderFID)) {
-            return true
-        }
-        return false
-    }
-
+    private val userDao: UserDao = UserDao()
+    
     suspend fun areFriends(firstFID: String, secondFID: String): Boolean {
-        val firstFriendList = db.getFriendList(firstFID) ?: return false
-        val secondFriendList = db.getFriendList(secondFID) ?: return false
+        val firstFriendList = userDao.getFriendList(firstFID)
+        val secondFriendList = userDao.getFriendList(secondFID)
 
         val firstHasSecond = firstFriendList.contains(secondFID)
         val secondHasFirst = secondFriendList.contains(firstFID)
+
         return firstHasSecond && secondHasFirst
     }
 
-    private suspend fun stopFriendship(user1: User, user2: User) {
-        if (areFriends(user1.fid, user2.fid)) {
-            (user1.friendList as MutableList).remove(user2.fid)
-            (user2.friendList as MutableList).remove(user1.fid)
-            db.updateFriendList(user1.fid, user1.friendList)
-            db.updateFriendList(user2.fid, user2.friendList)
-        }
-    }
 
-    private suspend fun cancelInviting(sender: User, receiver: User) {
-        val senderHasRecipient = idInSentInviteList(sender.fid, receiver.fid)
-        val recipientHasSender = idInGottenInviteList(sender.fid, receiver.fid)
-        if (senderHasRecipient && recipientHasSender) {
-            (sender.sentInvites as MutableList).remove(receiver.fid)
-            (receiver.gottenInvites as MutableList).remove(sender.fid)
-            db.updateSentInvites(sender.fid, sender.sentInvites)
-            db.updateReceivedInvites(receiver.fid, receiver.gottenInvites)
-        }
-    }
 
     suspend fun gottenInvite(userFid: String): Boolean {
         val currentUserFid = AppAuth().currentUserFID!!
-        return idInGottenInviteList(currentUserFid, userFid)
-                && idInSentInviteList(currentUserFid, userFid)
+
+        val gottenInviteList = userDao.getReceivedInviteList(userFid)
+        val sentInviteList = userDao.getReceivedInviteList(currentUserFid)
+
+        return gottenInviteList.contains(currentUserFid) && sentInviteList.contains(userFid)
     }
 
     suspend fun sentInvite(userFid: String): Boolean {
         val currentUserFid = AppAuth().currentUserFID!!
-        return idInGottenInviteList(userFid, currentUserFid)
-                && idInSentInviteList(userFid, currentUserFid)
+
+        val gottenInviteList = userDao.getReceivedInviteList(currentUserFid)
+        val sentInviteList = userDao.getReceivedInviteList(userFid)
+
+        return gottenInviteList.contains(userFid) && sentInviteList.contains(currentUserFid)
     }
 
     suspend fun sendInviteTo(fid: String) {
-        val sender = db.getUserByFID(AppAuth().currentUserFID!!)!!
-        val recipient = db.getUserByFID(fid)!!
-        sendInvite(sender, recipient)
+        val sender = currentUser!!
+        val recipient = userDao.getUserByFID(fid)!!
+
+        sender.sentInvites.add(recipient.fid)
+        recipient.gottenInvites.add(sender.fid)
+
+        userDao.updateSentInviteList(sender.fid, sender.sentInvites)
+        userDao.updateReceivedInviteList(recipient.fid, recipient.gottenInvites)
     }
 
     suspend fun cancelInviting(fid: String) {
-        val currentUser = db.getUserByFID(AppAuth().currentUserFID!!)!!
-        val recipient = db.getUserByFID(fid)!!
+        val currentUser = currentUser!!
+        val recipient = userDao.getUserByFID(fid)!!
 
-        cancelInviting(currentUser, recipient)
+        currentUser.sentInvites.remove(recipient.fid)
+        recipient.gottenInvites.remove(currentUser.fid)
+
+        userDao.updateSentInviteList(currentUser.fid, currentUser.sentInvites)
+        userDao.updateReceivedInviteList(recipient.fid, recipient.gottenInvites)
     }
 
     suspend fun acceptInvite(fid: String) {
-        val currentUser = db.getUserByFID(AppAuth().currentUserFID!!)!!
-        val sender = db.getUserByFID(fid)!!
-        acceptInvite(sender, currentUser)
-        cancelInviting(sender, currentUser)
+        val currentUser = currentUser!!
+        val sender = userDao.getUserByFID(fid)!!
+
+        sender.sentInvites.remove(currentUser.fid)
+        sender.friendList.add(currentUser.fid)
+        userDao.updateUser(sender)
+
+        currentUser.gottenInvites.remove(sender.fid)
+        currentUser.friendList.add(sender.fid)
+        userDao.updateUser(currentUser)
     }
 
     suspend fun stopFriendship(fid: String) {
-        val currentUser = db.getUserByFID(AppAuth().currentUserFID!!)!!
-        val friend = db.getUserByFID(fid)!!
-        stopFriendship(currentUser, friend)
+        val currentUser = userDao.getUserByFID(AppAuth().currentUserFID!!)!!
+        val friend = userDao.getUserByFID(fid)!!
+
+        currentUser.friendList.remove(friend.fid)
+        friend.friendList.remove(currentUser.fid)
+
+        userDao.updateFriendList(currentUser.fid, currentUser.friendList)
+        userDao.updateFriendList(friend.fid, friend.friendList)
     }
 }

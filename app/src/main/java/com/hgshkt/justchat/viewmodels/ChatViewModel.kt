@@ -36,7 +36,11 @@ class ChatViewModel(
     }
 
     fun sendMessage() {
-        val message = Message(messageText.value, currentUserFID!!)
+        val message = Message(
+            text = messageText.value,
+            authorFid = currentUserFID!!
+        )
+        println("message: $message")
         manager.sendMessage(message)
         messageText.value = ""
     }

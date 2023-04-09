@@ -2,7 +2,6 @@ package com.hgshkt.justchat.database
 
 import com.google.firebase.database.ChildEventListener
 import com.hgshkt.justchat.models.Chat
-import com.hgshkt.justchat.models.Message
 
 interface ChatDatabase {
 
@@ -12,7 +11,7 @@ interface ChatDatabase {
 
     suspend fun getChat(chatId: String, event: (chat: Chat?) -> Unit)
 
-    suspend fun addMessageToChat(chatId: String, messageId: String, time: String)
+    suspend fun addMessageIdToChat(chatId: String, messageId: String, time: String)
 
     suspend fun updateLastMessageTime(id: String, time: String)
 

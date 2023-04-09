@@ -2,7 +2,6 @@ package com.hgshkt.justchat.database
 
 import com.google.firebase.database.*
 import com.hgshkt.justchat.models.Chat
-import com.hgshkt.justchat.models.Message
 import kotlinx.coroutines.tasks.await
 
 class ChatDatabaseImpl : ChatDatabase {
@@ -35,7 +34,7 @@ class ChatDatabaseImpl : ChatDatabase {
         })
     }
 
-    override suspend fun addMessageToChat(chatId: String, messageId: String, time: String) {
+    override suspend fun addMessageIdToChat(chatId: String, messageId: String, time: String) {
         dbRef.child(chatId).child(messagesKey).child(time).setValue(messageId)
     }
 
