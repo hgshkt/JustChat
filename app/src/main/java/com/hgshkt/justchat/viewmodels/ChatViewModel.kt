@@ -40,7 +40,6 @@ class ChatViewModel(
             text = messageText.value,
             authorFid = currentUserFID!!
         )
-        println("message: $message")
         manager.sendMessage(message)
         messageText.value = ""
     }

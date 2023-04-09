@@ -29,7 +29,7 @@ fun ChatListScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(ChatListBackground)
-            .padding(16.dp)
+            .padding(horizontal = 16.dp)
     ) {
         items(chatList.size) {
             ChatItem(chatList[it]) { chat ->
