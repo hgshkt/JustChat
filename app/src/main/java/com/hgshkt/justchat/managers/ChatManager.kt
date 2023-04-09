@@ -28,7 +28,7 @@ class ChatManager(
         chat.membersFid.forEach {
             CoroutineScope(Dispatchers.IO).launch {
                 val user = userDao.getUserByFID(it)!!
-                user.chatIdMap.remove(chat.lastMessageTime)
+                user.chatIdList.remove(chat.lastMessageTime)
                 user.chatIdMap[message.date.toString()] = chat.id
                 userDao.updateUser(user)
             }

@@ -16,9 +16,9 @@ interface ChatDatabase {
 
     suspend fun updateLastMessageTime(id: String, time: String)
 
+    suspend fun updateLastMessageAuthorFid(id: String, fid: String)
+
     suspend fun addChatMessagesChangeListener(chatId: String, listener: ChildEventListener)
 
     suspend fun updateChatAvatar(chatId: String, avatarUri: String)
-
-    suspend fun updateListMessage(chatId: String, message: Message)
 }

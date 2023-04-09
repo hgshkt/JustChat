@@ -21,7 +21,7 @@ class UserDao {
 
     fun addOnValueChangeListener(fid: String, event: (snapshot: DataSnapshot) -> Unit) {
         CoroutineScope(Dispatchers.IO).launch {
-            db.addOnValueChangeListener(fid, event)
+            db.addUserChangeListener(fid, event)
         }
     }
 
