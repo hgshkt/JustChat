@@ -17,11 +17,13 @@ class ChatManager(
     fun sendMessage(message: Message) {
         messageDao.create(message)
 
-        chat.lastMessageTime = message.time
-        chat.lastMessageAuthorFid = message.authorFid
-        chat.lastMessageText = message.text
-        chat.messagesHashMap[message.time] = message.id
-        chatDao.updateChat(chat)
+        chatDao.updateChatValues(
+            chatId = chat.id,
+            lastMessageTime = message.time,
+            lastMessageAuthorFid = message.authorFid,
+            lastMessageText = message.text
+        )
+        chatDao.addMessageToChat(chat.id, message.id, message.time)
     }
 
     fun leave() {

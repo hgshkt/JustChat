@@ -18,6 +18,23 @@ class ChatDao {
         }
     }
 
+    fun updateChatValues(
+        chatId: String,
+        lastMessageTime: String? = null,
+        lastMessageAuthorFid: String? = null,
+        lastMessageText: String? = null
+    ) {
+        if (lastMessageTime != null) {
+            db.updateLastMessageTime(chatId, lastMessageTime)
+        }
+        if (lastMessageAuthorFid != null) {
+            db.updateLastMessageAuthorFid(chatId, lastMessageAuthorFid)
+        }
+        if (lastMessageText != null) {
+            db.updateLastMessageText(chatId, lastMessageText)
+        }
+    }
+
     suspend fun getChat(id: String): Chat? {
         return db.getChatById(id)
     }

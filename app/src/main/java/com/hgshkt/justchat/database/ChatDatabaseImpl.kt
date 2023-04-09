@@ -11,6 +11,7 @@ class ChatDatabaseImpl : ChatDatabase {
     private val lastMessageTimeKey = "lastMessageTime"
     private val lastMessageAuthorKey = "lastMessageAuthorFid"
     private val avatarUriKey = "avatarUri"
+    private val lastMessageTextKey = "lastMessageText"
 
     private var dbRef = FirebaseDatabase.getInstance().getReference(path)
 
@@ -38,12 +39,16 @@ class ChatDatabaseImpl : ChatDatabase {
         dbRef.child(chatId).child(messagesKey).child(time).setValue(messageId)
     }
 
-    override suspend fun updateLastMessageTime(id: String, time: String) {
+    override fun updateLastMessageTime(id: String, time: String) {
         dbRef.child(id).child(lastMessageTimeKey).setValue(time)
     }
 
-    override suspend fun updateLastMessageAuthorFid(id: String, fid: String) {
+    override fun updateLastMessageAuthorFid(id: String, fid: String) {
         dbRef.child(id).child(lastMessageAuthorKey).setValue(fid)
+    }
+
+    override fun updateLastMessageText(id: String, lastMessageText: String) {
+        dbRef.child(id).child(lastMessageTextKey).setValue(lastMessageText)
     }
 
     override suspend fun addChatMessagesChangeListener(

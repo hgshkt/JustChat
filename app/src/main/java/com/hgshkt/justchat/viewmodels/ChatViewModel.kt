@@ -30,8 +30,10 @@ class ChatViewModel(
 
     init {
         viewModelScope.launch {
-            chatState.value = chatDao.getChat(id)!!
-            manager = ChatManager(chatState.value)
+            chatDao.getChat(id) {
+                chatState.value = it!!
+                manager = ChatManager(chatState.value)
+            }
         }
     }
 
