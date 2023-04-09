@@ -23,7 +23,7 @@ class FriendController {
         val currentUserFid = AppAuth().currentUserFID!!
 
         val gottenInviteList = userDao.getReceivedInviteList(userFid)
-        val sentInviteList = userDao.getReceivedInviteList(currentUserFid)
+        val sentInviteList = userDao.getSentInviteList(currentUserFid)
 
         return gottenInviteList.contains(currentUserFid) && sentInviteList.contains(userFid)
     }
@@ -32,7 +32,7 @@ class FriendController {
         val currentUserFid = AppAuth().currentUserFID!!
 
         val gottenInviteList = userDao.getReceivedInviteList(currentUserFid)
-        val sentInviteList = userDao.getReceivedInviteList(userFid)
+        val sentInviteList = userDao.getSentInviteList(userFid)
 
         return gottenInviteList.contains(userFid) && sentInviteList.contains(currentUserFid)
     }
