@@ -59,7 +59,7 @@ fun SearchScreen(
             top.linkTo(textField.bottom)
             bottom.linkTo(parent.bottom)
             start.linkTo(parent.start, 16.dp)
-            end.linkTo(parent.start, 16.dp)
+            end.linkTo(parent.end, 16.dp)
 
             width = Dimension.fillToConstraints
             height = Dimension.fillToConstraints
