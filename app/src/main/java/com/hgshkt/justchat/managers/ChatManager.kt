@@ -22,7 +22,7 @@ class ChatManager(
         chatDao.addMessageToChat(
             chatId = chat.id,
             messageId = message.id,
-            time = message.date.toString()
+            time = message.time
         )
 
         chat.membersFid.forEach {
@@ -39,7 +39,7 @@ class ChatManager(
 
     fun leave() {
         val user = currentUser!!
-        user.chatIdMap.entries.removeIf { it.value == chat.id }
+        user.chatIdList.entries.removeIf { it.value == chat.id }
         userDao.updateUser(user)
 
         chat.membersFid -= user.fid

@@ -1,33 +1,15 @@
 package com.hgshkt.justchat.models
 
-class User {
-    var name: String = "name"
-    var id: String = "id"
-    var email: String = "email"
-    var password: String = "password"
-    var fid: String = "fid"
-    var bio: String = "User didn't tell about self..."
-    var avatarUri: String? = null
-
-    var chatIdMap: HashMap<String, String> = hashMapOf()
-    var gottenInvites: List<String> = mutableListOf()
-    var sentInvites: List<String> = mutableListOf()
-    var friendList: List<String> = mutableListOf()
-
-
-    constructor()
-
-    constructor(
-        name: String,
-        id: String,
-        email: String,
-        password: String,
-        fid: String
-    ) {
-        this.name = name
-        this.id = id
-        this.email = email
-        this.password = password
-        this.fid = fid
-    }
-}
+data class User(
+    var name: String = "...",
+    var id: String = "...",
+    var email: String = "...",
+    var password: String = "",
+    var fid: String = "",
+    var bio: String = "User didn't tell about self...",
+    var avatarUri: String = "",
+    var chatIdList: MutableList<String> = mutableListOf(),
+    var gottenInvites: MutableList<String> = mutableListOf(),
+    var sentInvites: MutableList<String> = mutableListOf(),
+    var friendList: MutableList<String> = mutableListOf()
+)

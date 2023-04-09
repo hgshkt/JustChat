@@ -15,7 +15,7 @@ class ChatDao {
 
     fun updateChatLastMessage(chatId: String, message: Message) {
         CoroutineScope(Dispatchers.IO).launch {
-            db.updateLastMessageTime(chatId, message.date.toString())
+            db.updateLastMessageTime(chatId, message.time.toString())
             db.updateListMessage(chatId, message)
         }
     }
