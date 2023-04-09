@@ -29,7 +29,7 @@ fun FriendListScreen(
     ) {
         items(userList.size) {
             UserItem(user = userList[it]) { user ->
-                viewModel.openProfile(user)
+                viewModel.openProfile(user.fid)
             }
         }
     }

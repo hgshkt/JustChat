@@ -32,7 +32,7 @@ class FriendListViewModel(
         }
     }
 
-    fun openProfile(user: User) {
-        navController.navigate(Screen.ProfileScreen.withArg("userFID", user.fid))
+    fun openProfile(fid: String) {
+        navController.navigate(Screen.ProfileScreen.withArg("userFID", fid))
     }
 }
