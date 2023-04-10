@@ -1,5 +1,6 @@
 package com.hgshkt.justchat.auth
 
+import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.hgshkt.justchat.creators.UserCreator
 import kotlinx.coroutines.*
@@ -7,7 +8,6 @@ import kotlinx.coroutines.*
 class AppAuth {
 
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
-    private var authStateListener: FirebaseAuth.AuthStateListener? = null
 
     val entered: Boolean
         get() {
@@ -33,7 +33,6 @@ class AppAuth {
                     event(true)
                 } else {
                     event(false)
-                    signOut()
                 }
             }
         }
@@ -46,31 +45,37 @@ class AppAuth {
         name: String,
         event: () -> Unit
     ) {
+        // TODO remove current user from db and auth
+        if (auth.currentUser == null) auth.signOut()
+
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    val currentUser = auth.currentUser
-                    currentUser?.sendEmailVerification()
-                        ?.addOnCompleteListener { verificationTask ->
-                            if (verificationTask.isSuccessful) {
-                                authStateListener = FirebaseAuth.AuthStateListener { auth ->
-                                    val creator = UserCreator()
-                                    CoroutineScope(Dispatchers.IO).launch {
-                                        creator.createUser(
-                                            name = name,
-                                            email = email,
-                                            password = password,
-                                            customId = customId,
-                                            firebaseId = auth.currentUser!!.uid
-                                        )
-                                        withContext(Dispatchers.Main) {
-                                            event()
-                                        }
-                                    }
-                                }
+                    sendEmailVerification { auth ->
+                        val creator = UserCreator()
+                        CoroutineScope(Dispatchers.IO).launch {
+                            creator.createUser(
+                                name = name,
+                                email = email,
+                                password = password,
+                                customId = customId,
+                                firebaseId = auth.currentUser!!.uid
+                            )
+                            withContext(Dispatchers.Main) {
+                                event()
                             }
-                            auth.addAuthStateListener(authStateListener!!)
                         }
+                    }
+                }
+            }
+    }
+
+    fun sendEmailVerification(onVerificationSent: (auth: FirebaseAuth) -> Unit) {
+        val currentUser = auth.currentUser
+        currentUser?.sendEmailVerification()
+            ?.addOnCompleteListener { verificationTask ->
+                if (verificationTask.isSuccessful) {
+                    onVerificationSent(auth)
                 }
             }
     }
