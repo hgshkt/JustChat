@@ -8,7 +8,7 @@ data class User(
     var fid: String = "",
     var bio: String = "User didn't tell about self...",
     var avatarUri: String = "",
-    var chatIdList: MutableList<String> = mutableListOf(),
+    var chatIdMap: MutableMap<String, String> = mutableMapOf(),
     var gottenInvites: MutableList<String> = mutableListOf(),
     var sentInvites: MutableList<String> = mutableListOf(),
     var friendList: MutableList<String> = mutableListOf()

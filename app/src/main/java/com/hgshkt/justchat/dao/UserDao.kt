@@ -58,6 +58,17 @@ class UserDao {
         db.updateReceivedInviteList(fid, friendList)
     }
 
+    suspend fun observeChatMap(fid: String, event: (chatIdList: MutableMap<String, String>) -> Unit) {
+        db.observeChatList(fid) {
+            val list = it.value as MutableMap<String, String>?
+            event(list ?: mutableMapOf())
+        }
+    }
+
+    suspend fun updateChatLastMessageTime(fid: String, chatId: String, chatLastMessageTime: String) {
+        db.updateChatLastMessageTime(fid, chatId, chatLastMessageTime)
+    }
+
     fun updateChatList(fid: String, chatIdList: List<String>) {
         db.updateChatIdList(fid, chatIdList)
     }

@@ -8,7 +8,7 @@ import kotlinx.coroutines.tasks.await
 class UserDatabaseImpl : UserDatabase {
 
     private val path = "users"
-    private val chatIdListKey = "chatIdList"
+    private val chatIdListKey = "chatIdMap"
     private val sentInvitesKey = "sentInvites"
     private val gottenInvitesKey = "gottenInvites"
     private val friendListKey = "friendList"
@@ -26,6 +26,17 @@ class UserDatabaseImpl : UserDatabase {
 
     override suspend fun getAllUsers(): HashMap<String, User>? {
         return dbRef.get().await().getValue<HashMap<String, User>>()
+    }
+    override suspend fun observeChatList(fid: String, event: (snapshot: DataSnapshot) -> Unit) {
+        dbRef.child(fid).child(chatIdListKey).addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                event(snapshot)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+        })
     }
 
     override fun updateChatIdList(fid: String, chatList: List<String>) {
@@ -66,6 +77,10 @@ class UserDatabaseImpl : UserDatabase {
         listener: ChildEventListener
     ) {
         dbRef.child(fid).child(chatIdListKey).addChildEventListener(listener)
+    }
+
+    override suspend fun updateChatLastMessageTime(fid: String, chatId: String, chatLastMessageTime: String) {
+        dbRef.child(fid).child(chatIdListKey).child(chatId).setValue(chatLastMessageTime)
     }
 
     override suspend fun addUserChangeListener(fid: String, event: (snapshot: DataSnapshot) -> Unit) {

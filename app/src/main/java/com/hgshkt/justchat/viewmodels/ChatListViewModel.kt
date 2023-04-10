@@ -1,61 +1,39 @@
 package com.hgshkt.justchat.viewmodels
 
-import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
-import com.google.firebase.database.ChildEventListener
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.hgshkt.justchat.dao.ChatDao
+import com.hgshkt.justchat.auth.currentUserFID
 import com.hgshkt.justchat.dao.UserDao
-import com.hgshkt.justchat.models.Chat
 import com.hgshkt.justchat.ui.navigation.Screen
 import kotlinx.coroutines.launch
 
-class ChatListViewModel : ViewModel() {
+class ChatListViewModel(
+    private val navController: NavController
+) : ViewModel() {
     private val userDao: UserDao = UserDao()
-    private val chatDao: ChatDao = ChatDao()
 
-    var chatList = mutableStateListOf<Chat>()
+    private val chatIdMap = mutableStateMapOf<String, String>()
+    var chatList = mutableListOf<String>()
 
-    fun observeChatList() {
+    init {
         viewModelScope.launch {
-            userDao.addChatListChangeListener(object : ChildEventListener {
-                override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
-                    val chatId = snapshot.value.toString()
-                    viewModelScope.launch {
-                        val chat = chatDao.getChat(chatId)
-                        chatList.add(0, chat!!)
-                    }
+            userDao.observeChatMap(currentUserFID!!) {
+                it.forEach { (id, time) ->
+                    chatIdMap[id] = time
                 }
-
-                override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
-
-                }
-
-                override fun onChildRemoved(snapshot: DataSnapshot) {
-                    val chatId = snapshot.value.toString()
-                    chatList.removeIf {
-                        it.id == chatId
-                    }
-                }
-
-                override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
-                    TODO("Not yet implemented")
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    TODO("Not yet implemented")
-                }
-            })
+                chatList = chatIdMap.toList()
+                    .sortedBy { (_, value) -> value }
+                    .map { (key, _) -> key }
+                    .toMutableList()
+            }
         }
     }
 
     fun openChat(
-        navController: NavController,
-        chat: Chat
+        chatId: String
     ) {
-        navController.navigate(Screen.ChatScreen.withArg("id", chat.id))
+        navController.navigate(Screen.ChatScreen.withArg("id", chatId))
     }
 }

@@ -12,6 +12,8 @@ interface UserDatabase {
 
     suspend fun getAllUsers(): HashMap<String, User>?
 
+    suspend fun observeChatList(fid: String, event: (snapshot: DataSnapshot) -> Unit)
+
     fun updateChatIdList(fid: String, chatList: List<String>)
 
     suspend fun getSentInviteList(fid: String): List<String>?
@@ -29,4 +31,6 @@ interface UserDatabase {
     suspend fun addUserChangeListener(fid: String, event: (snapshot: DataSnapshot) -> Unit)
 
     suspend fun addChatListChangeListener(fid: String, listener: ChildEventListener)
+
+    suspend fun updateChatLastMessageTime(fid: String, chatId: String, chatLastMessageTime: String)
 }

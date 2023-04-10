@@ -7,8 +7,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -17,23 +15,16 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
-import com.hgshkt.justchat.dao.UserDao
-import com.hgshkt.justchat.models.Chat
-import com.hgshkt.justchat.models.User
+import com.hgshkt.justchat.viewmodels.ChatItemViewModel
 
 @Composable
 fun ChatItem(
-    chat: Chat,
-    event: (chat: Chat) -> Unit
+    chatId: String,
+    event: () -> Unit
 ) {
-    val lastMessageAuthorState = remember { mutableStateOf(User()) }
-
-    LaunchedEffect(chat.lastMessageAuthorFid) {
-        if (chat.messagesHashMap.isNotEmpty()) {
-            val fid = chat.lastMessageAuthorFid
-            lastMessageAuthorState.value = UserDao().getUserByFID(fid)!!
-        }
-    }
+    val viewModel = remember { ChatItemViewModel(chatId) }
+    val author = viewModel.author.value
+    val chat = viewModel.chat.value
 
     Box(
         modifier = Modifier
@@ -46,7 +37,7 @@ fun ChatItem(
             modifier = Modifier
                 .fillMaxSize()
                 .clickable {
-                    event(chat)
+                    event()
                 }
         ) {
             Row(
@@ -74,10 +65,14 @@ fun ChatItem(
                         )
                     )
                     Text(
-                        text = buildString {
-                            append(lastMessageAuthorState.value.name)
-                            append(": ")
-                            append(chat.lastMessageText)
+                        text = if (author.fid.isNotEmpty()) {
+                            buildString {
+                                append(author.name)
+                                append(": ")
+                                append(chat.lastMessageText)
+                            }
+                        } else {
+                            "chat is empty"
                         },
                         style = TextStyle(
                             color = Color.Gray,

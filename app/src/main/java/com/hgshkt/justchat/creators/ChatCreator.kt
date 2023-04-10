@@ -29,7 +29,7 @@ class ChatCreator {
             membersFID.forEach {
                 withContext(Dispatchers.IO) {
                     val user = userDao.getUserByFID(it)
-                    user!!.chatIdList.add(chat.id)
+                    user!!.chatIdMap[chat.id] = chat.lastMessageTime
                     userDao.updateUser(user)
                 }
             }
