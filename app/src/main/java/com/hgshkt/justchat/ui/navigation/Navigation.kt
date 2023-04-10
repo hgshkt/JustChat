@@ -7,7 +7,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navArgument
-import com.hgshkt.justchat.auth.AppAuth
+import com.hgshkt.justchat.auth.currentUserFID
 import com.hgshkt.justchat.layout.activities.MainActivity
 import com.hgshkt.justchat.ui.screens.*
 
@@ -42,7 +42,7 @@ fun Navigation(
             arguments = listOf(
                 navArgument("userFID") {
                     type = NavType.StringType
-                    defaultValue = AppAuth().currentUserFID
+                    defaultValue = currentUserFID
                     nullable = true
                 }
             )
@@ -58,14 +58,14 @@ fun Navigation(
             arguments = listOf(
                 navArgument("userFID") {
                     type = NavType.StringType
-                    defaultValue = AppAuth().currentUserFID
+                    defaultValue = currentUserFID
                     nullable = true
                 }
             )
         ) {
             screenType.value = MainActivity.ScreenType.Main
             EditProfileScreen(
-                fid = it.arguments?.getString("userFID") ?: AppAuth().currentUserFID!!,
+                fid = it.arguments?.getString("userFID") ?: currentUserFID!!,
                 navController = navController
             )
         }

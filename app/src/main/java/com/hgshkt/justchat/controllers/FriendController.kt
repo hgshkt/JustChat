@@ -1,7 +1,7 @@
 package com.hgshkt.justchat.controllers
 
-import com.hgshkt.justchat.auth.AppAuth
 import com.hgshkt.justchat.auth.currentUser
+import com.hgshkt.justchat.auth.currentUserFID
 import com.hgshkt.justchat.dao.UserDao
 
 class FriendController {
@@ -20,7 +20,7 @@ class FriendController {
 
 
     suspend fun gottenInvite(userFid: String): Boolean {
-        val currentUserFid = AppAuth().currentUserFID!!
+        val currentUserFid = currentUserFID!!
 
         val gottenInviteList = userDao.getReceivedInviteList(userFid)
         val sentInviteList = userDao.getSentInviteList(currentUserFid)
@@ -29,7 +29,7 @@ class FriendController {
     }
 
     suspend fun sentInvite(userFid: String): Boolean {
-        val currentUserFid = AppAuth().currentUserFID!!
+        val currentUserFid = currentUserFID!!
 
         val gottenInviteList = userDao.getReceivedInviteList(currentUserFid)
         val sentInviteList = userDao.getSentInviteList(userFid)
@@ -73,7 +73,7 @@ class FriendController {
     }
 
     suspend fun stopFriendship(fid: String) {
-        val currentUser = userDao.getUserByFID(AppAuth().currentUserFID!!)!!
+        val currentUser = userDao.getUserByFID(currentUserFID!!)!!
         val friend = userDao.getUserByFID(fid)!!
 
         currentUser.friendList.remove(friend.fid)

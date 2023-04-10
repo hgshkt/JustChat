@@ -6,7 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
-import com.hgshkt.justchat.auth.AppAuth
+import com.hgshkt.justchat.auth.currentUserFID
 import com.hgshkt.justchat.auth.onCurrentUserChange
 import com.hgshkt.justchat.creators.ChatCreator
 import com.hgshkt.justchat.dao.UserDao
@@ -55,7 +55,7 @@ class CreatingChatViewModel(
 
     fun createChat() {
         CoroutineScope(Dispatchers.IO).launch {
-            membersFID.add(AppAuth().currentUserFID!!)
+            membersFID.add(currentUserFID!!)
             val chat = ChatCreator().createChat(
                 chatName = chatName.value,
                 avatarUri = avatarUri.value,

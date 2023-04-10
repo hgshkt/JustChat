@@ -1,6 +1,6 @@
 package com.hgshkt.justchat.controllers
 
-import com.hgshkt.justchat.auth.AppAuth
+import com.hgshkt.justchat.auth.currentUserFID
 
 enum class Status {
     /**
@@ -8,7 +8,7 @@ enum class Status {
      */
     CURRENT  {
         override suspend fun condition(id: String): Boolean {
-            return id == AppAuth().currentUserFID
+            return id == currentUserFID
         }
     },
 
@@ -39,7 +39,7 @@ enum class Status {
         private val controller = FriendController()
 
         override suspend fun condition(id: String): Boolean {
-            return controller.areFriends(AppAuth().currentUserFID!!, id)
+            return controller.areFriends(currentUserFID!!, id)
         }
     },
     /**

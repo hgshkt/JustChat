@@ -4,7 +4,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
-import com.hgshkt.justchat.auth.AppAuth
+import com.hgshkt.justchat.auth.currentUserFID
 import com.hgshkt.justchat.controllers.ProfileStatus
 import com.hgshkt.justchat.dao.UserDao
 import com.hgshkt.justchat.models.User
@@ -22,7 +22,7 @@ class ProfileViewModel(
     private val dao: UserDao = UserDao()
 
     init {
-        dao.addOnValueChangeListener(fid ?: AppAuth().currentUserFID!!) {
+        dao.addOnValueChangeListener(fid ?: currentUserFID!!) {
             user.value = it.getValue(User::class.java)!!
 
             viewModelScope.launch {
@@ -45,7 +45,7 @@ class ProfileViewModel(
         navController.navigate(
             Screen.EditProfileScreen.withArg(
                 argName = "userFID",
-                argValue = fid ?: AppAuth().currentUserFID!!
+                argValue = fid ?: currentUserFID!!
             )
         )
     }

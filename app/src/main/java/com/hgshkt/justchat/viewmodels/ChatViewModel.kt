@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
-import com.hgshkt.justchat.auth.AppAuth
+import com.hgshkt.justchat.auth.currentUserFID
 import com.hgshkt.justchat.dao.ChatDao
 import com.hgshkt.justchat.dao.MessageDao
 import com.hgshkt.justchat.managers.ChatManager
@@ -24,7 +24,6 @@ class ChatViewModel(
     private lateinit var manager: ChatManager
 
     private var chatState: MutableState<Chat> = mutableStateOf(Chat())
-    private var currentUserFID = AppAuth().currentUserFID
     var messages = mutableStateListOf<Message>()
     var messageText = mutableStateOf("")
 

@@ -13,7 +13,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.navigation.compose.rememberNavController
-import com.hgshkt.justchat.auth.AppAuth
+import com.hgshkt.justchat.auth.emailVerified
+import com.hgshkt.justchat.auth.entered
 import com.hgshkt.justchat.ui.ChatBar
 import com.hgshkt.justchat.ui.navigation.*
 import com.hgshkt.justchat.ui.theme.NavigationDrawerComposeTheme
@@ -38,7 +39,7 @@ class MainActivity : AppCompatActivity() {
                 val screenType = remember { mutableStateOf(ScreenType.Main) }
                 val isLoggedIn = remember {
                     mutableStateOf(
-                        AppAuth().entered && AppAuth().emailVerified
+                        entered && emailVerified
                     )
                 }
 

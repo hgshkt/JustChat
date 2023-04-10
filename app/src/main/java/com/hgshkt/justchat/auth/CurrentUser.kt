@@ -6,19 +6,18 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 
 private val dao: UserDao = UserDao()
-private val auth: AppAuth = AppAuth()
 
 
 var currentUser: User? = null
     private set
     get() {
         return runBlocking(Dispatchers.IO) {
-            dao.getUserByFID(auth.currentUserFID!!)!!
+            dao.getUserByFID(currentUserFID!!)!!
         }
     }
 
 fun onCurrentUserChange(event: (user: User) -> Unit) {
-    dao.addOnValueChangeListener(auth.currentUserFID!!) {
+    dao.addOnValueChangeListener(currentUserFID!!) {
         event(it.getValue(User::class.java)!!)
     }
 }

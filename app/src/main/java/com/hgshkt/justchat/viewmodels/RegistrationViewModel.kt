@@ -1,44 +1,46 @@
 package com.hgshkt.justchat.viewmodels
 
+import android.content.Intent
 import android.widget.Toast
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import com.google.firebase.auth.FirebaseAuth
-import com.hgshkt.justchat.auth.AppAuth
-import com.hgshkt.justchat.ui.navigation.Screen
+import com.hgshkt.justchat.auth.appAuthRegistration
+import com.hgshkt.justchat.auth.sendEmailVerification
+import com.hgshkt.justchat.layout.activities.MainActivity
 
 class RegistrationViewModel(
     private val navController: NavController
 ) : ViewModel() {
-    private val auth = AppAuth()
-
     val name = mutableStateOf("")
     val id = mutableStateOf("")
     val email = mutableStateOf("")
     val password = mutableStateOf("")
 
     fun registration() {
-        auth.registration(
+        appAuthRegistration(
             email = email.value,
             password = password.value,
             name = name.value,
             customId = id.value
         ) {
-            openLoginScreen()
             Toast.makeText(
                 navController.context,
                 "Link was sent to ${FirebaseAuth.getInstance().currentUser!!.email}",
                 Toast.LENGTH_LONG
             ).show()
+
+            openMainScreen()
         }
     }
 
     fun sendEmail() {
-        AppAuth().sendEmailVerification()
+        sendEmailVerification()
     }
 
-    private fun openLoginScreen() {
-        navController.navigate(Screen.LoginScreen.route)
+    private fun openMainScreen() {
+        val intent = Intent(navController.context, MainActivity::class.java)
+        navController.context.startActivity(intent)
     }
 }
