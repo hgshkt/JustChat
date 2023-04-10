@@ -19,6 +19,10 @@ class ChatListViewModel(
     val chatList = mutableStateListOf<String>()
 
     init {
+        observeChatMap()
+    }
+
+    fun observeChatMap() {
         viewModelScope.launch {
             userDao.observeChatMap(currentUserFID!!) {
                 it.forEach { (id, time) ->
@@ -29,6 +33,7 @@ class ChatListViewModel(
                     .sortedByDescending { (_, value) -> value }
                     .map { (key, _) -> key }
                 )
+                println(chatList.toMutableList())
             }
         }
     }
