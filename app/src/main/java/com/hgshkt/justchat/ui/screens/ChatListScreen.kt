@@ -17,7 +17,9 @@ import com.hgshkt.justchat.viewmodels.ChatListViewModel
 fun ChatListScreen(
     navController: NavController
 ) {
-    val viewModel = remember { ChatListViewModel(navController) }
+    val viewModel = remember {
+        ChatListViewModel(navController)
+    }
     val chatList = viewModel.chatList
 
     LazyColumn(
@@ -26,11 +28,9 @@ fun ChatListScreen(
             .background(ChatListBackground)
             .padding(horizontal = 16.dp)
     ) {
-        items(chatList.size) {
-            ChatItem(chatList[it]) {
-                viewModel.openChat(
-                    chatId = chatList[it]
-                )
+        items(chatList.size) { index ->
+            ChatItem(chatList[index]) {
+                viewModel.openChat(chatList[index])
             }
         }
     }

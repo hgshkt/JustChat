@@ -1,5 +1,6 @@
 package com.hgshkt.justchat.viewmodels
 
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -15,7 +16,7 @@ class ChatListViewModel(
     private val userDao: UserDao = UserDao()
 
     private val chatIdMap = mutableStateMapOf<String, String>()
-    var chatList = mutableListOf<String>()
+    val chatList = mutableStateListOf<String>()
 
     init {
         viewModelScope.launch {
@@ -23,17 +24,16 @@ class ChatListViewModel(
                 it.forEach { (id, time) ->
                     chatIdMap[id] = time
                 }
-                chatList = chatIdMap.toList()
-                    .sortedBy { (_, value) -> value }
+                chatList.clear()
+                chatList.addAll(chatIdMap.toList()
+                    .sortedByDescending { (_, value) -> value }
                     .map { (key, _) -> key }
-                    .toMutableList()
+                )
             }
         }
     }
 
-    fun openChat(
-        chatId: String
-    ) {
+    fun openChat(chatId: String) {
         navController.navigate(Screen.ChatScreen.withArg("id", chatId))
     }
 }
