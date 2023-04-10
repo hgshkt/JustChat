@@ -1,9 +1,11 @@
 package com.hgshkt.justchat.auth
 
-import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.hgshkt.justchat.creators.UserCreator
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class AppAuth {
 
@@ -70,7 +72,7 @@ class AppAuth {
             }
     }
 
-    fun sendEmailVerification(onVerificationSent: (auth: FirebaseAuth) -> Unit) {
+    fun sendEmailVerification(onVerificationSent: (auth: FirebaseAuth) -> Unit = {}) {
         val currentUser = auth.currentUser
         currentUser?.sendEmailVerification()
             ?.addOnCompleteListener { verificationTask ->

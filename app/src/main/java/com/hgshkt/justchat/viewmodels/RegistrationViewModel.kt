@@ -34,6 +34,10 @@ class RegistrationViewModel(
         }
     }
 
+    fun sendEmail() {
+        AppAuth().sendEmailVerification()
+    }
+
     private fun openLoginScreen() {
         navController.navigate(Screen.LoginScreen.route)
     }
