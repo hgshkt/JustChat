@@ -1,5 +1,6 @@
 package com.hgshkt.justchat.viewmodels
 
+import android.net.Uri
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -8,6 +9,7 @@ import com.hgshkt.justchat.tools.auth.currentUserFID
 import com.hgshkt.justchat.controllers.ProfileStatus
 import com.hgshkt.justchat.dao.UserDao
 import com.hgshkt.justchat.models.User
+import com.hgshkt.justchat.tools.loaders.uploadUserAvatar
 import com.hgshkt.justchat.ui.navigation.Screen
 import kotlinx.coroutines.launch
 
@@ -29,6 +31,11 @@ class ProfileViewModel(
                 status.value = ProfileStatus.getProfileStatusFor(fid!!)
             }
         }
+    }
+
+    fun uploadAvatar(uri: Uri) {
+        if (status.value == ProfileStatus.CURRENT)
+            uploadUserAvatar(uri)
     }
 
     fun buttonClick() {

@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
-import com.hgshkt.justchat.tools.loaders.uploadUserAvatar
+import com.hgshkt.justchat.controllers.ProfileStatus
 import com.hgshkt.justchat.viewmodels.ProfileViewModel
 
 @Composable
@@ -34,7 +34,7 @@ fun ProfileScreen(
 
     val launcher =
         rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { uri: Uri? ->
-            uploadUserAvatar(uri!!)
+            viewModel.uploadAvatar(uri!!)
         }
 
     Box(
@@ -62,7 +62,8 @@ fun ProfileScreen(
                         modifier = Modifier
                             .size(150.dp)
                             .clickable {
-                                launcher.launch("image/*")
+                                if (viewModel.status.value == ProfileStatus.CURRENT)
+                                    launcher.launch("image/*")
                             }
                     )
                 }
