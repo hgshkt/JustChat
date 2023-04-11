@@ -25,9 +25,10 @@ fun uploadUserAvatar(uri: Uri) {
         .continueWithTask { ref.child(name).downloadUrl }
 
         .addOnSuccessListener {
-            currentUser!!.avatarUri = it.toString()
+            val curUser = currentUser!!
+            curUser.avatarUri = it.toString()
             CoroutineScope(Dispatchers.IO).launch {
-                userDao.updateUser(currentUser!!)
+                userDao.updateUser(curUser)
             }
         }
 }
