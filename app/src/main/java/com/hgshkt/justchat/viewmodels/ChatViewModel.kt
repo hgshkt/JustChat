@@ -8,10 +8,10 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
-import com.hgshkt.justchat.auth.currentUserFID
+import com.hgshkt.justchat.tools.auth.currentUserFID
 import com.hgshkt.justchat.dao.ChatDao
 import com.hgshkt.justchat.dao.MessageDao
-import com.hgshkt.justchat.managers.ChatManager
+import com.hgshkt.justchat.tools.managers.ChatManager
 import com.hgshkt.justchat.models.Chat
 import com.hgshkt.justchat.models.Message
 import kotlinx.coroutines.launch

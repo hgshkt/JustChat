@@ -1,4 +1,4 @@
-package com.hgshkt.justchat.auth
+package com.hgshkt.justchat.tools.auth
 
 import com.hgshkt.justchat.dao.UserDao
 import com.hgshkt.justchat.models.User

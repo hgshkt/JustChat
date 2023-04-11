@@ -1,4 +1,4 @@
-package com.hgshkt.justchat.database
+package com.hgshkt.justchat.dao.database
 
 import com.hgshkt.justchat.models.Message
 

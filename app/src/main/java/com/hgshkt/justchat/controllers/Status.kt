@@ -1,6 +1,6 @@
 package com.hgshkt.justchat.controllers
 
-import com.hgshkt.justchat.auth.currentUserFID
+import com.hgshkt.justchat.tools.auth.currentUserFID
 
 enum class Status {
     /**

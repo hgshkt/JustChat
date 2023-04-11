@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.hgshkt.justchat.auth.signOut
+import com.hgshkt.justchat.tools.auth.signOut
 import com.hgshkt.justchat.layout.activities.LoginActivity
 
 @Composable

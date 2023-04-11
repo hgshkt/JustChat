@@ -1,4 +1,4 @@
-package com.hgshkt.justchat.auth
+package com.hgshkt.justchat.tools.auth
 
 import com.google.firebase.auth.FirebaseAuth
 import com.hgshkt.justchat.creators.UserCreator

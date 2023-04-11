@@ -22,8 +22,8 @@ import androidx.compose.ui.window.PopupProperties
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
-import com.hgshkt.justchat.database.ChatDatabaseImpl
-import com.hgshkt.justchat.managers.ChatManager
+import com.hgshkt.justchat.dao.database.ChatDatabaseImpl
+import com.hgshkt.justchat.tools.managers.ChatManager
 import com.hgshkt.justchat.models.Chat
 import com.hgshkt.justchat.ui.items.PopupItem
 import com.hgshkt.justchat.ui.navigation.Screen

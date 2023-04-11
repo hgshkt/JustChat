@@ -13,8 +13,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.navigation.compose.rememberNavController
-import com.hgshkt.justchat.auth.emailVerified
-import com.hgshkt.justchat.auth.entered
+import com.hgshkt.justchat.tools.auth.emailVerified
+import com.hgshkt.justchat.tools.auth.entered
 import com.hgshkt.justchat.ui.ChatBar
 import com.hgshkt.justchat.ui.navigation.*
 import com.hgshkt.justchat.ui.theme.NavigationDrawerComposeTheme

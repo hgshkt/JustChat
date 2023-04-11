@@ -2,9 +2,9 @@ package com.hgshkt.justchat.dao
 
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
-import com.hgshkt.justchat.auth.currentUserFID
-import com.hgshkt.justchat.database.UserDatabase
-import com.hgshkt.justchat.database.UserDatabaseImpl
+import com.hgshkt.justchat.tools.auth.currentUserFID
+import com.hgshkt.justchat.dao.database.UserDatabase
+import com.hgshkt.justchat.dao.database.UserDatabaseImpl
 import com.hgshkt.justchat.models.User
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

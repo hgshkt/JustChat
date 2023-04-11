@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
-import com.hgshkt.justchat.loaders.uploadUserAvatar
+import com.hgshkt.justchat.tools.loaders.uploadUserAvatar
 import com.hgshkt.justchat.viewmodels.ProfileViewModel
 
 @Composable

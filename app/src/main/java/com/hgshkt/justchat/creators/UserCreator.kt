@@ -1,7 +1,7 @@
 package com.hgshkt.justchat.creators
 
-import com.hgshkt.justchat.database.UserDatabase
-import com.hgshkt.justchat.database.UserDatabaseImpl
+import com.hgshkt.justchat.dao.database.UserDatabase
+import com.hgshkt.justchat.dao.database.UserDatabaseImpl
 import com.hgshkt.justchat.models.User
 
 class UserCreator {

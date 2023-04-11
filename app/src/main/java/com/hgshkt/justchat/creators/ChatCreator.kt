@@ -3,7 +3,7 @@ package com.hgshkt.justchat.creators
 import android.net.Uri
 import com.hgshkt.justchat.dao.ChatDao
 import com.hgshkt.justchat.dao.UserDao
-import com.hgshkt.justchat.loaders.uploadChatAvatar
+import com.hgshkt.justchat.tools.loaders.uploadChatAvatar
 import com.hgshkt.justchat.models.Chat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

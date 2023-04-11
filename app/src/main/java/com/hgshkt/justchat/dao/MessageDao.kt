@@ -1,7 +1,7 @@
 package com.hgshkt.justchat.dao
 
-import com.hgshkt.justchat.database.MessageDatabase
-import com.hgshkt.justchat.database.MessageDatabaseImpl
+import com.hgshkt.justchat.dao.database.MessageDatabase
+import com.hgshkt.justchat.dao.database.MessageDatabaseImpl
 import com.hgshkt.justchat.models.Message
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

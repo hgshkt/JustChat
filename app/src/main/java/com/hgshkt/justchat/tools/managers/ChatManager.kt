@@ -1,6 +1,6 @@
-package com.hgshkt.justchat.managers
+package com.hgshkt.justchat.tools.managers
 
-import com.hgshkt.justchat.auth.currentUser
+import com.hgshkt.justchat.tools.auth.currentUser
 import com.hgshkt.justchat.dao.ChatDao
 import com.hgshkt.justchat.dao.MessageDao
 import com.hgshkt.justchat.dao.UserDao

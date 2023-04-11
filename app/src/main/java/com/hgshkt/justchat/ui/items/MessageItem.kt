@@ -16,7 +16,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
-import com.hgshkt.justchat.auth.currentUserFID
+import com.hgshkt.justchat.tools.auth.currentUserFID
 import com.hgshkt.justchat.models.Message
 import com.hgshkt.justchat.ui.theme.IncomingMessageColor
 import com.hgshkt.justchat.ui.theme.OutgoingMessageColor

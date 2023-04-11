@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.hgshkt.justchat.dao.ChatDao
-import com.hgshkt.justchat.loaders.uploadChatAvatar
+import com.hgshkt.justchat.tools.loaders.uploadChatAvatar
 import com.hgshkt.justchat.models.Chat
 import com.hgshkt.justchat.ui.navigation.Screen
 import kotlinx.coroutines.CoroutineScope

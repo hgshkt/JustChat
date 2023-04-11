@@ -1,7 +1,7 @@
 package com.hgshkt.justchat.controllers
 
-import com.hgshkt.justchat.auth.currentUser
-import com.hgshkt.justchat.auth.currentUserFID
+import com.hgshkt.justchat.tools.auth.currentUser
+import com.hgshkt.justchat.tools.auth.currentUserFID
 import com.hgshkt.justchat.dao.UserDao
 
 class FriendController {

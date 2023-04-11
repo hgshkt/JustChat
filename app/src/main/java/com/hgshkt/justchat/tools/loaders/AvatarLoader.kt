@@ -1,8 +1,8 @@
-package com.hgshkt.justchat.loaders
+package com.hgshkt.justchat.tools.loaders
 
 import android.net.Uri
 import com.google.firebase.storage.FirebaseStorage
-import com.hgshkt.justchat.auth.currentUser
+import com.hgshkt.justchat.tools.auth.currentUser
 import com.hgshkt.justchat.dao.ChatDao
 import com.hgshkt.justchat.dao.UserDao
 import kotlinx.coroutines.CoroutineScope

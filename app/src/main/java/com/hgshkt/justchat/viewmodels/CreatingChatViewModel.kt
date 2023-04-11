@@ -6,8 +6,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
-import com.hgshkt.justchat.auth.currentUserFID
-import com.hgshkt.justchat.auth.onCurrentUserChange
+import com.hgshkt.justchat.tools.auth.currentUserFID
+import com.hgshkt.justchat.tools.auth.onCurrentUserChange
 import com.hgshkt.justchat.creators.ChatCreator
 import com.hgshkt.justchat.dao.UserDao
 import com.hgshkt.justchat.models.User

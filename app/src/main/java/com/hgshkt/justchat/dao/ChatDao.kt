@@ -1,8 +1,8 @@
 package com.hgshkt.justchat.dao
 
 import com.google.firebase.database.ChildEventListener
-import com.hgshkt.justchat.database.ChatDatabase
-import com.hgshkt.justchat.database.ChatDatabaseImpl
+import com.hgshkt.justchat.dao.database.ChatDatabase
+import com.hgshkt.justchat.dao.database.ChatDatabaseImpl
 import com.hgshkt.justchat.models.Chat
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

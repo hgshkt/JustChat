@@ -7,7 +7,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navArgument
-import com.hgshkt.justchat.auth.currentUserFID
+import com.hgshkt.justchat.tools.auth.currentUserFID
 import com.hgshkt.justchat.layout.activities.MainActivity
 import com.hgshkt.justchat.ui.screens.*
 

@@ -6,8 +6,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import com.google.firebase.auth.FirebaseAuth
-import com.hgshkt.justchat.auth.appAuthRegistration
-import com.hgshkt.justchat.auth.sendEmailVerification
+import com.hgshkt.justchat.tools.auth.appAuthRegistration
+import com.hgshkt.justchat.tools.auth.sendEmailVerification
 import com.hgshkt.justchat.layout.activities.MainActivity
 
 class RegistrationViewModel(
