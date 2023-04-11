@@ -2,10 +2,10 @@ package com.hgshkt.justchat.dao
 
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
-import com.hgshkt.justchat.tools.auth.currentUserFID
 import com.hgshkt.justchat.dao.database.UserDatabase
 import com.hgshkt.justchat.dao.database.UserDatabaseImpl
 import com.hgshkt.justchat.models.User
+import com.hgshkt.justchat.tools.auth.currentUserFID
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -19,6 +19,12 @@ class UserDao {
         }
     }
 
+    fun delete(fid: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            db.deleteUser(fid)
+        }
+    }
+
     suspend fun getUserByFID(fid: String): User? {
         return db.getUserByFID(fid)
     }
@@ -26,6 +32,13 @@ class UserDao {
     suspend fun getUserById(id: String): User? {
         getAllUsers().forEach {
             if (it.id == id) return it
+        }
+        return null
+    }
+
+    suspend fun getUserByEmail(email: String): User? {
+        getAllUsers().forEach {
+            if (it.email == email) return it
         }
         return null
     }

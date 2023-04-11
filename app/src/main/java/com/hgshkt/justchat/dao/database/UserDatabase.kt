@@ -8,6 +8,8 @@ interface UserDatabase {
 
     suspend fun addUser(user: User)
 
+    suspend fun deleteUser(fid: String)
+
     suspend fun getUserByFID(fid: String): User?
 
     suspend fun getAllUsers(): HashMap<String, User>?

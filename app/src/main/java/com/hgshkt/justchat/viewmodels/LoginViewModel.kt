@@ -5,8 +5,8 @@ import android.widget.Toast
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
-import com.hgshkt.justchat.tools.auth.appAuthLogin
 import com.hgshkt.justchat.layout.activities.MainActivity
+import com.hgshkt.justchat.tools.auth.appAuthLogin
 import com.hgshkt.justchat.ui.navigation.Screen
 
 class LoginViewModel(
@@ -17,6 +17,7 @@ class LoginViewModel(
     val password = mutableStateOf("")
     fun login() {
         appAuthLogin(
+            context = navController.context,
             email = email.value,
             password = password.value
         ) { isEmailVerified ->

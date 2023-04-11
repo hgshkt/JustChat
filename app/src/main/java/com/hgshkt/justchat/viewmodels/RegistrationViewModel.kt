@@ -6,9 +6,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import com.google.firebase.auth.FirebaseAuth
-import com.hgshkt.justchat.tools.auth.appAuthRegistration
-import com.hgshkt.justchat.tools.auth.sendEmailVerification
 import com.hgshkt.justchat.layout.activities.MainActivity
+import com.hgshkt.justchat.tools.auth.appAuthRegistration
+import com.hgshkt.justchat.tools.auth.entered
+import com.hgshkt.justchat.tools.auth.sendEmailVerification
 
 class RegistrationViewModel(
     private val navController: NavController
@@ -20,6 +21,7 @@ class RegistrationViewModel(
 
     fun registration() {
         appAuthRegistration(
+            context = navController.context,
             email = email.value,
             password = password.value,
             name = name.value,
@@ -36,7 +38,24 @@ class RegistrationViewModel(
     }
 
     fun sendEmail() {
-        sendEmailVerification()
+        if (entered) {
+            sendEmailVerification(
+                context = navController.context,
+                email = email.value
+            ) {
+                Toast.makeText(
+                    navController.context,
+                    "Link was sent to ${FirebaseAuth.getInstance().currentUser!!.email}",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        } else {
+            Toast.makeText(
+                navController.context,
+                "Fill in the data",
+                Toast.LENGTH_LONG
+            ).show()
+        }
     }
 
     private fun openMainScreen() {

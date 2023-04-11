@@ -20,6 +20,10 @@ class UserDatabaseImpl : UserDatabase {
         dbRef.child(user.fid).setValue(user)
     }
 
+    override suspend fun deleteUser(fid: String) {
+        dbRef.child(fid).removeValue()
+    }
+
     override suspend fun getUserByFID(fid: String): User? {
         return dbRef.child(fid).get().await().getValue(User::class.java)
     }
