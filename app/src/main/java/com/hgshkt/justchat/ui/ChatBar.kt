@@ -1,10 +1,7 @@
 package com.hgshkt.justchat.ui
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -63,13 +60,13 @@ fun ChatBar(
         Popup(
             onDismissRequest = { isMenuExpanded = false },
             properties = PopupProperties(focusable = true),
-            offset = IntOffset(LocalConfiguration.current.screenWidthDp, -16)
+            offset = IntOffset(LocalConfiguration.current.screenWidthDp, 0)
         ) {
             Surface(
                 shape = RoundedCornerShape(4.dp),
                 elevation = 4.dp,
                 color = Color.White,
-                modifier = Modifier.size(200.dp)
+                modifier = Modifier.size(200.dp).wrapContentHeight()
             ) {
                 LazyColumn {
                     items(viewModel.popupItems.size) {
